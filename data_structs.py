@@ -86,11 +86,12 @@ class Simulation():
     def __init__(self, population):
         self.population = population
 
-    def seed_simulation(self, initial_infected, P, recovery_period, death_rate, seed_num):
+    def seed_simulation(self, initial_infected, infection_probability,
+                        recovery_period, death_probability, seed_num):
         r.seed(seed_num)
-        self.P = P
+        self.infection_probability = infection_probability
         self.recovery_period = recovery_period
-        self.death_rate = death_rate
+        self.death_probability = death_probability
         infected = 0
         pop = self.population.get_population()
         for person in pop:
@@ -103,11 +104,11 @@ class Simulation():
         for person_id in people:
             person = people[person_id]
             # Simulates probability of getting infection
-            if r.random() < self.P and person.get_state() == "not infected":
+            if r.random() < self.infection_probability and person.get_state() == "not infected":
                 person.update_state("infected")
                 person.is_infected(day)
             # Simulates probability of dying
-            if r.random() < self.death_rate and person.get_state() == "infected":
+            if r.random() < self.death_probability and person.get_state() == "infected":
                 person.update_state("dead")
             # Simulates period it takes to recover
             if person.get_state() == "infected" and day - person.get_infection_date() > self.recovery_period:

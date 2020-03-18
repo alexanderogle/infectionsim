@@ -9,11 +9,11 @@ import data_structs as data
 # Model initial parameters
 population = 100000
 recovery_period = 14
-death_rate = 0.05
+death_probability = 0.05
 initial_infected = 1
 seed_num = 1459
 states = ["not infected", "infected", "recovered", "dead"]
-P = 0.01
+infection_probability = 0.01
 t = 60
 
 # Setup the population
@@ -23,7 +23,7 @@ for i in range(0, population):
 
 # Setup and run the simulation
 sim = data.Simulation(pop)
-sim.seed_simulation(initial_infected, P, recovery_period, death_rate, seed_num)
+sim.seed_simulation(initial_infected, infection_probability, recovery_period, death_probability, seed_num)
 timeline, infection_timeline, not_infected_timeline, alive_timeline = sim.simulate(t)
 
 
