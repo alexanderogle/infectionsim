@@ -21,8 +21,11 @@ Population object over a specified time.
 
 The process for running the simulation currently goes like this:
 1. Create a Population object with a set of Person objects that are not infected.
-2. Setup the Simulation and run it.
+2. Setup the Simulation and run it. Define what kind of simulation to run here.
 3. Plot and examine the results.
+
+For a comparison to your simulation, run data_fitting.py, which pulls the latest
+data from https://ourworldindata.org/coronavirus-source-data and plots it. 
 
 There are many ways to model the dynamics of a system's change of state, and
 hopefully in the future, we will bring in differential equations and some Monte
