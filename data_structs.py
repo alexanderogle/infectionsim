@@ -96,21 +96,26 @@ class Network():
     def __init__(self, population):
         self.population = population
 
-    def init_random_network(self, connection_max):
+    def init_random_network(self, connection_min, connection_max, seed_num):
+        r.seed(seed_num)
         pop = self.population.get_population()
         pop_size =len(pop)
         self.network = {}
-        for person in pop:
+
+        completion_percent = 0
+        for person_id in pop:
             num_connections = r.random() * connection_max
             connections_list = []
-            for i in range(0, connections):
+            for i in range(connection_min, connection_max):
                 # Get a random person_id
-                person_id = r.randint(1, pop_size)
+                connection_id = r.randint(1, pop_size)
                 # Ensure it isn't in the connections_list
-                while(person_id in connections_list):
-                    person_id = r.randint(1, pop_size)
+                while(connection_id in connections_list):
+                    connection_id = r.randint(1, pop_size)
                 # Add the random person_id to the connections_list
-                connections_list.append(person_id)
+                connections_list.append(connection_id)
+                completion_percent = (person_id / pop_size) * 100
+                print("Generating random network: " + str(completion_percent))
             # Add the connections list to the network dict
             self.network[person_id] = connections_list
 
@@ -119,6 +124,10 @@ class Network():
 
     def get_population(self):
         return self.population
+
+    def __str__(self):
+        string = str(self.network)
+        return string
 
 
 class Simulation():
@@ -150,6 +159,7 @@ class Simulation():
             # Simulates probability of dying
             if r.random() < self.death_probability and person.get_state() == "infected":
                 person.update_state("dead")
+                person.is_dead(day)
             # Simulates period it takes to recover
             if person.get_state() == "infected" and day - person.get_infection_date() > self.recovery_period:
                 person.update_state("recovered")
@@ -182,9 +192,57 @@ class Simulation():
         string = str(self.population)
         return string
 
-class NetworkSimulation():
-""" Simulates propogation of an infection through a network in a population.
-"""
+class NetworkSimulation(Simulation):
+    """ Simulates propogation of an infection through a static network in a population.
+    """
     def __init__(self, network):
         self.population = network.get_population()
         self.network = network
+
+    def get_snapshot(self):
+        return self.population, self.network
+
+    def update(self, day):
+        people = self.population.people
+        for person_id in people:
+            person = people[person_id]
+            # Only use infected individuals' connections for updating infection status
+            # Simulates probability of individuals connected to infected individual
+            # getting infected.
+            network = self.network.get_network()
+            connections_list = network[person_id]
+            if person.get_state() == "infected":
+                for connection in connections_list:
+                    connected_person = people[connection]
+                    if r.random() < self.infection_probability and connected_person.get_state() == "not infected":
+                        connected_person.update_state("infected")
+                        connected_person.is_infected(day)
+            # Simulates probability of dying
+            if r.random() < self.death_probability and person.get_state() == "infected":
+                person.update_state("dead")
+                person.is_dead(day)
+            # Simulates period it takes to recover
+            if person.get_state() == "infected" and day - person.get_infection_date() > self.recovery_period:
+                person.update_state("recovered")
+
+    def simulate(self, max_days):
+        initial_population, initial_network = self.get_snapshot()
+        timeline = {0: {"population": initial_population, "network": initial_network}}
+        infection_timeline = {0: self.population.count_infected()}
+        not_infected_states = ["not infected", "recovered"]
+        not_infected_timeline = {0: self.population.count_states(not_infected_states)}
+        alive_states = ["not infected", "infected", "recovered"]
+        alive_timeline = {0: self.population.count_states(alive_states)}
+
+        completion_percent = 0
+        for day in range(1, max_days):
+            self.update(day)
+            population, network = self.get_snapshot()
+            timeline[day] = {"population": population, "network": network}
+            infection_timeline[day] = population.count_infected()
+            not_infected_timeline[day] = population.count_states(not_infected_states)
+            alive_timeline[day] = population.count_states(alive_states)
+
+            completion_percent = (day/max_days)*100
+            print("Percent Simulation Complete: " + str(completion_percent))
+        return timeline, infection_timeline, not_infected_timeline, alive_timeline
