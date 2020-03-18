@@ -108,14 +108,14 @@ class Network():
             connections_list = []
             for i in range(connection_min, connection_max):
                 # Get a random person_id
-                connection_id = r.randint(1, pop_size)
+                connection_id = r.randint(0, pop_size-1)
                 # Ensure it isn't in the connections_list
                 while(connection_id in connections_list):
-                    connection_id = r.randint(1, pop_size)
+                    connection_id = r.randint(0, pop_size-1)
                 # Add the random person_id to the connections_list
                 connections_list.append(connection_id)
                 completion_percent = (person_id / pop_size) * 100
-                print("Generating random network: " + str(completion_percent))
+                print("Generating random network: " + str(completion_percent) + "%")
             # Add the connections list to the network dict
             self.network[person_id] = connections_list
 
@@ -185,7 +185,7 @@ class Simulation():
             alive_timeline[day] = self.population.count_states(alive_states)
 
             completion_percent = (day/max_days)*100
-            print("Percent Simulation Complete: " + str(completion_percent))
+            print("Percent Simulation Complete: " + str(completion_percent) + "%")
         return timeline, infection_timeline, not_infected_timeline, alive_timeline
 
     def __str__(self):
@@ -244,5 +244,5 @@ class NetworkSimulation(Simulation):
             alive_timeline[day] = population.count_states(alive_states)
 
             completion_percent = (day/max_days)*100
-            print("Percent Simulation Complete: " + str(completion_percent))
+            print("Percent Simulation Complete: " + str(completion_percent) + "%")
         return timeline, infection_timeline, not_infected_timeline, alive_timeline

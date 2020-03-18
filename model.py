@@ -24,7 +24,7 @@ for i in range(0, population):
 
 # Setup the Network
 network = data.Network(pop)
-network.init_random_network(connection_min=1, connection_max=5, seed_num=1234)
+network.init_random_network(connection_min=1, connection_max=5, seed_num=seed_num)
 
 # Setup and run the simulation
 # sim = data.Simulation(pop)
