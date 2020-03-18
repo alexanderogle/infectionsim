@@ -35,10 +35,12 @@ class Person():
     def __str__(self):
         return "Person object id: \"" + str(self.id) + "\" and state: \"" + str(self.state) + "\""
 
+
 class Population():
 
-    def __init__(self, people={}):
+    def __init__(self, id, people={}):
         self.people = people
+        self.id = id
 
     def add_people(self, person):
         self.people[person.get_id()] = person
@@ -54,12 +56,19 @@ class Population():
                 self.people[person_id].infect(day)
 
     def get_population_size(self):
-        count = 0
-        for person in self.people:
-            count += 1
-        return count
+        return len(self.people)
 
     def get_population(self):
+        """ Returns the people dict of this population object.
+        The people dict should have the following format:
+
+            people = {person_id_int_1: Person_object_1,
+                      .
+                      .
+                      .
+                      person_id_int_n: Person_object_n
+                      }
+        """
         return self.people
 
     def count_infected(self):
@@ -81,6 +90,37 @@ class Population():
         string = str(self.people)
         return string
 
+
+class Network():
+
+    def __init__(self, population):
+        self.population = population
+
+    def init_random_network(self, connection_max):
+        pop = self.population.get_population()
+        pop_size =len(pop)
+        self.network = {}
+        for person in pop:
+            num_connections = r.random() * connection_max
+            connections_list = []
+            for i in range(0, connections):
+                # Get a random person_id
+                person_id = r.randint(1, pop_size)
+                # Ensure it isn't in the connections_list
+                while(person_id in connections_list):
+                    person_id = r.randint(1, pop_size)
+                # Add the random person_id to the connections_list
+                connections_list.append(person_id)
+            # Add the connections list to the network dict
+            self.network[person_id] = connections_list
+
+    def get_network(self):
+        return self.network
+
+    def get_population(self):
+        return self.population
+
+
 class Simulation():
 
     def __init__(self, population):
@@ -99,7 +139,7 @@ class Simulation():
                 self.population.infect_person(person, 0)
                 infected += 1
 
-    def update_infection(self, day):
+    def update(self, day):
         people = self.population.people
         for person_id in people:
             person = people[person_id]
@@ -128,7 +168,7 @@ class Simulation():
 
         completion_percent = 0
         for day in range(1, max_days):
-            self.update_infection(day)
+            self.update(day)
             timeline[day] = self.get_snapshot()
             infection_timeline[day] = self.population.count_infected()
             not_infected_timeline[day] = self.population.count_states(not_infected_states)
@@ -141,3 +181,10 @@ class Simulation():
     def __str__(self):
         string = str(self.population)
         return string
+
+class NetworkSimulation():
+""" Simulates propogation of an infection through a network in a population.
+"""
+    def __init__(self, network):
+        self.population = network.get_population()
+        self.network = network

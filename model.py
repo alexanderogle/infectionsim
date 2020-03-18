@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import data_structs as data
 
 # Model initial parameters
-population = 100000
+population = 10000
+population_name = "cityville"
 recovery_period = 14
 death_probability = 0.05
 initial_infected = 1
@@ -17,7 +18,7 @@ infection_probability = 0.01
 t = 60
 
 # Setup the population
-pop = data.Population()
+pop = data.Population("cityville")
 for i in range(0, population):
     pop.add_people(data.Person(i, states[0]))
 
