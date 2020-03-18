@@ -29,5 +29,7 @@ hopefully in the future, we will bring in differential equations and some Monte
 Carlo simulation.
 
 Articles for further consideration:
+
   Monte Carlo Simulation: https://towardsdatascience.com/infection-modeling-part-1-87e74645568a
+
   Mathematical models to characterize early epidemic growth: A Review: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5348083/
