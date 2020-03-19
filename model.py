@@ -20,7 +20,7 @@ read_in_path = './large_network_pop_100000_conmin_1_conmax_50'
 population = 100000
 population_name = "cityville"
 connection_min = 1
-connection_max = 50
+connection_max = 8
 
 # Infection propogation parameters
 recovery_period = 14
@@ -68,5 +68,7 @@ plt.plot(infected)
 plt.plot(susceptible)
 plt.plot(recovered)
 plt.plot(dead)
+plt.xlabel("timeline (days from t = 0)")
+plt.ylabel("person count")
 plt.legend(["infected", "susceptible", "recovered", "dead"])
 plt.show()
