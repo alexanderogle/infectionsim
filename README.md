@@ -20,7 +20,7 @@ A Population object consists of a collection of Person objects. The Population
 object has built in functions/methods for keeping track of and managing the
 state of its Person objects.
 
-A Network object 
+A Network object
 
 A Simulation object manages the set up and tracks the evolution of state for a
 Population object (whether structured via a Network object or not) over a specified time.
@@ -42,3 +42,5 @@ Articles for further consideration:
   Monte Carlo Simulation: https://towardsdatascience.com/infection-modeling-part-1-87e74645568a
 
   Mathematical models to characterize early epidemic growth: A Review: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5348083/
+
+  A Network-Based Compartmental Model For The Spread Of Whooping Cough In Nebraska: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6568137/
