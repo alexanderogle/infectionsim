@@ -39,8 +39,10 @@ class Person():
 
 class Population():
 
-    def __init__(self, id, people={}):
-        self.people = people
+    def __init__(self, id, population):
+        self.people = {}
+        for i in range(0, population):
+            self.add_people(Person(i, "susceptible"))
         self.id = id
 
     def add_people(self, person):

@@ -8,14 +8,16 @@ import data_structs as data
 
 ################################################################################
 # Data input/output parameters
+# TODO(aogle): Fix read_in_data functionality, currently graph is outputting a
+# flattened curve, might have to do with presence of NaNs in data?
 read_in_data = False
 write_out_data = not read_in_data
-write_out_path = './large_network_pop_10000_conmin_1_conmax_50'
-read_in_path = './large_network_pop_10000_conmin_1_conmax_50'
+write_out_path = './large_network_pop_100000_conmin_1_conmax_50'
+read_in_path = './large_network_pop_100000_conmin_1_conmax_50'
 
 # Model initial parameters
 ## Population and Network parameters
-population = 10000
+population = 100000
 population_name = "cityville"
 connection_min = 1
 connection_max = 50
@@ -24,7 +26,7 @@ connection_max = 50
 recovery_period = 14
 recovery_probability = 0.3
 death_probability = 0.01
-initial_infected = int(population * 0.01)
+initial_infected = int(population * 0.005)
 seed_num = 1459
 states = ["susceptible", "infected", "recovered", "dead"]
 infection_probability = 0.03
@@ -33,9 +35,7 @@ t = 120
 ################################################################################
 
 # Setup the population
-pop = data.Population("cityville")
-for i in range(0, population):
-    pop.add_people(data.Person(i, states[0]))
+pop = data.Population("cityville", population)
 
 if not read_in_data:
     # Setup the Network
