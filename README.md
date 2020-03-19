@@ -7,7 +7,7 @@ by building some infection simulations that I can eventually fit to actual data.
 The four main data structures are as follows:
 - Person
 - Population
-- Network
+- Network 
   TODO(alexanderogle): fix import issues (NaNs values, etc.)
 - Simulation
   - Simulation(): base class for simulations
