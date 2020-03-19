@@ -58,7 +58,7 @@ Notice the narrow bell shape of the infection line.
 ![SRI Model with moderately dense network (max connections of 50)](example1_max_connections_50.png)
 
 And here is the output when social distancing is implemented (connections were more limited
-ranging from 1 - 8 other people)
+ranging from 1 - 8 other people). This is "flattening the curve".
 
 ![SRI model with light network (max connections of 8)](example2_max_connections_8.png)
 
