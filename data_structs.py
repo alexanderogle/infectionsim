@@ -242,6 +242,7 @@ class Simulation():
         string = str(self.population)
         return string
 
+
 class NetworkSimulation(Simulation):
     """ Simulates propogation of an infection through a static network in a population.
     """

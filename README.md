@@ -4,7 +4,7 @@ Have a lot of time to play around with Python? I do. I'm trying to play around
 by building some infection simulations that I can eventually fit to actual data.
 
 ## Data Structures
-The three main data structures are as follows:
+The four main data structures are as follows:
 - Person
 - Population
 - Network
