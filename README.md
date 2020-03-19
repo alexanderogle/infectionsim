@@ -8,6 +8,7 @@ The four main data structures are as follows:
 - Person
 - Population
 - Network
+  TODO(alexanderogle): fix import issues (NaNs values, etc.)
 - Simulation
   - Simulation(): base class for simulations
   - NetworkSimulation(): inherits Simulation, simulates static networks
