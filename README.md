@@ -78,6 +78,6 @@ Articles for further consideration:
 
   Impact of non-pharmaceutical interventions (NPIs) to reduce COVID19 mortality and healthcare demand: https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf?fbclid=IwAR13T_bDz3d0Vr4UCZAmVIN5gU8O2VG-OCKn8fpeJc51W7YysL_S85RAi6M
 
-  Strategies for mitigating an influenza pandemic: https://www.ncbi.nlm.nih.gov/pubmed/16642006
+  Strategies for mitigating an influenza pandemic: https://www.nature.com/articles/nature04795
 
-  Modeling targeted layered containment of an influenza pandemic in the United States: https://www.ncbi.nlm.nih.gov/pubmed/18332436
+  Modeling targeted layered containment of an influenza pandemic in the United States: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2290797/
