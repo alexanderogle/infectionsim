@@ -30,9 +30,9 @@ Population object (whether structured via a Network object or not) over a specif
 
 ## Simulation Process Abstractly:
 The process for running the simulation (done in model.py) currently goes like this:
-1. Create a Population object with a set of Person objects that are not infected.
-2. Generate a Network object for the Population, optionally saving the Network
-object as a CSV.
+1. Create a Population object.
+2. Either generate a Network object for the Population, optionally saving the Network
+object as a CSV, or read in a CSV file as a Network object (importing currently not working).
 2. Setup the Simulation with user defined initial conditions and run it.
 Define what kind of simulation to run here (currently just NetworkSimulation,
 but will include TemporalNetworkSimulation in the future).
