@@ -183,6 +183,80 @@ class Network():
         return string
 
 
+class Policy():
+
+    def __init__(self, id):
+        self.id = id
+        self.policy = {}
+        self.policy_type = ""
+
+    def init_network_policy(self, connection_min, connection_max):
+        self.policy_type = "network"
+        self.policy["connection_min"] = connection_min
+        self.policy["connection_max"] = connection_max
+
+    def linearly_interpolated_network_policy(self, max_days, connection_min_start,
+                                     connection_max_start, connection_min_end,
+                                     connection_max_end):
+        """ Initiates a policy for a temporal network that linearly interpolates
+        from connection_min/max_start to connection_min/max_end.
+        TODO(aogle): find a method for better intepolation between min/max as
+        the current method is crude.
+        """
+        self.policy_type = "lienarly_interpolated_network_policy"
+        connection_min_dict = {}
+        connection_max_dict = {}
+
+        for day in range(0, max_days):
+            # Interpolate across max_days from connection_min_start/end to
+            # connection_max_start/end.
+            if connection_min_start <= connection_min_end:
+                connection_min = round((day / max_days) * connection_min_end)
+                if connection_min < connection_min_start:
+                    connection_min = connection_min_start
+
+            if connection_min_start > connection_min_end:
+                connection_min = round((1 - (day / max_days)) * connection_min_start)
+                if connection_min < connection_min_end:
+                    connection_min = connection_min_end
+
+            if connection_max_start <= connection_max_end:
+                connection_max = round((day / max_days) * connection_max_end)
+                if connection_max < connection_max_start:
+                    connection_max = connection_max_start
+
+            if connection_max_start > connection_max_end:
+                connection_max = round((1 - (day / max_days)) * connection_max_start)
+                if connection_max < connection_max_end:
+                    connection_max = connection_max_end
+
+            # Checks that connection_max is never below connection_min
+            if connection_max < connection_min:
+                connection_max = connection_min
+
+            connection_min_dict[day] = connection_min
+            connection_max_dict[day] = connection_max
+
+        self.policy["connection_min"] = connection_min_dict
+        self.policy["connection_max"] = connection_max_dict
+
+    def get_policy(self):
+        return self.policy
+
+    def policy_type(self):
+        return self.policy_type
+
+    def get_id():
+        return self.id
+
+    def __str__(self):
+        string = "Policy type of \'" + self.policy_type + "\' with contents: \n"
+        contents = ""
+        for key in self.policy:
+            contents += str(key) + " = " + str(self.policy[key]) + "\n"
+        return string + contents
+
+
 class TemporalNetwork():
     # TODO(alexanderogle): define a temporal network and its initialization,
     # export and import as csv, etc.
@@ -193,15 +267,31 @@ class TemporalNetwork():
         for day in range(0, self.days):
             self.temporal_network[day] = {}
 
-    def init_random_network(self, connection_min, connection_max, seed_num, verbose=False):
+    def init_random_network(self, connection_min, connection_max, seed_num, policy={}, verbose=False):
         # For each day, generate a random network to represent a randomly
         # evolving temporal network
         r.seed(seed_num)
+
+        if policy:
+            policy_dict = policy.get_policy()
+            connection_min_dict = policy_dict["connection_min"]
+            connection_max_dict = policy_dict["connection_max"]
+        else:
+            policy = Policy("static")
+            policy.linearly_interpolated_network_policy(self.days, connection_min,
+                                                connection_max, connection_min,
+                                                connection_max)
+            policy_dict = policy.get_policy()
+            connection_min_dict = policy_dict["connection_min"]
+            connection_max_dict = policy_dict["connection_max"]
+
         completion_percent = 0
         for day in range(0, self.days):
             network_seed_num = r.randint(0,100000)
             network = Network(self.population)
-            network.init_random_network(connection_min, connection_max, network_seed_num)
+            network.init_random_network(connection_min_dict[day],
+                                        connection_max_dict[day],
+                                        network_seed_num)
             self.temporal_network[day] = network
             if(verbose):
                 completion_percent = (day / self.days) * 100
@@ -256,7 +346,7 @@ class Simulation():
     def get_snapshot(self):
         return self.population
 
-    def simulate(self, max_days):
+    def simulate(self, max_days, verbose=True):
         timeline = {0: self.get_snapshot()}
         infection_timeline = {0: self.population.count_infected()}
         not_infected_states = ["susceptible", "recovered"]
@@ -272,8 +362,9 @@ class Simulation():
             not_infected_timeline[day] = self.population.count_states(not_infected_states)
             alive_timeline[day] = self.population.count_states(alive_states)
 
-            completion_percent = (day/max_days)*100
-            print("Percent Simulation Complete: " + str(completion_percent) + "%")
+            if verbose:
+                completion_percent = (day/max_days)*100
+                print("Percent Simulation Complete: " + str(completion_percent) + "%")
         return timeline, infection_timeline, not_infected_timeline, alive_timeline
 
     def __str__(self):
@@ -314,7 +405,7 @@ class NetworkSimulation(Simulation):
             if person.get_state() == "infected" and day - person.get_infection_date() > self.recovery_period and r.random() < self.recovery_probability:
                 person.update_state("recovered")
 
-    def simulate(self, max_days):
+    def simulate(self, max_days, verbose=True):
         initial_population, initial_network = self.get_snapshot()
         timeline = {0: {"population": initial_population, "network": initial_network}}
         infection_timeline = {0: self.population.count_infected()}
@@ -332,8 +423,9 @@ class NetworkSimulation(Simulation):
             recovered_timeline[day] = population.count_states(["recovered"])
             dead_timeline[day] = population.count_states(["dead"])
 
-            completion_percent = (day/max_days)*100
-            print("Percent Simulation Complete: " + str(completion_percent) + "%")
+            if verbose:
+                completion_percent = (day/max_days)*100
+                print("Percent Simulation Complete: " + str(completion_percent) + "%")
         return timeline, infection_timeline, susceptible_timeline, recovered_timeline, dead_timeline
 
 

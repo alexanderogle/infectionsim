@@ -7,20 +7,17 @@ import matplotlib.pyplot as plt
 from infectionsim import data_structs as data
 
 ################################################################################
-# Data input/output parameters
-# TODO(aogle): Fix read_in_data functionality, currently graph is outputting a
-# flattened curve, might have to do with presence of NaNs in data?
-read_in_data = False
-write_out_data = False
-write_out_path = './large_network_pop_100000_conmin_1_conmax_50'
-read_in_path = './large_network_pop_100000_conmin_1_conmax_50'
-
 # Model initial parameters
 ## Population and Network parameters
-population = 10000
+population = 1000
 population_name = "cityville"
-connection_min = 1
-connection_max = 20
+connection_min_start = 1
+connection_max_start = 50
+connection_min_end = 1
+connection_max_end = 1
+
+# Control whether simulation completion percentage is output to the console:
+verbose = False
 
 # Infection propogation parameters
 recovery_period = 14
@@ -32,27 +29,24 @@ if initial_infected < 1: initial_infected = 1
 seed_num = 1459
 states = ["susceptible", "infected", "recovered", "dead"]
 infection_probability = 0.03
-max_days = 80
+max_days = 50
 
 ################################################################################
 
 # Setup the population
 pop = data.Population("cityville", population)
 
-if not read_in_data:
-    # Setup the Network
-    temporal_network = data.TemporalNetwork(pop, max_days)
-    temporal_network.init_random_network(connection_min=connection_min,
-                                         connection_max=connection_max,
-                                         seed_num=seed_num, verbose=True)
+# Create a temporal network policy (defines how the network should change over time)
+policy = data.Policy("linearly increase isolation")
+policy.linearly_interpolated_network_policy(max_days, connection_min_start,
+                                    connection_max_start, connection_min_end,
+                                    connection_max_end)
 
-# if write_out_data:
-#     network.to_csv(write_out_path)
-#
-# if read_in_data:
-#     network = data.Network(pop)
-#     network.from_csv(read_in_path)
-#     print("Network created from data located at: " + read_in_path)
+temporal_network = data.TemporalNetwork(pop, max_days)
+temporal_network.init_random_network(connection_min=connection_min_start,
+                                         connection_max=connection_max_start,
+                                         seed_num=seed_num,
+                                         policy=policy, verbose=False)
 
 # Setup and run the network simulation
 sim = data.TemporalNetworkSimulation(temporal_network)
@@ -60,7 +54,7 @@ print("Seeding simulation...")
 sim.seed_simulation(initial_infected, infection_probability, recovery_period,
                     recovery_probability, death_probability, seed_num)
 print("Beginning simulation...")
-timeline, infection_timeline, susceptible_timeline, recovered_timeline, dead_timeline = sim.simulate(max_days)
+timeline, infection_timeline, susceptible_timeline, recovered_timeline, dead_timeline = sim.simulate(max_days, verbose=verbose)
 
 # Plot results
 infected = pd.DataFrame.from_dict(infection_timeline, orient="index", columns=["number infected"])
