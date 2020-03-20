@@ -110,12 +110,12 @@ class Network():
     """
     def __init__(self, population):
         self.population = population
+        self.network = {}
 
-    def init_random_network(self, connection_min, connection_max, seed_num):
+    def init_random_network(self, connection_min, connection_max, seed_num, verbose=False):
         r.seed(seed_num)
         pop = self.population.get_population()
         pop_size =len(pop)
-        self.network = {}
 
         completion_percent = 0
         for person_id in pop:
@@ -130,7 +130,8 @@ class Network():
                 # Add the random person_id to the connections_list
                 connections_list.append(connection_id)
                 completion_percent = (person_id / pop_size) * 100
-                print("Generating random network: " + str(completion_percent) + "%")
+                if(verbose):
+                    print("Generating random network: " + str(completion_percent) + "%")
             # Add the connections list to the network dict
             self.network[person_id] = connections_list
 
@@ -180,6 +181,40 @@ class Network():
     def __str__(self):
         string = str(self.network)
         return string
+
+
+class TemporalNetwork():
+    # TODO(alexanderogle): define a temporal network and its initialization,
+    # export and import as csv, etc.
+    def __init__(self, population, days):
+        self.population = population
+        self.days = days
+        self.temporal_network = {}
+        for day in range(0, self.days):
+            self.temporal_network[day] = {}
+
+    def init_random_network(self, connection_min, connection_max, seed_num, verbose=False):
+        # For each day, generate a random network to represent a randomly
+        # evolving temporal network
+        r.seed(seed_num)
+        completion_percent = 0
+        for day in range(0, self.days):
+            network_seed_num = r.randint(0,100000)
+            network = Network(self.population)
+            network.init_random_network(connection_min, connection_max, network_seed_num)
+            self.temporal_network[day] = network
+            if(verbose):
+                completion_percent = (day / self.days) * 100
+                print("Temporal Network Completion Percent: " + str(completion_percent))
+
+    def get_network(self, day):
+        return self.temporal_network[day].get_network()
+
+    def get_temporal_network(self):
+        return self.temporal_network
+
+    def get_population(self):
+        return self.population
 
 
 class Simulation():
@@ -300,3 +335,37 @@ class NetworkSimulation(Simulation):
             completion_percent = (day/max_days)*100
             print("Percent Simulation Complete: " + str(completion_percent) + "%")
         return timeline, infection_timeline, susceptible_timeline, recovered_timeline, dead_timeline
+
+
+class TemporalNetworkSimulation(NetworkSimulation):
+    # TODO(alexanderogle): Will update class methods here after creating the
+    # TemporalNetwork object
+    def __init__(self, temporal_network):
+        self.population = temporal_network.population
+        self.temporal_network = temporal_network
+
+    def get_snapshot(self):
+        return self.population, self.temporal_network
+
+    def update(self, day):
+        people = self.population.people
+        for person_id in people:
+            person = people[person_id]
+            # Only use infected individuals' connections for updating infection status
+            # Simulates probability of individuals connected to infected individual
+            # getting infected.
+            network = self.temporal_network.get_network(day)
+            connections_list = network[person_id]
+            if person.get_state() == "infected":
+                for connection in connections_list:
+                    connected_person = people[connection]
+                    if r.random() < self.infection_probability and connected_person.get_state() == "susceptible":
+                        connected_person.update_state("infected")
+                        connected_person.is_infected(day)
+            # Simulates probability of dying
+            if r.random() < self.death_probability and person.get_state() == "infected":
+                person.update_state("dead")
+                person.is_dead(day)
+            # Simulates period it takes to recover and probability of recovering
+            if person.get_state() == "infected" and day - person.get_infection_date() > self.recovery_period and r.random() < self.recovery_probability:
+                person.update_state("recovered")

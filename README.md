@@ -9,10 +9,13 @@ The four main data structures are as follows:
 - Population
 - Network
   - TODO(alexanderogle): fix import issues (NaNs values, etc.)
+- TemporalNetwork
+  - TODO(alexanderogle): add CSV import/export capabilities
 - Simulation
   - Simulation(): base class for simulations
   - NetworkSimulation(): inherits Simulation, simulates static networks
-  - TODO(alexanderogle): TemporalNetworkSimulation(): simulates temporally variant networks
+  - TemporalNetworkSimulation(): inherits NetworkSimulation, simulates temporally
+  variant networks
 
 A Person instance has a unique identifier (currently just an int) and a state.
 A Person can have a state of "susceptible", "infected", "recovered", or "dead".
@@ -25,21 +28,35 @@ A Network object generates a connections list for a population and allows networ
 to be exported and imported as CSVs. You can thus generate a large and densely
 connected network once and then use it repeatedly for future simulations.
 
+A TemporalNetwork object is a collection of Network objects. TemporalNetwork
+manages state and generation of these Network objects.
+
 A Simulation object manages the set up and tracks the evolution of state for a
-Population object (whether structured via a Network object or not) over a specified time.
+Population object over a specified time.
+
+A NetworkSimulation object manages the setup and tracks the evolution of state for
+a Population object that is structured by a Network object.
+
+A TemporalNetworkSimulation object manages the setup and tracks the evolution of state
+for a Population object that is structured by a TemporalNetwork object. Ideally,
+the TemporalNetwork would be defined in such a way as to simulate events where
+policies such as social distancing are implemented (the max connections between
+people decreases to some minimum over a small time period, and is maintained for
+some period of time).
 
 ## Simulation Process Abstractly:
-The process for running the simulation (done in model.py) currently goes like this:
+The process for running the simulation (done in a model.py file) currently goes like this:
 1. Create a Population object.
-2. Either generate a Network object for the Population, optionally saving the Network
-object as a CSV, or read in a CSV file as a Network object (importing currently not working).
+2. Generate a Network or TemporalNetwork object depending on the type of simulation
+desired (the base Simulation class does not use Network objects).
 2. Setup the Simulation with user defined initial conditions and run it.
-Define what kind of simulation to run here (currently just NetworkSimulation,
-but will include TemporalNetworkSimulation in the future).
+Define what kind of simulation to run here (can be the base Simulation, NetworkSimulation
+or TemporalNetworkSimulation).
 3. Plot and examine the results.
 
-## To Run Simulation:
-1. Edit 'model.py' as desired
+## To Run a Simulation:
+1. Edit either 'model_static_network.py' or 'model_temporal_network.py' as desired
+or create your own model_.py file
 2. Run $ python3 model.py
 
 Required dependencies:

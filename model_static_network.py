@@ -17,7 +17,7 @@ read_in_path = './large_network_pop_100000_conmin_1_conmax_50'
 
 # Model initial parameters
 ## Population and Network parameters
-population = 1000
+population = 100000
 population_name = "cityville"
 connection_min = 1
 connection_max = 15
@@ -32,7 +32,7 @@ if initial_infected < 1: initial_infected = 1
 seed_num = 1459
 states = ["susceptible", "infected", "recovered", "dead"]
 infection_probability = 0.03
-max_days = 120
+max_days = 80
 
 ################################################################################
 
