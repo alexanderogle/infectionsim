@@ -62,11 +62,11 @@ chosen connections between Person objects change over time).
 3. Setup the Simulation with user defined initial conditions and run it.
 Define what kind of simulation to run here (can be the base Simulation, NetworkSimulation
 or TemporalNetworkSimulation). For each day, the simulation will randomly select
-the change of state for person objects depending on their network connections,
+the change of state for Person objects depending on their network connections,
 the infection, recovery, and death probabilities, and the recovery period for that day.
 Policy objects can change how these parameters vary for each day. The essential
 day-to-day mechanics for Person objects can be found in the update() function of
-each Simulation object. 
+each Simulation object.
 4. Plot and examine the results.
 
 ## To Run a Simulation:
