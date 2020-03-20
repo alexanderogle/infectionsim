@@ -4,13 +4,14 @@ Have a lot of time to play around with Python? I do. I'm trying to play around
 by building some infection simulations that I can eventually fit to actual data.
 
 ## Data Structures
-The four main data structures are as follows:
+The six main data structures are as follows:
 - Person
 - Population
 - Network
   - TODO(alexanderogle): fix import issues (NaNs values, etc.)
 - TemporalNetwork
   - TODO(alexanderogle): add CSV import/export capabilities
+- Policy
 - Simulation
   - Simulation(): base class for simulations
   - NetworkSimulation(): inherits Simulation, simulates static networks
@@ -31,6 +32,12 @@ connected network once and then use it repeatedly for future simulations.
 A TemporalNetwork object is a collection of Network objects. TemporalNetwork
 manages state and generation of these Network objects.
 
+A Policy is a dictionary which keeps track of how parameters change over time.
+This can be used to simulate a change in the max/min of the connections in a network,
+or even to change the death rate or infection probability. A policy represents
+changes implemented by governments or from viral adaptions or the presence of a
+vaccine that affects the mechanics of the simulation.
+
 A Simulation object manages the set up and tracks the evolution of state for a
 Population object over a specified time.
 
@@ -48,11 +55,19 @@ some period of time).
 The process for running the simulation (done in a model.py file) currently goes like this:
 1. Create a Population object.
 2. Generate a Network or TemporalNetwork object depending on the type of simulation
-desired (the base Simulation class does not use Network objects).
-2. Setup the Simulation with user defined initial conditions and run it.
+desired (the base Simulation class does not use Network objects). If a TemporalNetwork
+is being generated, the user can define a policy that will determine the temporal
+evolution of the network (essentially how the minimum and maximum number of randomly
+chosen connections between Person objects change over time).
+3. Setup the Simulation with user defined initial conditions and run it.
 Define what kind of simulation to run here (can be the base Simulation, NetworkSimulation
-or TemporalNetworkSimulation).
-3. Plot and examine the results.
+or TemporalNetworkSimulation). For each day, the simulation will randomly select
+the change of state for person objects depending on their network connections,
+the infection, recovery, and death probabilities, and the recovery period for that day.
+Policy objects can change how these parameters vary for each day. The essential
+day-to-day mechanics for Person objects can be found in the update() function of
+each Simulation object. 
+4. Plot and examine the results.
 
 ## To Run a Simulation:
 1. Edit either 'model_static_network.py' or 'model_temporal_network.py' as desired
