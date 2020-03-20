@@ -56,7 +56,7 @@ The process for running the simulation (done in a model.py file) currently goes 
 1. Create a Population object.
 2. Generate a Network or TemporalNetwork object depending on the type of simulation
 desired (the base Simulation class does not use Network objects). If a TemporalNetwork
-is being generated, the user can define a policy that will determine the temporal
+is being generated, the user can define a Policy object that will determine the temporal
 evolution of the network (essentially how the minimum and maximum number of randomly
 chosen connections between Person objects change over time).
 3. Setup the Simulation with user defined initial conditions and run it.
