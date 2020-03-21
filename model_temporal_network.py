@@ -9,15 +9,15 @@ from infectionsim import data_structs as data
 ################################################################################
 # Model initial parameters
 ## Population and Network parameters
-population = 1000
+population = 1000000
 population_name = "cityville"
 connection_min_start = 1
-connection_max_start = 50
+connection_max_start = 1
 connection_min_end = 1
-connection_max_end = 1
+connection_max_end = 50
 
 # Control whether simulation completion percentage is output to the console:
-verbose = False
+verbose = True
 
 # Infection propogation parameters
 recovery_period = 14
@@ -46,7 +46,7 @@ temporal_network = data.TemporalNetwork(pop, max_days)
 temporal_network.init_random_network(connection_min=connection_min_start,
                                          connection_max=connection_max_start,
                                          seed_num=seed_num,
-                                         policy=policy, verbose=False)
+                                         policy=policy, verbose=verbose)
 
 # Setup and run the network simulation
 sim = data.TemporalNetworkSimulation(temporal_network)
