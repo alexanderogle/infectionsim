@@ -79,6 +79,7 @@ Required dependencies:
 - numpy
 - matplotlib
 - random
+- protobuf (if defining new file i/o methods)
 
 ## Comparing to Naturalistic Data:
 For a comparison to your simulation, run data_fitting.py, which pulls the latest

@@ -5,11 +5,12 @@ import matplotlib.pyplot as plt
 
 # User defined
 from infectionsim import data_structs as data
+from infectionsim import utilities as ut
 
 ################################################################################
 # Model initial parameters
 ## Population and Network parameters
-population = 1000000
+population = 100
 population_name = "cityville"
 connection_min_start = 1
 connection_max_start = 1
@@ -62,11 +63,13 @@ susceptible = pd.DataFrame.from_dict(susceptible_timeline, orient="index", colum
 recovered = pd.DataFrame.from_dict(recovered_timeline, orient="index", columns=["number alive"])
 dead = pd.DataFrame.from_dict(dead_timeline, orient="index", columns=["number dead"])
 
-plt.plot(infected)
-plt.plot(susceptible)
-plt.plot(recovered)
-plt.plot(dead)
-plt.xlabel("timeline (days from t = 0)")
-plt.ylabel("person count")
-plt.legend(["infected", "susceptible", "recovered", "dead"])
-plt.show()
+ut.save_simulation_to_file("./test", timeline)
+
+# plt.plot(infected)
+# plt.plot(susceptible)
+# plt.plot(recovered)
+# plt.plot(dead)
+# plt.xlabel("timeline (days from t = 0)")
+# plt.ylabel("person count")
+# plt.legend(["infected", "susceptible", "recovered", "dead"])
+# plt.show()
