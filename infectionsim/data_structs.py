@@ -52,10 +52,10 @@ class Population():
         self.people[person.get_id()] = person
 
     def update_person_state(self, id, state):
-        self.people[person_id].update_state(state)
+        self.people[id].update_state(state)
 
     def infect_person(self, id, day):
-        self.people[person_id].infect(day)
+        self.people[id].infect(day)
 
     def get_population_size(self):
         return len(self.people)
