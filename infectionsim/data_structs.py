@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 import random as r
 import pandas as pd
+import copy
 # Data structs for use in modeling infections
 
 class Person():
@@ -317,9 +318,9 @@ class Simulation():
         self.death_probability = death_probability
         infected = 0
         pop = self.population.get_population()
-        for person in pop:
+        for person_id in pop:
             if infected < initial_infected:
-                self.population.infect_person(person, 0)
+                self.population.infect_person(person_id, 0)
                 infected += 1
 
     def update(self, day):
@@ -432,8 +433,8 @@ class TemporalNetworkSimulation(NetworkSimulation):
         self.population = temporal_network.population
         self.temporal_network = temporal_network
 
-    def get_snapshot(self):
-        return self.population, self.temporal_network
+    def get_snapshot(self, day):
+        return self.population, self.temporal_network.get_network(day)
 
     def update(self, day):
         people = self.population.people
@@ -457,3 +458,26 @@ class TemporalNetworkSimulation(NetworkSimulation):
             # Simulates period it takes to recover and probability of recovering
             if person.get_state() == "infected" and day - person.get_infection_date() > self.recovery_period and r.random() < self.recovery_probability:
                 person.update_state("recovered")
+
+    def simulate(self, max_days, verbose=True):
+        initial_population, initial_network = self.get_snapshot(0)
+        timeline = {0: {"population": copy.deepcopy(initial_population), "network": initial_network}}
+        infection_timeline = {0: self.population.count_infected()}
+        susceptible_timeline = {0: self.population.count_states(["susceptible"])}
+        recovered_timeline = {0: self.population.count_states(["recovered"])}
+        dead_timeline = {0: self.population.count_states(["dead"])}
+
+        completion_percent = 0
+        for day in range(1, max_days):
+            self.update(day)
+            population, network = self.get_snapshot(day)
+            timeline[day] = {"population": copy.deepcopy(population), "network": network}
+            infection_timeline[day] = self.population.count_infected()
+            susceptible_timeline[day] = self.population.count_states(["susceptible"])
+            recovered_timeline[day] = self.population.count_states(["recovered"])
+            dead_timeline[day] = self.population.count_states(["dead"])
+
+            if verbose:
+                completion_percent = (day/max_days)*100
+                print("Percent Simulation Complete: " + str(completion_percent) + "%")
+        return timeline 
