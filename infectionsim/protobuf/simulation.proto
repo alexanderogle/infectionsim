@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+message Person {
+  string id = 1;
+  string state = 2;
+  int32 infection_date = 3;
+  int32 death_date = 4;
+}
+
+message Population {
+  string id = 1;
+  repeated Person people = 2;
+}
+
+message ConnectionsList {
+  repeated string id = 1;
+  repeated int32 connection = 2;
+}
+
+message Network {
+  Population population = 1;
+  repeated ConnectionsList connections = 2;
+}
+
+message TemporalNetwork {
+  repeated int32 timestep = 1;
+  repeated Network network = 2;
+}
+
+message SimulationTimeline {
+  repeated Population population = 1;
+  repeated Network network = 2;
+}
