@@ -5,16 +5,17 @@ import matplotlib.pyplot as plt
 
 # User defined
 from infectionsim import data_structs as data
+from infectionsim import utilities as util
 
 ################################################################################
 # Model initial parameters
 ## Population and Network parameters
-population = 1000000
+population = 10000
 population_name = "cityville"
 connection_min_start = 1
-connection_max_start = 1
+connection_max_start = 20
 connection_min_end = 1
-connection_max_end = 50
+connection_max_end = 20
 
 # Control whether simulation completion percentage is output to the console:
 verbose = True
@@ -54,19 +55,6 @@ print("Seeding simulation...")
 sim.seed_simulation(initial_infected, infection_probability, recovery_period,
                     recovery_probability, death_probability, seed_num)
 print("Beginning simulation...")
-timeline, infection_timeline, susceptible_timeline, recovered_timeline, dead_timeline = sim.simulate(max_days, verbose=verbose)
+timeline = sim.simulate(max_days, verbose=verbose)
 
-# Plot results
-infected = pd.DataFrame.from_dict(infection_timeline, orient="index", columns=["number infected"])
-susceptible = pd.DataFrame.from_dict(susceptible_timeline, orient="index", columns=["number susceptible"])
-recovered = pd.DataFrame.from_dict(recovered_timeline, orient="index", columns=["number alive"])
-dead = pd.DataFrame.from_dict(dead_timeline, orient="index", columns=["number dead"])
-
-plt.plot(infected)
-plt.plot(susceptible)
-plt.plot(recovered)
-plt.plot(dead)
-plt.xlabel("timeline (days from t = 0)")
-plt.ylabel("person count")
-plt.legend(["infected", "susceptible", "recovered", "dead"])
-plt.show()
+util.plot_timeline(timeline)
