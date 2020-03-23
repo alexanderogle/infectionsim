@@ -132,13 +132,20 @@ def read_in_network(simulation_proto):
         network = field.network
         network_dict = {}
         for field in network:
-            timestep = field.timestep
+            timestep = int(field.timestep)
             connections = field.connections
+            connections_dict = {}
             for field in connections:
                 person_id = field.person_id
-                connection = field.connection
-                for person_id in connection:
-                    print(person_id)
+                connection_repeated_list = field.connection
+                connection_list = []
+                for connection_id in connection_repeated_list:
+                    connection_list.append(int(connection_id))
+                connections_dict[person_id] = connection_list
+            network_obj = data.Network()
+            network_obj.init_from_connections_dict(connections_dict)
+            network_dict[timestep] = network_obj.get_network()
+        return network_dict
 
 def read_simulation_to_timeline(filepath):
     simulation_proto = simulation_pb2.SimulationTimeline()
@@ -148,4 +155,11 @@ def read_simulation_to_timeline(filepath):
     f.close()
 
     population = read_in_population(simulation_proto)
-    read_in_network(simulation_proto)
+    network = read_in_network(simulation_proto)
+    if(len(population) == len(network)):
+        # Zip the two dictionaries into a timeline-like dictionary
+        timeline = {}
+        for timestep in range(0, len(population)):
+            timeline[timestep] = {"population": population[timestep], "network": network[timestep]}
+
+        return timeline

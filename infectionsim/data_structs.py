@@ -110,8 +110,9 @@ class Network():
     Network.get_network() method. This method returns the network dict which
     contains all the connection lists.
     """
-    def __init__(self, population):
-        self.population = population
+    def __init__(self, population=""):
+        if population:
+            self.population = population
         self.network = {}
 
     def init_random_network(self, connection_min, connection_max, seed_num, verbose=False):
@@ -136,6 +137,10 @@ class Network():
                     print("Generating random network: " + str(completion_percent) + "%")
             # Add the connections list to the network dict
             self.network[person_id] = connections_list
+
+    def init_from_connections_dict(self, connections_dict):
+        for person_id in connections_dict:
+            self.network[person_id] = connections_dict[person_id]
 
     def from_csv(self, filepath):
         """Method for reading in a csv file of a network."""
