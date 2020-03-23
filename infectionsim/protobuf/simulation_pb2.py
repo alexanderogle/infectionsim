@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x10simulation.proto\"O\n\x06Person\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05state\x18\x02 \x01(\t\x12\x16\n\x0einfection_date\x18\x03 \x01(\t\x12\x12\n\ndeath_date\x18\x04 \x01(\t\"C\n\nPopulation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x10\n\x08timestep\x18\x02 \x01(\t\x12\x17\n\x06people\x18\x03 \x03(\x0b\x32\x07.Person\"8\n\x0f\x43onnectionsList\x12\x11\n\tperson_id\x18\x01 \x01(\t\x12\x12\n\nconnection\x18\x02 \x03(\t\"B\n\x07Network\x12\x10\n\x08timestep\x18\x01 \x01(\t\x12%\n\x0b\x63onnections\x18\x02 \x03(\x0b\x32\x10.ConnectionsList\"Y\n\x0fTemporalNetwork\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1f\n\npopulation\x18\x02 \x03(\x0b\x32\x0b.Population\x12\x19\n\x07network\x18\x03 \x03(\x0b\x32\x08.Network\"L\n\x12SimulationTimeline\x12\n\n\x02id\x18\x01 \x01(\t\x12*\n\x10temporal_network\x18\x04 \x01(\x0b\x32\x10.TemporalNetworkb\x06proto3'
+  serialized_pb=b'\n\x10simulation.proto\"O\n\x06Person\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05state\x18\x02 \x01(\t\x12\x16\n\x0einfection_date\x18\x03 \x01(\t\x12\x12\n\ndeath_date\x18\x04 \x01(\t\"C\n\nPopulation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x10\n\x08timestep\x18\x02 \x01(\t\x12\x17\n\x06people\x18\x03 \x03(\x0b\x32\x07.Person\"8\n\x0f\x43onnectionsList\x12\x11\n\tperson_id\x18\x01 \x01(\t\x12\x12\n\nconnection\x18\x02 \x03(\t\"B\n\x07Network\x12\x10\n\x08timestep\x18\x01 \x01(\t\x12%\n\x0b\x63onnections\x18\x02 \x03(\x0b\x32\x10.ConnectionsList\"Y\n\x0fTemporalNetwork\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1f\n\npopulation\x18\x02 \x03(\x0b\x32\x0b.Population\x12\x19\n\x07network\x18\x03 \x03(\x0b\x32\x08.Network\"L\n\x12SimulationTimeline\x12\n\n\x02id\x18\x01 \x01(\t\x12*\n\x10temporal_network\x18\x04 \x03(\x0b\x32\x10.TemporalNetworkb\x06proto3'
 )
 
 
@@ -258,8 +258,8 @@ _SIMULATIONTIMELINE = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='temporal_network', full_name='SimulationTimeline.temporal_network', index=1,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),

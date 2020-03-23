@@ -31,5 +31,5 @@ message TemporalNetwork {
 
 message SimulationTimeline {
   string id = 1;
-  TemporalNetwork temporal_network = 4;
+  repeated TemporalNetwork temporal_network = 2;
 }
