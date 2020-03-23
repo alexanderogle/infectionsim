@@ -9,8 +9,8 @@ class Person():
     def __init__(self, id, state):
         self.id = id
         self.state = state
-        self.infection_date = "NaN"
-        self.death_date = "NaN"
+        self.infection_date = ""
+        self.death_date = ""
 
     def update_state(self, new_state):
         self.state = new_state
@@ -294,8 +294,11 @@ class TemporalNetwork():
                 completion_percent = (day / self.days) * 100
                 print("Temporal Network Completion Percent: " + str(completion_percent))
 
-    def get_network(self, day):
+    def get_network_dict(self, day):
         return self.temporal_network[day].get_network()
+
+    def get_network(self, day):
+        return self.temporal_network[day]
 
     def get_temporal_network(self):
         return self.temporal_network
@@ -443,7 +446,7 @@ class TemporalNetworkSimulation(NetworkSimulation):
             # Only use infected individuals' connections for updating infection status
             # Simulates probability of individuals connected to infected individual
             # getting infected.
-            network = self.temporal_network.get_network(day)
+            network = self.temporal_network.get_network_dict(day)
             connections_list = network[person_id]
             if person.get_state() == "infected":
                 for connection in connections_list:
@@ -480,4 +483,4 @@ class TemporalNetworkSimulation(NetworkSimulation):
             if verbose:
                 completion_percent = (day/max_days)*100
                 print("Percent Simulation Complete: " + str(completion_percent) + "%")
-        return timeline 
+        return timeline
