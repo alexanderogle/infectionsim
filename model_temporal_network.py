@@ -2,12 +2,17 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import time
 
 # User defined
 from infectionsim import data_structs as data
 from infectionsim import utilities as util
 
+start_time = time.time()
 ################################################################################
+# Simulation write out options
+save_simulation = True
+
 # Model initial parameters
 ## Population and Network parameters
 population = 10000
@@ -56,5 +61,16 @@ sim.seed_simulation(initial_infected, infection_probability, recovery_period,
                     recovery_probability, death_probability, seed_num)
 print("Beginning simulation...")
 timeline = sim.simulate(max_days, verbose=verbose)
+
+execution_time = time.time() - start_time
+print("Simulation completed in " + str(execution_time) + " seconds.")
+
+# Write out the simulation to file
+if save_simulation:
+    filepath = "./" + "sim_" + str(int(time.time())) + ".infectionsim"
+    util.save_simulation_to_file(filepath, timeline, verbose=False)
+
+    execution_time = time.time() - start_time
+    print("Simulation and file output in: " + str(execution_time) + " seconds.")
 
 util.plot_timeline(timeline)

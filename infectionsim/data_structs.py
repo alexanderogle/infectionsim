@@ -43,11 +43,16 @@ class Person():
 
 class Population():
 
-    def __init__(self, id, population):
+    def __init__(self, id, population_size):
         self.people = {}
-        for i in range(0, population):
-            self.add_people(Person(i, "susceptible"))
+        if population_size > 0:
+            for i in range(0, population_size):
+                self.add_people(Person(i, "susceptible"))
         self.id = id
+
+    def init_with_dict(self, people_dict):
+        for i in range(0, len(people_dict)):
+            self.add_people(people_dict[i])
 
     def add_people(self, person):
         self.people[person.get_id()] = person
@@ -105,8 +110,9 @@ class Network():
     Network.get_network() method. This method returns the network dict which
     contains all the connection lists.
     """
-    def __init__(self, population):
-        self.population = population
+    def __init__(self, population=""):
+        if population:
+            self.population = population
         self.network = {}
 
     def init_random_network(self, connection_min, connection_max, seed_num, verbose=False):
@@ -131,6 +137,10 @@ class Network():
                     print("Generating random network: " + str(completion_percent) + "%")
             # Add the connections list to the network dict
             self.network[person_id] = connections_list
+
+    def init_from_connections_dict(self, connections_dict):
+        for person_id in connections_dict:
+            self.network[person_id] = connections_dict[person_id]
 
     def from_csv(self, filepath):
         """Method for reading in a csv file of a network."""

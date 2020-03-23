@@ -11,7 +11,7 @@ def ListPeople(population):
 test = test_pb2.Population()
 
 # Read the existing test proto
-f = open("./test.file", "rb")
+f = open("./infectionsim/protobuf/test.file", "rb")
 test.ParseFromString(f.read())
 f.close()
 
