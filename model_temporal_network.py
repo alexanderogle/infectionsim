@@ -10,7 +10,7 @@ from infectionsim import utilities as util
 ################################################################################
 # Model initial parameters
 ## Population and Network parameters
-population = 10000
+population = 100
 population_name = "cityville"
 connection_min_start = 1
 connection_max_start = 20
