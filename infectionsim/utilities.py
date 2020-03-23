@@ -61,19 +61,23 @@ def write_out_network(network_proto, network):
         connections = network[person_id]
         write_out_connection_list(connection_list_proto, person_id, connections)
 
-def write_out_temporal_network(simulation_proto, id, timeline):
+def write_out_temporal_network(simulation_proto, id, timeline, verbose=False):
     temporal_network_proto = simulation_proto.temporal_network.add()
-    for day in timeline:
+    completion_percent = 0
+    for timestep in timeline:
+        if verbose:
+            completion_percent = (timestep / len(timeline)) * 100
+            print("File generation completion: " + str(completion_percent) + "%")
         network_proto = temporal_network_proto.network.add()
         population_proto = temporal_network_proto.population.add()
-        network_proto.timestep = str(day)
-        population_proto.timestep = str(day)
-        network = timeline[day]["network"]
-        population = timeline[day]["population"].get_population()
+        network_proto.timestep = str(timestep)
+        population_proto.timestep = str(timestep)
+        network = timeline[timestep]["network"]
+        population = timeline[timestep]["population"].get_population()
         write_out_network(network_proto, network)
         write_out_population(population_proto, id, population)
 
-def save_simulation_to_file(filepath, timeline):
+def save_simulation_to_file(filepath, timeline, verbose=False):
     print("Writing out to filepath: " + filepath)
 
     # population = timeline[0]["population"]
@@ -84,12 +88,14 @@ def save_simulation_to_file(filepath, timeline):
 
     # Write out the populations
     pop_id = "cityville"
-    write_out_temporal_network(simulation_proto, pop_id, timeline)
+    write_out_temporal_network(simulation_proto, pop_id, timeline, verbose)
 
     # Write the new person out to disk
+    print("Writing out file...")
     f = open(filepath, "wb")
     f.write(simulation_proto.SerializeToString())
     f.close
+    print("File written!")
 
 def read_in_people(pop_id, people):
     people_dict = {}
@@ -151,15 +157,21 @@ def read_simulation_to_timeline(filepath):
     simulation_proto = simulation_pb2.SimulationTimeline()
 
     f = open(filepath, "rb")
+    print("Reading in data from file...")
     simulation_proto.ParseFromString(f.read())
     f.close()
 
+    print("Extracting population data...")
     population = read_in_population(simulation_proto)
+    print("Extracting network data...")
     network = read_in_network(simulation_proto)
     if(len(population) == len(network)):
         # Zip the two dictionaries into a timeline-like dictionary
         timeline = {}
+        completion_percent = 0
         for timestep in range(0, len(population)):
+            print("Zipping timeline: " + str(completion_percent) + "%")
+            completion_percent = (timestep / len(population)) * 100
             timeline[timestep] = {"population": population[timestep], "network": network[timestep]}
 
         return timeline

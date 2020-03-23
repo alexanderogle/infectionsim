@@ -8,15 +8,19 @@ import time
 from infectionsim import data_structs as data
 from infectionsim import utilities as util
 
+start_time = time.time()
 ################################################################################
+# Simulation write out options
+save_simulation = True
+
 # Model initial parameters
 ## Population and Network parameters
-population = 10
+population = 10000
 population_name = "cityville"
 connection_min_start = 1
-connection_max_start = 5
+connection_max_start = 20
 connection_min_end = 1
-connection_max_end = 5
+connection_max_end = 20
 
 # Control whether simulation completion percentage is output to the console:
 verbose = True
@@ -58,9 +62,15 @@ sim.seed_simulation(initial_infected, infection_probability, recovery_period,
 print("Beginning simulation...")
 timeline = sim.simulate(max_days, verbose=verbose)
 
-print(timeline)
+execution_time = time.time() - start_time
+print("Simulation completed in " + str(execution_time) + " seconds.")
 
-# filepath = "./" + "simulation_" + str(time.time()) + "infectionsim"
-# util.save_simulation_to_file("./test.file", timeline)
-#
-# util.plot_timeline(timeline)
+# Write out the simulation to file
+if save_simulation:
+    filepath = "./" + "sim_" + str(int(time.time())) + ".infectionsim"
+    util.save_simulation_to_file(filepath, timeline, verbose=False)
+
+    execution_time = time.time() - start_time
+    print("Simulation and file output in: " + str(execution_time) + " seconds.")
+
+util.plot_timeline(timeline)
