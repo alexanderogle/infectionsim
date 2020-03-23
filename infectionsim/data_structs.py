@@ -43,11 +43,16 @@ class Person():
 
 class Population():
 
-    def __init__(self, id, population):
+    def __init__(self, id, population_size):
         self.people = {}
-        for i in range(0, population):
-            self.add_people(Person(i, "susceptible"))
+        if population_size > 0:
+            for i in range(0, population_size):
+                self.add_people(Person(i, "susceptible"))
         self.id = id
+
+    def init_with_dict(self, people_dict):
+        for i in range(0, len(people_dict)):
+            self.add_people(people_dict[i])
 
     def add_people(self, person):
         self.people[person.get_id()] = person

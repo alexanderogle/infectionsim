@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import time
 
 # User defined
 from infectionsim import data_structs as data
@@ -57,5 +58,9 @@ sim.seed_simulation(initial_infected, infection_probability, recovery_period,
 print("Beginning simulation...")
 timeline = sim.simulate(max_days, verbose=verbose)
 
+print(timeline)
+
+# filepath = "./" + "simulation_" + str(time.time()) + "infectionsim"
+# util.save_simulation_to_file("./test.file", timeline)
+#
 # util.plot_timeline(timeline)
-util.save_simulation_to_file("./test.file", timeline)
