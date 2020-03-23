@@ -9,25 +9,27 @@ message Person {
 
 message Population {
   string id = 1;
-  repeated Person people = 2;
+  string timestep = 2;
+  repeated Person people = 3;
 }
 
 message ConnectionsList {
-  string id = 1;
+  string person_id = 1;
   repeated string connection = 2;
 }
 
 message Network {
-  repeated ConnectionsList connections = 1;
+  string timestep = 1;
+  repeated ConnectionsList connections = 2;
 }
 
 message TemporalNetwork {
-  repeated string timestep = 1;
-  repeated Network network = 2;
+  string id = 1;
+  repeated Population population = 2;
+  repeated Network network = 3;
 }
 
 message SimulationTimeline {
   string id = 1;
-  repeated Population population = 2;
-  repeated Network network = 3;
+  TemporalNetwork temporal_network = 4;
 }
