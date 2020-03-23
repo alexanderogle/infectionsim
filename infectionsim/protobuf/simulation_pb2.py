@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x10simulation.proto\"O\n\x06Person\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05state\x18\x02 \x01(\t\x12\x16\n\x0einfection_date\x18\x03 \x01(\x05\x12\x12\n\ndeath_date\x18\x04 \x01(\x05\"1\n\nPopulation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x06people\x18\x02 \x03(\x0b\x32\x07.Person\"1\n\x0f\x43onnectionsList\x12\n\n\x02id\x18\x01 \x03(\t\x12\x12\n\nconnection\x18\x02 \x03(\x05\"Q\n\x07Network\x12\x1f\n\npopulation\x18\x01 \x01(\x0b\x32\x0b.Population\x12%\n\x0b\x63onnections\x18\x02 \x03(\x0b\x32\x10.ConnectionsList\">\n\x0fTemporalNetwork\x12\x10\n\x08timestep\x18\x01 \x03(\x05\x12\x19\n\x07network\x18\x02 \x03(\x0b\x32\x08.Network\"P\n\x12SimulationTimeline\x12\x1f\n\npopulation\x18\x01 \x03(\x0b\x32\x0b.Population\x12\x19\n\x07network\x18\x02 \x03(\x0b\x32\x08.Networkb\x06proto3'
+  serialized_pb=b'\n\x10simulation.proto\"O\n\x06Person\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05state\x18\x02 \x01(\t\x12\x16\n\x0einfection_date\x18\x03 \x01(\t\x12\x12\n\ndeath_date\x18\x04 \x01(\t\"1\n\nPopulation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x06people\x18\x02 \x03(\x0b\x32\x07.Person\"1\n\x0f\x43onnectionsList\x12\n\n\x02id\x18\x01 \x01(\t\x12\x12\n\nconnection\x18\x02 \x03(\t\"0\n\x07Network\x12%\n\x0b\x63onnections\x18\x01 \x03(\x0b\x32\x10.ConnectionsList\">\n\x0fTemporalNetwork\x12\x10\n\x08timestep\x18\x01 \x03(\t\x12\x19\n\x07network\x18\x02 \x03(\x0b\x32\x08.Network\"\\\n\x12SimulationTimeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1f\n\npopulation\x18\x02 \x03(\x0b\x32\x0b.Population\x12\x19\n\x07network\x18\x03 \x03(\x0b\x32\x08.Networkb\x06proto3'
 )
 
 
@@ -47,15 +47,15 @@ _PERSON = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='infection_date', full_name='Person.infection_date', index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='death_date', full_name='Person.death_date', index=3,
-      number=4, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -123,14 +123,14 @@ _CONNECTIONSLIST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='id', full_name='ConnectionsList.id', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='connection', full_name='ConnectionsList.connection', index=1,
-      number=2, type=5, cpp_type=1, label=3,
+      number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -160,15 +160,8 @@ _NETWORK = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='population', full_name='Network.population', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='connections', full_name='Network.connections', index=1,
-      number=2, type=11, cpp_type=10, label=3,
+      name='connections', full_name='Network.connections', index=0,
+      number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -186,7 +179,7 @@ _NETWORK = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=203,
-  serialized_end=284,
+  serialized_end=251,
 )
 
 
@@ -199,7 +192,7 @@ _TEMPORALNETWORK = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='timestep', full_name='TemporalNetwork.timestep', index=0,
-      number=1, type=5, cpp_type=1, label=3,
+      number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -223,8 +216,8 @@ _TEMPORALNETWORK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=286,
-  serialized_end=348,
+  serialized_start=253,
+  serialized_end=315,
 )
 
 
@@ -236,15 +229,22 @@ _SIMULATIONTIMELINE = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='population', full_name='SimulationTimeline.population', index=0,
-      number=1, type=11, cpp_type=10, label=3,
+      name='id', full_name='SimulationTimeline.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='population', full_name='SimulationTimeline.population', index=1,
+      number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='network', full_name='SimulationTimeline.network', index=1,
-      number=2, type=11, cpp_type=10, label=3,
+      name='network', full_name='SimulationTimeline.network', index=2,
+      number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -261,12 +261,11 @@ _SIMULATIONTIMELINE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=350,
-  serialized_end=430,
+  serialized_start=317,
+  serialized_end=409,
 )
 
 _POPULATION.fields_by_name['people'].message_type = _PERSON
-_NETWORK.fields_by_name['population'].message_type = _POPULATION
 _NETWORK.fields_by_name['connections'].message_type = _CONNECTIONSLIST
 _TEMPORALNETWORK.fields_by_name['network'].message_type = _NETWORK
 _SIMULATIONTIMELINE.fields_by_name['population'].message_type = _POPULATION
