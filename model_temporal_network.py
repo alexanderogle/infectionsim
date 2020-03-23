@@ -10,12 +10,12 @@ from infectionsim import utilities as util
 ################################################################################
 # Model initial parameters
 ## Population and Network parameters
-population = 100
+population = 10
 population_name = "cityville"
 connection_min_start = 1
-connection_max_start = 20
+connection_max_start = 5
 connection_min_end = 1
-connection_max_end = 20
+connection_max_end = 5
 
 # Control whether simulation completion percentage is output to the console:
 verbose = True
@@ -57,4 +57,5 @@ sim.seed_simulation(initial_infected, infection_probability, recovery_period,
 print("Beginning simulation...")
 timeline = sim.simulate(max_days, verbose=verbose)
 
-util.plot_timeline(timeline)
+# util.plot_timeline(timeline)
+util.save_simulation_to_file("./test.file", timeline)

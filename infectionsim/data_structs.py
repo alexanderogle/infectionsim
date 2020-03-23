@@ -9,8 +9,8 @@ class Person():
     def __init__(self, id, state):
         self.id = id
         self.state = state
-        self.infection_date = "NaN"
-        self.death_date = "NaN"
+        self.infection_date = ""
+        self.death_date = ""
 
     def update_state(self, new_state):
         self.state = new_state
@@ -480,4 +480,4 @@ class TemporalNetworkSimulation(NetworkSimulation):
             if verbose:
                 completion_percent = (day/max_days)*100
                 print("Percent Simulation Complete: " + str(completion_percent) + "%")
-        return timeline 
+        return timeline
