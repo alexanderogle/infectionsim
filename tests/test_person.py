@@ -12,8 +12,8 @@ class TestPersonMethods(test.TestCase):
         self.setup()
         self.assertEqual(self.person.get_id(), self.id)
         self.assertEqual(self.person.get_state(), self.state)
-        self.assertEqual(self.person.get_infection_date(), "NaN")
-        self.assertEqual(self.person.get_death_date(), "NaN")
+        self.assertEqual(self.person.get_infection_date(), "")
+        self.assertEqual(self.person.get_death_date(), "")
 
     def test_person_change_state(self):
         self.setup()

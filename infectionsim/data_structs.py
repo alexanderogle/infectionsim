@@ -321,8 +321,8 @@ class TemporalNetwork():
             connection_min_dict = policy_dict["connection_min"]
             connection_max_dict = policy_dict["connection_max"]
         else:
-            policy = Policy("static")
-            policy.init_network_policy(self.days, connection_min, connection_max)
+            policy = Policy("static", self.days)
+            policy.init_network_policy(connection_min, connection_max)
             policy_dict = policy.get_policy()
             connection_min_dict = policy_dict["connection_min"]
             connection_max_dict = policy_dict["connection_max"]

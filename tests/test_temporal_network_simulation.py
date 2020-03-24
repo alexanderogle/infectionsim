@@ -22,14 +22,13 @@ class TestTemporalSimulation(test.TestCase):
         self.sim = data.TemporalNetworkSimulation(self.temporal_network)
         self.sim.seed_simulation(initial_infected, infection_probability,
                             recovery_period, recovery_probability, death_probability, seed_num)
-        self.timeline, self.infection_timeline, self.susceptible_timeline, self.recovered_timeline, self.dead_timeline = self.sim.simulate(self.max_days, verbose=False)
+        self.timeline = self.sim.simulate(self.max_days, verbose=False)
 
     def test_initial_timeline_population_correct(self):
         # Only the first person in the population should be infected
         self.setup()
-        population = self.timeline[0]['population']
+        population = self.timeline[0]["population"].get_population()
         for person_id in population:
-            print("Person ID: " + str(person_id) + " : " + population[person_id].get_state())
             if person_id == 0:
                 self.assertEquals(population[person_id].get_state(), "infected")
             else:

@@ -7,7 +7,7 @@ start_time = time.time()
 ################################################################################
 # Adjust filepath to be the name of the simulation file you want to read in.   #
 ################################################################################
-filepath = "./test.file"
+filepath = "./test.simulation"
 
 # Read in simulation data
 timeline = util.read_simulation_to_timeline(filepath)
