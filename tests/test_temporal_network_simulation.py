@@ -42,7 +42,9 @@ class TestTemporalSimulation(test.TestCase):
         util.save_simulation_to_file(filepath, self.timeline)
         # Read in that test file
         timeline = util.read_simulation_to_timeline(filepath)
-        
+
+        # Need a better method of checking whether these timelines are the same
+        # Currently will just check whether they have the same dimension. 
         self.assertEqual(len(timeline), len(self.timeline))
 
 
