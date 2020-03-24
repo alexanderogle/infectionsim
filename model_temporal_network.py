@@ -12,16 +12,16 @@ start_time = time.time()
 ################################################################################
 # Simulation write out options
 save_simulation = True
-plot_simulation = True
+plot_simulation = False
 
 # Model initial parameters
 ## Population and Network parameters
-population = 1000
+population = 100000
 population_name = "cityville"
 connection_min_start = 1
-connection_max_start = 20
+connection_max_start = 8
 connection_min_end = 1
-connection_max_end = 20
+connection_max_end = 8
 
 # Control whether simulation completion percentage is output to the console:
 verbose = True
@@ -41,15 +41,18 @@ max_days = 50
 ################################################################################
 
 # Setup the population
+print("Generating population...")
 pop = data.Population("cityville", population)
 
 # Create a temporal network policy (defines how the network should change over time)
 policy = data.Policy("linearly increase isolation")
+print("Generating policy...")
 policy.linearly_interpolated_network_policy(max_days, connection_min_start,
                                     connection_max_start, connection_min_end,
                                     connection_max_end)
 
 temporal_network = data.TemporalNetwork(pop, max_days)
+print("Generating temporal network...")
 temporal_network.init_random_network(connection_min=connection_min_start,
                                          connection_max=connection_max_start,
                                          seed_num=seed_num,
