@@ -51,9 +51,9 @@ policy.linearly_interpolated_network_policy(max_days, connection_min_start,
                                     connection_max_start, connection_min_end,
                                     connection_max_end)
 
-# Edit the policy so it has an opening on the 20th day, with connections ranging
-# from 30-50
-days = [20,50]
+# Edit the policy so it has an opening from day 20 to day 21, where people no
+# longer have to isolate, letting their connections range from 30-50. 
+days = [20,21]
 connections_start = [30, 50]
 connections_end = [30, 50]
 policy.edit_policy(days, connections_start, connections_end)
