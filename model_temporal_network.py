@@ -12,10 +12,11 @@ start_time = time.time()
 ################################################################################
 # Simulation write out options
 save_simulation = True
+plot_simulation = True
 
 # Model initial parameters
 ## Population and Network parameters
-population = 10000
+population = 1000
 population_name = "cityville"
 connection_min_start = 1
 connection_max_start = 20
@@ -73,4 +74,6 @@ if save_simulation:
     execution_time = time.time() - start_time
     print("Simulation and file output in: " + str(execution_time) + " seconds.")
 
-util.plot_timeline(timeline)
+# Plot the simulation
+if plot_simulation:
+    util.plot_timeline(timeline)

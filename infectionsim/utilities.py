@@ -72,7 +72,7 @@ def write_out_temporal_network(simulation_proto, id, timeline, verbose=False):
         population_proto = temporal_network_proto.population.add()
         network_proto.timestep = str(timestep)
         population_proto.timestep = str(timestep)
-        network = timeline[timestep]["network"]
+        network = timeline[timestep]["network"].get_network()
         population = timeline[timestep]["population"].get_population()
         write_out_network(network_proto, network)
         write_out_population(population_proto, id, population)
