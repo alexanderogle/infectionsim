@@ -78,10 +78,8 @@ def write_out_temporal_network(simulation_proto, id, timeline, verbose=False):
         write_out_population(population_proto, id, population)
 
 def save_simulation_to_file(filepath, timeline, verbose=False):
-    print("Writing out to filepath: " + filepath)
-
-    # population = timeline[0]["population"]
-    # network = timeline[0]["network"]
+    if verbose:
+        print("Writing out to filepath: " + filepath)
 
     simulation_proto = simulation_pb2.SimulationTimeline()
     simulation_proto.id = str(time.time())
@@ -91,11 +89,13 @@ def save_simulation_to_file(filepath, timeline, verbose=False):
     write_out_temporal_network(simulation_proto, pop_id, timeline, verbose)
 
     # Write the new person out to disk
-    print("Writing out file...")
+    if verbose:
+        print("Writing out file...")
     f = open(filepath, "wb")
     f.write(simulation_proto.SerializeToString())
-    f.close
-    print("File written!")
+    f.close()
+    if verbose:
+        print("File written!")
 
 def read_in_people(pop_id, people):
     people_dict = {}
@@ -153,24 +153,28 @@ def read_in_network(simulation_proto):
             network_dict[timestep] = network_obj.get_network()
         return network_dict
 
-def read_simulation_to_timeline(filepath):
+def read_simulation_to_timeline(filepath, verbose=False):
     simulation_proto = simulation_pb2.SimulationTimeline()
 
     f = open(filepath, "rb")
-    print("Reading in data from file...")
+    if verbose:
+        print("Reading in data from file...")
     simulation_proto.ParseFromString(f.read())
     f.close()
 
-    print("Extracting population data...")
+    if verbose:
+        print("Extracting population data...")
     population = read_in_population(simulation_proto)
-    print("Extracting network data...")
+    if verbose:
+        print("Extracting network data...")
     network = read_in_network(simulation_proto)
     if(len(population) == len(network)):
         # Zip the two dictionaries into a timeline-like dictionary
         timeline = {}
         completion_percent = 0
         for timestep in range(0, len(population)):
-            print("Zipping timeline: " + str(completion_percent) + "%")
+            if verbose:
+                print("Zipping timeline: " + str(completion_percent) + "%")
             completion_percent = (timestep / len(population)) * 100
             timeline[timestep] = {"population": population[timestep], "network": network[timestep]}
 

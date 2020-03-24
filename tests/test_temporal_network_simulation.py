@@ -1,5 +1,6 @@
 import unittest as test
 from infectionsim import data_structs as data
+from infectionsim import utilities as util
 
 class TestTemporalSimulation(test.TestCase):
 
@@ -30,9 +31,19 @@ class TestTemporalSimulation(test.TestCase):
         population = self.timeline[0]["population"].get_population()
         for person_id in population:
             if person_id == 0:
-                self.assertEquals(population[person_id].get_state(), "infected")
+                self.assertEqual(population[person_id].get_state(), "infected")
             else:
-                self.assertEquals(population[person_id].get_state(), "susceptible")
+                self.assertEqual(population[person_id].get_state(), "susceptible")
+
+    def test_simulation_write_out_read_in(self):
+        self.setup()
+        filepath = "./tests/test_simulation_write_out_read_in.simulation"
+        # Write out the test simulation to a test file
+        util.save_simulation_to_file(filepath, self.timeline)
+        # Read in that test file
+        timeline = util.read_simulation_to_timeline(filepath)
+        
+        self.assertEqual(len(timeline), len(self.timeline))
 
 
 if __name__ == '__main__':
