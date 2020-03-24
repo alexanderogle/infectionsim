@@ -193,19 +193,19 @@ class Network():
 
 class Policy():
 
-    def __init__(self, id):
+    def __init__(self, id, max_days):
         self.id = id
         self.policy = {}
         self.policy_type = ""
-
-    def init_network_policy(self, connection_min, connection_max, max_days):
-        self.policy_type = "linearly_interpolated_network"
         self.max_days = max_days
-        self.linearly_interpolated_network_policy(max_days, connection_min,
+
+    def init_network_policy(self, connection_min, connection_max):
+        self.policy_type = "linearly_interpolated_network"
+        self.linearly_interpolated_network_policy(connection_min,
                                              connection_max, connection_min,
                                              connection_max)
 
-    def linearly_interpolated_network_policy(self, max_days, connection_min_start,
+    def linearly_interpolated_network_policy(self, connection_min_start,
                                      connection_max_start, connection_min_end,
                                      connection_max_end):
         """ Initiates a policy for a temporal network that linearly interpolates
@@ -217,10 +217,10 @@ class Policy():
         connection_min_dict = {}
         connection_max_dict = {}
 
-        x = [0, max_days]
+        x = [0, self.max_days]
         connect_min = [connection_min_start, connection_min_end]
         connect_max = [connection_max_start, connection_max_end]
-        for day in range(0, max_days):
+        for day in range(0, self.max_days):
             connection_min = int(round(np.interp(day, x, connect_min)))
             connection_max = int(round(np.interp(day, x, connect_max)))
 
@@ -233,6 +233,35 @@ class Policy():
 
         self.policy["connection_min"] = connection_min_dict
         self.policy["connection_max"] = connection_max_dict
+
+    def square_wave(self, connect_on, connect_off, frequency_on=1):
+        """ connect_on is a list of two elements describing the [min, max]
+        connections when social isolation is "in effect", connect_off is
+        a list of two elements describing the [min, max] when the social
+        isolation policy is lifted.
+
+        A frequency_off of 1 represents social isolation not being in effect
+        every day. frequency_off of 2 represents social isolation being in effect
+        every other day, etc.
+        """
+        if frequency_on < 1:
+            frequency_on = 1
+
+        connection_min_dict = {}
+        connection_max_dict = {}
+
+        for day in range(0, self.max_days):
+            policy_on = not(day%frequency_on)
+            if policy_on:
+                connection_min_dict[day] = connect_on[0]
+                connection_max_dict[day] = connect_on[1]
+            else:
+                connection_min_dict[day] = connect_off[0]
+                connection_max_dict[day] = connect_off[1]
+
+        self.policy["connection_min"] = connection_min_dict
+        self.policy["connection_max"] = connection_max_dict
+
 
     def edit_policy(self, days, connections_start, connections_end):
         start_day = days[0]

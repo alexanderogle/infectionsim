@@ -45,18 +45,25 @@ print("Generating population...")
 pop = data.Population("cityville", population)
 
 # Create a temporal network policy (defines how the network should change over time)
-policy = data.Policy("linearly increase isolation")
+policy = data.Policy("linearly increase isolation", max_days)
 print("Generating policy...")
-policy.linearly_interpolated_network_policy(max_days, connection_min_start,
+policy.linearly_interpolated_network_policy(connection_min_start,
                                     connection_max_start, connection_min_end,
                                     connection_max_end)
 
 # Edit the policy so it has an opening from day 20 to day 21, where people no
-# longer have to isolate, letting their connections range from 30-50. 
+# longer have to isolate, letting their connections range from 30-50.
 days = [20,21]
 connections_start = [30, 50]
 connections_end = [30, 50]
 policy.edit_policy(days, connections_start, connections_end)
+
+# # Implement a "square wave" policy (isolation on, then isolation off)
+# connect_while_isolation_active = [1, 5] # [min, max]
+# connect_while_isolation_inactive = [1, 50]
+# policy.square_wave(connect_while_isolation_active,
+#                    connect_while_isolation_inactive,
+#                    frequency_on=2)
 
 temporal_network = data.TemporalNetwork(pop, max_days)
 print("Generating temporal network...")
