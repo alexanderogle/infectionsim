@@ -11,17 +11,17 @@ from infectionsim import utilities as util
 start_time = time.time()
 ################################################################################
 # Simulation write out options
-save_simulation = True
-plot_simulation = False
+save_simulation = False
+plot_simulation = True
 
 # Model initial parameters
 ## Population and Network parameters
-population = 100000
+population = 1000
 population_name = "cityville"
 connection_min_start = 1
-connection_max_start = 8
+connection_max_start = 10
 connection_min_end = 1
-connection_max_end = 8
+connection_max_end = 10
 
 # Control whether simulation completion percentage is output to the console:
 verbose = True
@@ -51,12 +51,19 @@ policy.linearly_interpolated_network_policy(max_days, connection_min_start,
                                     connection_max_start, connection_min_end,
                                     connection_max_end)
 
+# Edit the policy so it has an opening on the 20th day, with connections ranging
+# from 30-50
+days = [20,50]
+connections_start = [30, 50]
+connections_end = [30, 50]
+policy.edit_policy(days, connections_start, connections_end)
+
 temporal_network = data.TemporalNetwork(pop, max_days)
 print("Generating temporal network...")
 temporal_network.init_random_network(connection_min=connection_min_start,
-                                         connection_max=connection_max_start,
-                                         seed_num=seed_num,
-                                         policy=policy, verbose=verbose)
+                                     connection_max=connection_max_start,
+                                     seed_num=seed_num,
+                                     policy=policy, verbose=verbose)
 
 # Setup and run the network simulation
 sim = data.TemporalNetworkSimulation(temporal_network)

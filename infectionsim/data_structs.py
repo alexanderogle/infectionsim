@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 import random as r
 import pandas as pd
+import numpy as np
 import copy
 # Data structs for use in modeling infections
 
@@ -197,10 +198,12 @@ class Policy():
         self.policy = {}
         self.policy_type = ""
 
-    def init_network_policy(self, connection_min, connection_max):
-        self.policy_type = "network"
-        self.policy["connection_min"] = connection_min
-        self.policy["connection_max"] = connection_max
+    def init_network_policy(self, connection_min, connection_max, max_days):
+        self.policy_type = "linearly_interpolated_network"
+        self.max_days = max_days
+        self.linearly_interpolated_network_policy(max_days, connection_min,
+                                             connection_max, connection_min,
+                                             connection_max)
 
     def linearly_interpolated_network_policy(self, max_days, connection_min_start,
                                      connection_max_start, connection_min_end,
@@ -210,32 +213,16 @@ class Policy():
         TODO(aogle): find a method for better intepolation between min/max as
         the current method is crude.
         """
-        self.policy_type = "lienarly_interpolated_network_policy"
+        self.policy_type = "lienarly_interpolated_network"
         connection_min_dict = {}
         connection_max_dict = {}
 
+        x = [0, max_days]
+        connect_min = [connection_min_start, connection_min_end]
+        connect_max = [connection_max_start, connection_max_end]
         for day in range(0, max_days):
-            # Interpolate across max_days from connection_min_start/end to
-            # connection_max_start/end.
-            if connection_min_start <= connection_min_end:
-                connection_min = round((day / max_days) * connection_min_end)
-                if connection_min < connection_min_start:
-                    connection_min = connection_min_start
-
-            if connection_min_start > connection_min_end:
-                connection_min = round((1 - (day / max_days)) * connection_min_start)
-                if connection_min < connection_min_end:
-                    connection_min = connection_min_end
-
-            if connection_max_start <= connection_max_end:
-                connection_max = round((day / max_days) * connection_max_end)
-                if connection_max < connection_max_start:
-                    connection_max = connection_max_start
-
-            if connection_max_start > connection_max_end:
-                connection_max = round((1 - (day / max_days)) * connection_max_start)
-                if connection_max < connection_max_end:
-                    connection_max = connection_max_end
+            connection_min = int(round(np.interp(day, x, connect_min)))
+            connection_max = int(round(np.interp(day, x, connect_max)))
 
             # Checks that connection_max is never below connection_min
             if connection_max < connection_min:
@@ -246,6 +233,27 @@ class Policy():
 
         self.policy["connection_min"] = connection_min_dict
         self.policy["connection_max"] = connection_max_dict
+
+    def edit_policy(self, days, connections_start, connections_end):
+        start_day = days[0]
+        end_day = days[1]
+        connection_min_start = connections_start[0]
+        connection_max_start = connections_start[1]
+        connection_min_end = connections_end[0]
+        connection_max_end = connections_end[1]
+        x = [start_day, end_day]
+        connect_min = [connection_min_start, connection_min_end]
+        connect_max = [connection_max_start, connection_max_end]
+
+        for day in range(start_day, end_day):
+            connection_min = int(round(np.interp(day, x, connect_min)))
+            connection_max = int(round(np.interp(day, x, connect_max)))
+
+            if connection_max < connection_min:
+                connection_max = connection_min
+
+            self.policy["connection_min"][day] = connection_min
+            self.policy["connection_max"][day] = connection_max
 
     def get_policy(self):
         return self.policy
@@ -285,9 +293,7 @@ class TemporalNetwork():
             connection_max_dict = policy_dict["connection_max"]
         else:
             policy = Policy("static")
-            policy.linearly_interpolated_network_policy(self.days, connection_min,
-                                                connection_max, connection_min,
-                                                connection_max)
+            policy.init_network_policy(self.days, connection_min, connection_max)
             policy_dict = policy.get_policy()
             connection_min_dict = policy_dict["connection_min"]
             connection_max_dict = policy_dict["connection_max"]
