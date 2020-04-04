@@ -16,7 +16,7 @@ write_out_path = './large_network_pop_100000_conmin_1_conmax_50'
 read_in_path = './large_network_pop_100000_conmin_1_conmax_50'
 
 # Model initial parameters
-## Population and Network parameters
+# Population and Network parameters
 population = 100000
 population_name = "cityville"
 connection_min = 1
@@ -28,7 +28,8 @@ recovery_probability = 0.3
 death_probability = 0.01
 # A good number for initial infected is 0.5% of the population
 initial_infected = int(population * 0.005)
-if initial_infected < 1: initial_infected = 1
+if initial_infected < 1:
+    initial_infected = 1
 seed_num = 1459
 states = ["susceptible", "infected", "recovered", "dead"]
 infection_probability = 0.03
@@ -42,7 +43,8 @@ pop = data.Population("cityville", population)
 if not read_in_data:
     # Setup the Network
     network = data.Network(pop)
-    network.init_random_network(connection_min=connection_min, connection_max=connection_max, seed_num=seed_num)
+    network.init_random_network(connection_min=connection_min,
+                                connection_max=connection_max, seed_num=seed_num)
 
 if write_out_data:
     network.to_csv(write_out_path)
@@ -58,11 +60,13 @@ print("Seeding simulation...")
 sim.seed_simulation(initial_infected, infection_probability, recovery_period,
                     recovery_probability, death_probability, seed_num)
 print("Beginning simulation...")
-timeline, infection_timeline, susceptible_timeline, recovered_timeline, dead_timeline = sim.simulate(max_days)
+timeline, infection_timeline, susceptible_timeline, recovered_timeline, dead_timeline = sim.simulate(
+    max_days)
 
 # Plot results
 infected = pd.DataFrame.from_dict(infection_timeline, orient="index", columns=["number infected"])
-susceptible = pd.DataFrame.from_dict(susceptible_timeline, orient="index", columns=["number susceptible"])
+susceptible = pd.DataFrame.from_dict(
+    susceptible_timeline, orient="index", columns=["number susceptible"])
 recovered = pd.DataFrame.from_dict(recovered_timeline, orient="index", columns=["number alive"])
 dead = pd.DataFrame.from_dict(dead_timeline, orient="index", columns=["number dead"])
 
