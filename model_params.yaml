@@ -1,0 +1,25 @@
+---
+    # IO Parameters
+    read_in_data: False # Read restart data
+    path_in: 'data/dev.simulation' # Path to restart data
+    write_out_data: False # Write restart data
+    path_out: 'data/dev.simulation' # Path to restart data
+    seed: 1459 # Random number seed
+
+    # Population Parameters
+    population_name: 'cityville' # Name of population
+    population: 100000 # Number of agents
+
+    # Network Parameters
+    connection_min: 1 # Minimum number of connections for an agent
+    connection_max: 15 # Maximum number of connections for an agent
+
+    # Pathogen Parameters
+    recovery_period: 14 # Minimum time before an agent can recover from a pathogen
+    recovery_probability: 0.3 # Once recovery_period is reached, use this recovery rate
+    death_probability: 0.01 # Death rate for pathogen
+    infection_probability: 0.03 # Rate of infection
+
+    # Run Parameters
+    max_days: 80 # Run simulation for this number of days
+    plot_results: False # T/F: Print plots at end of model run
