@@ -9,7 +9,8 @@ from model_engine import InfectionRun
 class ReadInputs(luigi.Task):
     input_file = luigi.Parameter(default='None')
     run_id = int(time.time())
-    target = os.path.join('.pipeline_data', str(run_id), 'read_inputs.pkl')
+    path_target = os.path.join('.pipeline_data', str(run_id))
+    target = os.path.join(path_target, 'read_inputs.pkl')
 
     def run(self):
         # Make pipeline_data dir if doesn't exist
@@ -25,7 +26,8 @@ class ReadInputs(luigi.Task):
 
 class SetDefaults(luigi.Task):
     input_file = luigi.Parameter(default='None')
-    target = 'dummy.pkl'
+    path_target = ReadInputs.path_target
+    target = os.path.join(path_target, 'set_defaults.pkl')
 
     def requires(self):
         return ReadInputs(input_file=self.input_file)
@@ -36,11 +38,11 @@ class SetDefaults(luigi.Task):
 
         inputs = set_defaults(inputs)
 
-        self.target = os.path.join(
-            inputs['path_pipeline_data'],
-            inputs['run_id'],
-            'set_defaults.pkl'
-        )
+#        self.target = os.path.join(
+#            inputs['path_pipeline_data'],
+#            inputs['run_id'],
+#            'set_defaults.pkl'
+#        )
 
         with open(self.target, 'wb') as file_:
             pkl.dump(inputs, file_)
