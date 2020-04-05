@@ -24,7 +24,7 @@
 
         python -m luigi --module pipeline RunModel --local-scheduler
 
-The pipeline data is stored in `.pipeline_data`, and if you want to rerun, that data will have to be deleted first, or else `luigi` will skip the previously completed tasks. (NOTE: Because of this, we should come up with a way to autogenerate a unique ID for each model run.)
+The pipeline data is stored in `.pipeline_data`. Each run creates a unique `run_id` by using the time since epoch in seconds as `IntType`. 
 
 # Run Model as Standalone Process
 
