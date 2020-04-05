@@ -24,7 +24,7 @@
         [--send-to-cloud] --local-scheduler
 
     - Optional Parameters:
-        - `--input-file PATH-TO-INPUT-FILE`: Override default parameters with input file.
+        - `--input-file PATH-TO-INPUT-FILE`: Override default parameters with input file. Example input file can be found [here](model_params.yaml).
         - `--send-to-cloud`: Sync with S3 bucket before and after run. For instructions on implementing this feature, see the [AWS README](README_AWS.md).
 
 The pipeline data is stored in `.pipeline_data`. Each run creates a unique `run_id` by using the time since epoch in seconds and the process ID both as `IntType`.
