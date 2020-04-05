@@ -85,9 +85,18 @@ class InfectionRun():
 
 
 if __name__ == '__main__':
-    run = InfectionRun()
-    run.setup_population()
-    run.setup_network()
-    run.run_model()
-    with open('.pipeline_data/done.pkl', 'wb') as file_:
-        pkl.dump('Done.', file_)
+    print(
+        '''**************************
+
+
+Nothing to see here.
+If you want to run a instance of Infection Sim \
+execute the following command:
+
+        python -m luigi --module RunModel [--input-file /path/to/input.yaml] \
+--local-scheduler
+
+
+**************************'''
+
+    )

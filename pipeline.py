@@ -78,7 +78,6 @@ class RunModel(luigi.Task):
         return luigi.LocalTarget(self.target)
 
     def run(self):
-        #        self.target = self.target.format(ValidateInputs.inputs['run_id'])
         run = InfectionRun(path_inputs=ValidateInputs.target)
         run.setup_population()
         run.setup_network()
