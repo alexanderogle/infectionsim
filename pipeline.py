@@ -18,7 +18,9 @@ class ReadInputs(luigi.Task):
 
     def run(self):
         # Make pipeline_data dir if doesn't exist
-        os.makedirs(os.path.join('.pipeline_data', str(self.run_id)), exist_ok=True)
+        os.makedirs(os.path.join('.pipeline_data',
+                                 str(self.run_id)),
+                    exist_ok=True)
         inputs = unload_inputs(input_file=self.input_file)
 
         with open(self.target, 'wb') as file_:
