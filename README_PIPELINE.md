@@ -18,11 +18,11 @@
 
 - Execute at command line using input file:
 
-    python -m luigi --module pipeline RunModel --RunModel-input-file model_params.yaml --local-scheduler
+        python -m luigi --module pipeline RunModel --RunModel-input-file model_params.yaml --local-scheduler
 
 - Execute at command line using default values:
 
-    python -m luigi --module pipeline RunModel --local-scheduler
+        python -m luigi --module pipeline RunModel --local-scheduler
 
 The pipeline data is stored in `.pipeline_data`, and if you want to rerun, that data will have to be deleted first, or else `luigi` will skip the previously completed tasks. (NOTE: Because of this, we should come up with a way to autogenerate a unique ID for each model run.)
 
