@@ -12,4 +12,4 @@
 
     `2020-04-05 13:37:36 infectionsim-pipeline-data`
 
-You are now ready to run the model using the `--send-to-cloud` feature. See the [pipeline README](PIPELINE_README.md) for further instructions.
+You are now ready to run the model using the `--send-to-cloud` feature. See the [pipeline README](README_PIPELINE.md) for further instructions.
