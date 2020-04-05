@@ -8,11 +8,13 @@
     + Can execute with `python model_engine.py` from command line as well.
     + Uses `model_params.yaml`
 - `pipeline.py`:
-    + Functional `luigi` pipeline that consists of four tasks:
+    + Functional `luigi` pipeline that consists of the following tasks:
         - `ReadInputs`: Reads YAML file if one is provided.
+        -`SyncFromS3`: Sinks S3 bucket to local machine.
         - `SetDefaults`: Sets default values for any missing parameters.
         - `ValidateInputs`: Validates that inputs passed are of proper type.
-        - `RunModel`: Runs an instance of the model
+        - `Model Engine`: Runs the model engine
+        - `Run Model`: Run an instance of Infection Sim
 
 # Submitting an InfectionSim Run
 
