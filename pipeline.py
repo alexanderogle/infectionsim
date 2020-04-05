@@ -46,8 +46,9 @@ class SetDefaults(luigi.Task):
 
 
 class ValidateInputs(luigi.Task):
-    input_file = luigi.Parameter(default=None)
-    target = '.pipeline_data/{}/read_inputs.pkl'
+    input_file = luigi.Parameter(default='None')
+    path_target = SetDefaults.path_target
+    target = os.path.join(path_target, 'validate_inputs.pkl')
 
     def requires(self):
         return SetDefaults(input_file=self.input_file)
@@ -60,7 +61,6 @@ class ValidateInputs(luigi.Task):
             inputs = pkl.load(_file)
 
         inputs = validate_inputs(inputs)
-        self.target = self.target.format(inputs['run_id'])
 
         with open(self.target, 'wb') as file_:
             pkl.dump(inputs, file_)
