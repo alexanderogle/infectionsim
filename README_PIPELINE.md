@@ -1,4 +1,4 @@
-# New files:
+# Descriptions of Dependencies
 
 - `model_params.yaml`:
     +  Default input file for model run
@@ -10,7 +10,7 @@
 - `pipeline.py`:
     + Functional `luigi` pipeline that consists of the following tasks:
         - `ReadInputs`: Reads YAML file if one is provided.
-        -`SyncFromS3`: Sinks S3 bucket to local machine.
+        - `SyncFromS3`: Sinks S3 bucket to local machine.
         - `SetDefaults`: Sets default values for any missing parameters.
         - `ValidateInputs`: Validates that inputs passed are of proper type.
         - `Model Engine`: Runs the model engine
