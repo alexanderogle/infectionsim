@@ -3,15 +3,15 @@ import numpy as np
 
 
 def unload_inputs(input_file=None):
-    # Validate
-    assert input_file != None, 'Provide an input file.'
-    suffix = input_file.split('.')[-1]
-    assert suffix == 'yaml', 'Invalid input file type. Should be ".yaml".'
-    with open('model_params.yaml') as _inputs:
-        inputs = yaml.load(_inputs, Loader=yaml.FullLoader)
-
-    # TODO: Validate all keys are present and that values are of the
-    #       correct type.
+    # Preliminary Validatation
+    if input_file == None:
+        print('+ Using default values.')
+        inputs = {}
+    else:
+        suffix = input_file.split('.')[-1]
+        assert suffix == 'yaml', 'Invalid input file type. Should be ".yaml".'
+        with open('model_params.yaml') as _inputs:
+            inputs = yaml.load(_inputs, Loader=yaml.FullLoader)
 
     return inputs
 
@@ -21,7 +21,7 @@ def set_defaults(inputs):
         'read_in_data': False,
         'path_in': '',
         'write_out_data': True,
-        'path_out': 'data',
+        'path_out': 'data/run.simulation',
         'seed_num': np.random.randint(1, high=10000),
         'population_name': 'cityville',
         'population': 10000,

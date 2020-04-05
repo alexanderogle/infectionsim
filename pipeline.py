@@ -5,7 +5,7 @@ from model_engine import InfectionRun
 
 
 class ReadInputs(luigi.Task):
-    input_file = luigi.Parameter(default='model_params.yaml')
+    input_file = luigi.Parameter(default=None)
     target = '.pipeline_data/read_inputs.pkl'
 
     def output(self):
@@ -19,7 +19,7 @@ class ReadInputs(luigi.Task):
 
 
 class SetDefaults(luigi.Task):
-    input_file = luigi.Parameter(default='model_params.yaml')
+    input_file = luigi.Parameter(default=None)
     target = '.pipeline_data/set_defaults.pkl'
 
     def requires(self):
@@ -39,7 +39,7 @@ class SetDefaults(luigi.Task):
 
 
 class ValidateInputs(luigi.Task):
-    input_file = luigi.Parameter(default='model_params.yaml')
+    input_file = luigi.Parameter(default=None)
     target = '.pipeline_data/validate_inputs.pkl'
 
     def requires(self):
@@ -59,8 +59,8 @@ class ValidateInputs(luigi.Task):
 
 
 class RunModel(luigi.Task):
-    input_file = luigi.Parameter(default='model_params.yaml')
-    target = '.pipeline_data/done.pkl'
+    input_file = luigi.Parameter(default=None)
+    target = '.pipeline_data/run_model.pkl'
 
     def requires(self):
         return ValidateInputs(input_file=self.input_file)
