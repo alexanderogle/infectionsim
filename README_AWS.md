@@ -2,8 +2,10 @@
 
 ## Installation
 
-1. Install AWS CLI
+1. Install AWS CLI by executing the following at command line:
+
     `pip install awscli`
+    
 2. Copy your `credential` file into `~/.aws`
 
 ## Verify Installation
