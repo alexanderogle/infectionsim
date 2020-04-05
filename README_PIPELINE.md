@@ -8,8 +8,10 @@
     + Can execute with `python model_engine.py` from command line as well.
     + Uses `model_params.yaml`
 - `pipeline.py`:
-    + Functional `luigi` pipeline that consists of two tasks:
-        - `ReadInputs`: Reads YAML file. Will eventually validate inputs
+    + Functional `luigi` pipeline that consists of four tasks:
+        - `ReadInputs`: Reads YAML file if one is provided.
+        - `SetDefaults`: Sets default values for any missing parameters.
+        - `ValidateInputs`: Validates that inputs passed are of proper type.
         - `RunModel`: Runs an instance of the model
 
 # Submitting Luigi Task
