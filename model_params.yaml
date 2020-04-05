@@ -2,9 +2,9 @@
     # IO Parameters
     read_in_data: False # Read restart data
     path_in: 'data/dev.simulation' # Path to restart data
-    write_out_data: False # Write restart data
+    write_out_data: True # Write restart data
     path_out: 'data/dev.simulation' # Path to restart data
-    seed: 1459 # Random number seed
+    seed_num: 1459 # Random number seed
 
     # Population Parameters
     population_name: 'cityville' # Name of population
@@ -22,4 +22,4 @@
 
     # Run Parameters
     max_days: 80 # Run simulation for this number of days
-    plot_results: False # T/F: Print plots at end of model run
+    plot_results: True # T/F: Print plots at end of model run
