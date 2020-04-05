@@ -14,17 +14,18 @@
         - `ValidateInputs`: Validates that inputs passed are of proper type.
         - `RunModel`: Runs an instance of the model
 
-# Submitting Luigi Task
+# Submitting an InfectionSim Run
 
 - Execute at command line using input file:
 
-        python -m luigi --module pipeline RunModel --input-file model_params.yaml --local-scheduler
+        python -m luigi --module pipeline RunModel [--input-file PATH-TO-INPUT-FILE]
+        [--send-to-cloud] --local-scheduler
 
-- Execute at command line using default values:
+    - Optional Parameters:
+        - `--input-file PATH-TO-INPUT-FILE`: Override default parameters with input file.
+        - `[--send-to-cloud]`: Sync with S3 bucket before and after run.
 
-        python -m luigi --module pipeline RunModel --local-scheduler
-
-The pipeline data is stored in `.pipeline_data`. Each run creates a unique `run_id` by using the time since epoch in seconds and the process ID as `IntType`.
+The pipeline data is stored in `.pipeline_data`. Each run creates a unique `run_id` by using the time since epoch in seconds and the process ID both as `IntType`.
 
 # Run Model as Standalone Process
 
