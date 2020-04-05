@@ -24,7 +24,7 @@
 
         python -m luigi --module pipeline RunModel --local-scheduler
 
-The pipeline data is stored in `.pipeline_data`. Each run creates a unique `run_id` by using the time since epoch in seconds as `IntType`.
+The pipeline data is stored in `.pipeline_data`. Each run creates a unique `run_id` by using the time since epoch in seconds and the process ID as `IntType`.
 
 # Run Model as Standalone Process
 
