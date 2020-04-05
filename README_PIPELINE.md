@@ -26,9 +26,3 @@
         - `--send-to-cloud`: Sync with S3 bucket before and after run.
 
 The pipeline data is stored in `.pipeline_data`. Each run creates a unique `run_id` by using the time since epoch in seconds and the process ID both as `IntType`.
-
-# Run Model as Standalone Process
-
-Execute at command line:
-
-    python model_engine.py
