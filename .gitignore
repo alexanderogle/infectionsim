@@ -9,3 +9,5 @@ infectionsim/__pycache__/
 data/
 
 *.ipynb
+
+aws_credentials/
