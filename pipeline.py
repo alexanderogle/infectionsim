@@ -41,7 +41,8 @@ class SetDefaults(luigi.Task):
     target = os.path.join(path_target, 'set_defaults.pkl')
 
     def requires(self):
-        return ReadInputs(input_file=self.input_file, send_to_cloud=self.send_to_cloud)
+        return ReadInputs(input_file=self.input_file,
+                          send_to_cloud=self.send_to_cloud)
 
     def run(self):
         with open(ReadInputs.target, 'rb') as _file:
@@ -63,7 +64,8 @@ class ValidateInputs(luigi.Task):
     target = os.path.join(path_target, 'validate_inputs.pkl')
 
     def requires(self):
-        return SetDefaults(input_file=self.input_file, send_to_cloud=self.send_to_cloud)
+        return SetDefaults(input_file=self.input_file,
+                           send_to_cloud=self.send_to_cloud)
 
     def output(self):
         return luigi.LocalTarget(self.target)
@@ -85,7 +87,8 @@ class ModelEngine(luigi.Task):
     target = os.path.join(path_target, 'run_model.pkl')
 
     def requires(self):
-        return ValidateInputs(input_file=self.input_file, send_to_cloud=self.send_to_cloud)
+        return ValidateInputs(input_file=self.input_file,
+                              send_to_cloud=self.send_to_cloud)
 
     def output(self):
         return luigi.LocalTarget(self.target)
@@ -107,7 +110,8 @@ class RunModel(luigi.Task):
     target = os.path.join(path_target, 'sync_to_s3.pkl')
 
     def requires(self):
-        return ModelEngine(input_file=self.input_file, send_to_cloud=self.send_to_cloud)
+        return ModelEngine(input_file=self.input_file,
+                           send_to_cloud=self.send_to_cloud)
 
     def output(self):
         return luigi.LocalTarget(self.target)
