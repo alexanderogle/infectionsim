@@ -27,25 +27,8 @@ class ReadInputs(luigi.Task):
         with open(self.target, 'wb') as file_:
             pkl.dump(inputs, file_)
 
-    def output(self):
-        return luigi.LocalTarget(self.target)
-
-
-class SyncFromS3(luigi.Task):
-    input_file = luigi.Parameter(default='None')
-    send_to_cloud = luigi.BoolParameter(default=False)
-    path_target = ReadInputs.path_target
-    target = os.path.join(path_target, 'sync_from_s3.pkl')
-
-    def requires(self):
-        return ReadInputs(input_file=self.input_file, send_to_cloud=self.send_to_cloud)
-
-    def run(self):
         if self.send_to_cloud:
             sync_s3('s3://infectionsim-pipeline-data', '.pipeline_data')
-
-        with open(self.target, 'wb') as file_:
-            pkl.dump('synced', file_)
 
     def output(self):
         return luigi.LocalTarget(self.target)
@@ -54,11 +37,11 @@ class SyncFromS3(luigi.Task):
 class SetDefaults(luigi.Task):
     input_file = luigi.Parameter(default='None')
     send_to_cloud = luigi.BoolParameter(default=False)
-    path_target = SyncFromS3.path_target
+    path_target = ReadInputs.path_target
     target = os.path.join(path_target, 'set_defaults.pkl')
 
     def requires(self):
-        return SyncFromS3(input_file=self.input_file, send_to_cloud=self.send_to_cloud)
+        return ReadInputs(input_file=self.input_file, send_to_cloud=self.send_to_cloud)
 
     def run(self):
         with open(ReadInputs.target, 'rb') as _file:
