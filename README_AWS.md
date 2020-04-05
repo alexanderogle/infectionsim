@@ -11,3 +11,5 @@
 1. Issue the command `aws s3 ls`. The output should resemble the following:
 
     `2020-04-05 13:37:36 infectionsim-pipeline-data`
+
+You are now ready to run the model using the `--send-to-cloud` feature. See the [pipeline README](PIPELINE_README.) for further instructions.
