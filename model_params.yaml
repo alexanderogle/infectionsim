@@ -3,7 +3,7 @@
     read_in_data: False # Read restart data
     path_in: 'data/dev.simulation' # Path to restart data
     write_out_data: True # Write restart data
-    path_out: 'data/dev.simulation' # Path to restart data
+    path_out: 'data/run.simulation' # Path to restart data
     seed_num: 1459 # Random number seed
 
     # Population Parameters
