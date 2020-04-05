@@ -3,13 +3,13 @@
 - `model_params.yaml`:
     +  Default input file for model run
 - `model_engine.py`:
-    + Created a `InfectionRun` class for an instance run of Infection Sim.
+    + Created a `InfectionRun` class for an instance run of Infection Sim. \n
         ~ These methods are an example draft for `luigi.Task` instances
     + Can execute with `python model_engine.py` from command line as well.
     + Uses `model_params.yaml`
 - `pipeline.py`:
-    + Functional `luigi` pipeline that consists of two tasks:
-        ~ `ReadInputs`: Reads YAML file. Will eventually validate inputs
+    + Functional `luigi` pipeline that consists of two tasks: \n
+        ~ `ReadInputs`: Reads YAML file. Will eventually validate inputs \n
         ~ `RunModel`: Runs an instance of the model
 
 # Submitting Luigi Task
