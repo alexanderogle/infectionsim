@@ -10,4 +10,4 @@
 
 1. Issue the command `aws s3 ls`. The output should resemble the following:
 
-    2020-04-05 13:37:36 infectionsim-pipeline-data
+     2020-04-05 13:37:36 infectionsim-pipeline-data
