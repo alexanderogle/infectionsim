@@ -18,13 +18,13 @@
 
 - Execute at command line using input file:
 
-        python -m luigi --module pipeline RunModel --RunModel-input-file model_params.yaml --local-scheduler
+        python -m luigi --module pipeline RunModel --input-file model_params.yaml --local-scheduler
 
 - Execute at command line using default values:
 
         python -m luigi --module pipeline RunModel --local-scheduler
 
-The pipeline data is stored in `.pipeline_data`. Each run creates a unique `run_id` by using the time since epoch in seconds as `IntType`. 
+The pipeline data is stored in `.pipeline_data`. Each run creates a unique `run_id` by using the time since epoch in seconds as `IntType`.
 
 # Run Model as Standalone Process
 
