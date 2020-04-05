@@ -67,8 +67,9 @@ class ValidateInputs(luigi.Task):
 
 
 class RunModel(luigi.Task):
-    input_file = luigi.Parameter(default=None)
-    target = '.pipeline_data/{}/read_inputs.pkl'
+    input_file = luigi.Parameter(default='None')
+    path_target = ValidateInputs.path_target
+    target = os.path.join(path_target, 'run_model.pkl')
 
     def requires(self):
         return ValidateInputs(input_file=self.input_file)
@@ -77,8 +78,8 @@ class RunModel(luigi.Task):
         return luigi.LocalTarget(self.target)
 
     def run(self):
-        self.target = self.target.format(ValidateInputs.inputs['run_id'])
-        run = InfectionRun()
+        #        self.target = self.target.format(ValidateInputs.inputs['run_id'])
+        run = InfectionRun(path_inputs=ValidateInputs.target)
         run.setup_population()
         run.setup_network()
         run.run_model()

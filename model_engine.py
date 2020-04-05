@@ -8,10 +8,12 @@ from infectionsim import data_structs as data
 class InfectionRun():
     '''An instance of a model run.'''
 
-    def __init__(self, path_inputs='.pipeline_data/validate_inputs.pkl'):
-        with open(path_inputs, 'rb') as _file:
-            self.inputs = pkl.load(_file)
-
+    def __init__(self, path_inputs=None):
+        try:
+            with open(path_inputs, 'rb') as _file:
+                self.inputs = pkl.load(_file)
+        except TypeError:
+            raise AttributeError('Provide a path to the inputs.')
         os.makedirs('data', exist_ok=True)
 
     def setup_population(self):
