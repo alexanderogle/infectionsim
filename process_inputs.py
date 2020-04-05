@@ -1,10 +1,12 @@
 import yaml
 import numpy as np
+import time
+import os
 
 
-def unload_inputs(input_file=None):
+def unload_inputs(input_file='None'):
     # Preliminary Validatation
-    if input_file == None:
+    if input_file == 'None':
         print('+ Using default values.')
         inputs = {}
     else:
@@ -12,6 +14,21 @@ def unload_inputs(input_file=None):
         assert suffix == 'yaml', 'Invalid input file type. Should be ".yaml".'
         with open('model_params.yaml') as _inputs:
             inputs = yaml.load(_inputs, Loader=yaml.FullLoader)
+
+    # Preliminary Validation
+    # Add population_name if it is not defined
+#    if 'population_name' not in inputs:
+#        inputs['population_name'] = 'cityville'
+#    # Add path_pipeline_data if it is not defined
+#    if 'path_pipeline_data' not in inputs:
+#        inputs['path_pipeline_data'] = os.path.join('.pipeline_data')
+#
+#    # Set unique id
+#    inputs['run_id'] = inputs['population_name'] + '_' + str(int(time.time()))
+#
+#    # Make path_pipeline_data if doesn't exist
+#    _dest = os.path.join(inputs['path_pipeline_data'], inputs['run_id'])
+#    os.makedirs(_dest, exist_ok=True)
 
     return inputs
 
