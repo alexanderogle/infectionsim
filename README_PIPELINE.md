@@ -1,4 +1,4 @@
-# New files:
+# New Files
 
 - `model_params.yaml`:
     +  Default input file for model run
