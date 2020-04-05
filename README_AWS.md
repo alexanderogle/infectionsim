@@ -20,3 +20,4 @@ You are now ready to run the model using the `--send-to-cloud` feature. See the 
 
 1. Go to Infection Sim's [AWS console](https://infection-sim.signin.aws.amazon.com/console).
 2. Log in with your username and password in your `aws_credentials.csv` file.
+3. Follow instructions to create new password.
