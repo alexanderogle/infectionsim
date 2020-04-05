@@ -8,7 +8,7 @@
     + Can execute with `python model_engine.py` from command line as well.
     + Uses `model_params.yaml`
 - `pipeline.py`:
-    + Functional `luigi` pipeline that consists of two tasks: 
+    + Functional `luigi` pipeline that consists of two tasks:
         - `ReadInputs`: Reads YAML file. Will eventually validate inputs
         - `RunModel`: Runs an instance of the model
 
@@ -16,7 +16,7 @@
 
 Execute at command line:
 
-    python -m luigi --module pipeline RunModel --local-scheduler
+    python -m luigi --module pipeline RunModel --RunModel-input-file model_params.yaml --local-scheduler
 
 The pipeline data is stored in `.pipeline_data`, and if you want to rerun, that data will have to be deleted first, or else `luigi` will skip the previously completed tasks. (NOTE: Because of this, we should come up with a way to autogenerate a unique ID for each model run.)
 
