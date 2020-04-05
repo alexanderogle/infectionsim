@@ -1,4 +1,4 @@
-# Descriptions of New Files
+# Descriptions of Dependencies
 
 - `model_params.yaml`:
     +  Default input file for model run
