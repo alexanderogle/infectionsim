@@ -38,12 +38,6 @@ class SetDefaults(luigi.Task):
 
         inputs = set_defaults(inputs)
 
-#        self.target = os.path.join(
-#            inputs['path_pipeline_data'],
-#            inputs['run_id'],
-#            'set_defaults.pkl'
-#        )
-
         with open(self.target, 'wb') as file_:
             pkl.dump(inputs, file_)
 
