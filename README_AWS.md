@@ -6,7 +6,7 @@
 
     `pip install awscli`
     
-2. Copy your `credential` file into `~/.aws`
+2. Copy your `credentials` file into `~/.aws`
 
 ## Verify Installation
 
