@@ -7,3 +7,5 @@ infectionsim/__pycache__/
 .pipeline_data/
 
 data/
+
+*.ipynb
