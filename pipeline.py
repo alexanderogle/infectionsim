@@ -14,6 +14,7 @@ class ReadInputs(luigi.Task):
         int(time.time()),
         int(os.getpid())
     )
+    job_id = luigi.Parameter(default=run_id)
     path_target = os.path.join('.pipeline_data', str(run_id))
     target = os.path.join(path_target, 'read_inputs.pkl')
 
@@ -37,6 +38,7 @@ class ReadInputs(luigi.Task):
 class SetDefaults(luigi.Task):
     input_file = luigi.Parameter(default='None')
     send_to_cloud = luigi.BoolParameter(default=False)
+    job_id = ReadInputs.job_id
     path_target = ReadInputs.path_target
     target = os.path.join(path_target, 'set_defaults.pkl')
 
@@ -60,6 +62,7 @@ class SetDefaults(luigi.Task):
 class ValidateInputs(luigi.Task):
     input_file = luigi.Parameter(default='None')
     send_to_cloud = luigi.BoolParameter(default=False)
+    job_id = SetDefaults.job_id
     path_target = SetDefaults.path_target
     target = os.path.join(path_target, 'validate_inputs.pkl')
 
@@ -83,8 +86,9 @@ class ValidateInputs(luigi.Task):
 class ModelEngine(luigi.Task):
     input_file = luigi.Parameter(default='None')
     send_to_cloud = luigi.BoolParameter(default=False)
+    job_id = ValidateInputs.job_id
     path_target = ValidateInputs.path_target
-    target = os.path.join(path_target, 'run_model.pkl')
+    target = os.path.join(path_target, 'model_engine.pkl')
 
     def requires(self):
         return ValidateInputs(input_file=self.input_file,
@@ -106,6 +110,7 @@ class ModelEngine(luigi.Task):
 class RunModel(luigi.Task):
     input_file = luigi.Parameter(default='None')
     send_to_cloud = luigi.BoolParameter(default=False)
+    job_id = ModelEngine.job_id
     path_target = ModelEngine.path_target
     target = os.path.join(path_target, 'sync_to_s3.pkl')
 
@@ -117,8 +122,7 @@ class RunModel(luigi.Task):
         return luigi.LocalTarget(self.target)
 
     def run(self):
-        if self.send_to_cloud:
-            sync_s3('.pipeline_data', 's3://infectionsim-pipeline-data')
-
         with open(self.target, 'wb') as file_:
             pkl.dump('synced', file_)
+        if self.send_to_cloud:
+            sync_s3('.pipeline_data', 's3://infectionsim-pipeline-data')
