@@ -35,7 +35,7 @@ def set_defaults(inputs):
         'death_probability': 0.01,
         'infection_probability': 0.03,
         'max_days': 80,
-        'plot_results': False
+        'plot_results': True
 
     }
 
