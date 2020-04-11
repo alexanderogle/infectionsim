@@ -77,9 +77,9 @@ def write_out_temporal_network(simulation_proto, id, timeline, verbose=False):
         write_out_network(network_proto, network)
         write_out_population(population_proto, id, population)
 
-def save_simulation_to_file(filepath, timeline, verbose=False):
+def save_temporalnetworksimulation_to_file(filepath, timeline, verbose=False):
     if verbose:
-        print("Writing out to filepath: " + filepath)
+        print("Will write out to filepath: " + filepath)
 
     simulation_proto = simulation_pb2.SimulationTimeline()
     simulation_proto.id = str(time.time())

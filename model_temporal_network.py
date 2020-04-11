@@ -11,7 +11,7 @@ from infectionsim import utilities as util
 start_time = time.time()
 ################################################################################
 # Simulation write out options
-save_simulation = False
+save_simulation = True
 plot_simulation = True
 
 # Model initial parameters
@@ -19,9 +19,9 @@ plot_simulation = True
 population = 100000
 population_name = "cityville"
 connection_min_start = 1
-connection_max_start = 10
+connection_max_start = 50
 connection_min_end = 1
-connection_max_end = 10
+connection_max_end = 50
 
 # Control whether simulation completion percentage is output to the console:
 verbose = True
@@ -34,7 +34,6 @@ death_probability = 0.01
 initial_infected = int(population * 0.005)
 if initial_infected < 1: initial_infected = 1
 seed_num = 1459
-states = ["susceptible", "infected", "recovered", "dead"]
 infection_probability = 0.03
 max_days = 50
 
@@ -53,10 +52,10 @@ policy.linearly_interpolated_network_policy(connection_min_start,
 
 # Edit the policy so it has an opening from day 20 to day 21, where people no
 # longer have to isolate, letting their connections range from 30-50.
-days = [20,21]
-connections_start = [30, 50]
-connections_end = [30, 50]
-policy.edit_policy(days, connections_start, connections_end)
+# days = [20,21]
+# connections_start = [30, 50]
+# connections_end = [30, 50]
+# policy.edit_policy(days, connections_start, connections_end)
 
 # # Implement a "square wave" policy (isolation on, then isolation off)
 # connect_while_isolation_active = [1, 5] # [min, max]
@@ -86,7 +85,7 @@ print("Simulation completed in " + str(execution_time) + " seconds.")
 # Write out the simulation to file
 if save_simulation:
     filepath = "./" + "sim_" + str(int(time.time())) + ".infectionsim"
-    util.save_simulation_to_file(filepath, timeline, verbose=False)
+    util.save_temporalnetworksimulation_to_file(filepath, timeline, verbose=False)
 
     execution_time = time.time() - start_time
     print("Simulation and file output in: " + str(execution_time) + " seconds.")
