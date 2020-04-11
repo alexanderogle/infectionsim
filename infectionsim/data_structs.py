@@ -115,6 +115,8 @@ class Network():
         if population:
             self.population = population
         self.network = {}
+        for i in range(0, self.population.get_population_size()):
+            self.network[i] = []
 
     def init_random_network(self, connection_min, connection_max, seed_num, verbose=False):
         r.seed(seed_num)
