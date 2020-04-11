@@ -140,7 +140,7 @@ class Network():
                     other_person_connection_limit = num_connections[connection_id]
                     # Ensure it isn't in the connections_list and the other
                     # person has space in their connections_list too.
-                    while(connection_id in connections_list and len(other_person_connection_list) < num_connections[connection_id]):
+                    while(connection_id in connections_list or len(other_person_connection_list) >= num_connections[connection_id]):
                         connection_id = r.randint(0, pop_size-1)
                         other_person_connection_list = self.network[connection_id]
                     # Add the random person_id to the connections_list
