@@ -16,7 +16,7 @@ plot_simulation = True
 
 # Model initial parameters
 ## Population and Network parameters
-population = 100000
+population = 1000
 population_name = "cityville"
 connection_min_start = 1
 connection_max_start = 10

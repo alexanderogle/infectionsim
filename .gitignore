@@ -1,0 +1,16 @@
+infectionsim/__init__.pyc
+
+*.pyc
+
+infectionsim/__pycache__/
+
+.pipeline_data/
+
+data/
+
+
+aws_credentials/
+
+.ipynb_checkpoints/
+
+.DS_Store
