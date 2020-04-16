@@ -115,27 +115,39 @@ class Network():
         if population:
             self.population = population
         self.network = {}
+        for i in range(0, self.population.get_population_size()):
+            self.network[i] = []
 
     def init_random_network(self, connection_min, connection_max, seed_num, verbose=False):
         r.seed(seed_num)
         pop = self.population.get_population()
         pop_size =len(pop)
+        #TODO(aogle): Make it so that connections are 1:1 and still satisfy the
+        #num_connections condition.
+        num_connections = []
+        for person_id in pop:
+            num_connections.append(r.randint(connection_min, connection_max))
 
         completion_percent = 0
         for person_id in pop:
-            num_connections = r.randint(connection_min, connection_max)
-            connections_list = []
-            for i in range(0, num_connections):
-                # Get a random person_id
-                connection_id = r.randint(0, pop_size-1)
-                # Ensure it isn't in the connections_list
-                while(connection_id in connections_list):
+            connection_limit = num_connections[person_id]
+            connections_list = self.network[person_id]
+            for i in range(0, connection_limit):
+                if len(connections_list) < connection_limit:
+                    # Get a random person_id
                     connection_id = r.randint(0, pop_size-1)
-                # Add the random person_id to the connections_list
-                connections_list.append(connection_id)
-                completion_percent = (person_id / pop_size) * 100
-                if(verbose):
-                    print("Generating random network: " + str(completion_percent) + "%")
+                    other_person_connection_list = self.network[connection_id]
+                    other_person_connection_limit = num_connections[connection_id]
+                    # Ensure it isn't in the connections_list and the other
+                    # person has space in their connections_list too.
+                    while(connection_id in connections_list and len(other_person_connection_list) < num_connections[connection_id]):
+                        connection_id = r.randint(0, pop_size-1)
+                        other_person_connection_list = self.network[connection_id]
+                    # Add the random person_id to the connections_list
+                    connections_list.append(connection_id)
+                    completion_percent = (person_id / pop_size) * 100
+                    if(verbose):
+                        print("Generating random network: " + str(completion_percent) + "%")
             # Add the connections list to the network dict
             self.network[person_id] = connections_list
 
