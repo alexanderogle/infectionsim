@@ -1,4 +1,5 @@
 import unittest as test
+import time
 from infectionsim import data_structs as data
 from infectionsim import utilities as util
 
@@ -9,7 +10,7 @@ class TestTemporalSimulation(test.TestCase):
         population_size = 10
         self.pop = data.Population("city", 10)
 
-        self.max_days = 10
+        self.max_days = 100
         self.temporal_network = data.TemporalNetwork(self.pop, self.max_days)
         conmin = 1
         conmax = 5
@@ -44,8 +45,16 @@ class TestTemporalSimulation(test.TestCase):
         timeline = util.read_simulation_to_timeline(filepath)
 
         # Need a better method of checking whether these timelines are the same
-        # Currently will just check whether they have the same dimension. 
+        # Currently will just check whether they have the same dimension.
         self.assertEqual(len(timeline), len(self.timeline))
+
+    def test_time_simulation(self):
+        start_time = time.time()
+        self.setup()
+        end_time = time.time()
+        runtime = end_time - start_time
+        print(runtime)
+        self.assertGreater(5, runtime)
 
 
 if __name__ == '__main__':
