@@ -16,3 +16,5 @@ aws_credentials/
 .DS_Store
 
 *.pkl
+
+*.ipynb
