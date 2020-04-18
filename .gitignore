@@ -14,3 +14,5 @@ aws_credentials/
 .ipynb_checkpoints/
 
 .DS_Store
+
+*.pkl
