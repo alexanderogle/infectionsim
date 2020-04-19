@@ -85,7 +85,10 @@ class ConnectionEngine():
             population.iloc[[agent, connection], 2] += 1
 
             # If more connections are needed, iterate
-            while population.num_connections[agent] < num_connections:
+            cont = population.num_connections[agent] < num_connections
+            cnt = 0
+            while cont and (cnt < len(population)):
+                cnt += 1
                 self._build_connection_list(agent,
                                             population,
                                             num_connections)
