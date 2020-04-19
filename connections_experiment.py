@@ -6,6 +6,7 @@ import resource
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 import pickle as pkl
+import logging
 sys.setrecursionlimit(10**6)
 
 
@@ -27,15 +28,43 @@ class MemoryMonitor:
         return max_usage
 
 
+class ExperimentLogger:
+    def __init__(self):
+        pass
+
+    def init(self):
+        # Create logger ---
+        logger = logging.getLogger('connection-engine')
+        logger.setLevel(logging.DEBUG)
+        # Create file handler
+        log_path = 'experiment.log'
+        fh = logging.FileHandler(log_path)
+        fh.setLevel(logging.DEBUG)
+        # Create console handler
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.DEBUG)
+        # Create formatter and add it to the handlers
+        formatter = logging.Formatter(
+            '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+        )
+        fh.setFormatter(formatter)
+        ch.setFormatter(formatter)
+        # Add the handlers to the logger
+        logger.addHandler(fh)
+        logger.addHandler(ch)
+
+        self.log = logger
+
+        return logger
+
+
 class ConnectionEngine():
     def __init__(self, num_people=None, num_connections=None):
         self.num_people = num_people
         self.num_connections = num_connections
 
     def _build_connection_list(self, agent, population, num_connections):
-        # Break ounter
-        # if _cnt == 0:
-        #    _cnt += 1
+
         # Return IDs of people with connections less than num_connections
         available_to_connect = (
             lambda agent, population: population.drop(agent).query('num_connections < {}'
@@ -43,8 +72,6 @@ class ConnectionEngine():
                                                                    ).index
         )
 
-        # Update number of connections
-        #population['num_connections'] = population.connections.apply(len)
         # Get other agents available to connect
         available = available_to_connect(agent, population)
         # Randomly choose connection
@@ -56,7 +83,8 @@ class ConnectionEngine():
 
             # Update number of connections
             population.iloc[[agent, connection], 2] += 1
-            # if _cnt < 10:
+
+            # If more connections are needed, iterate
             while population.num_connections[agent] < num_connections:
                 self._build_connection_list(agent,
                                             population,
@@ -83,7 +111,6 @@ class ConnectionEngine():
             self._build_connection_list(_per, population, num_connections)
 
         self.population = population
-
         return population
 
 
@@ -94,27 +121,30 @@ class ConnectionsExperiment():
         self.connection_engine = connection_engine
         self.num_runs = num_runs
         self.data = []
+        self.logger = ExperimentLogger()
+        self.logger.init()
 
     def single_experiment(self, num_connections=None, num_people=None):
+        logger = self.logger
         if num_connections is None:
             num_connections = self.num_connections
         if num_people is None:
             num_people = self.num_people
-        start = time.time()
-        xns = self.connection_engine(num_people=num_people, num_connections=num_connections)
+        xns = self.connection_engine(
+            num_people=num_people,
+            num_connections=num_connections
+        )
         xns.create_connections()
-        del xns
-        end = time.time()
         output = {
             'num_people': num_people,
             'num_connections': num_connections,
-            'time': end-start
+            'size': sys.getsizeof(xns.population)
         }
+        del xns
         self.data.append(output)
 
     def run(self):
-        # Overall runtime tracking
-        start = time.time()
+        logger = self.logger
         # Set variables
         num_people = self.num_people
         num_connections = self.num_connections
@@ -129,9 +159,11 @@ class ConnectionsExperiment():
         #    num_runs = [num_runs]
 
         # Main
+        logger.log.info('+ Starting Engine')
         for run in range(num_runs):
             for _np in num_people:
                 for _nc in num_connections:
+                    logger.log.info('People: {} Connections: {}'.format(_np, _nc))
                     try:
                         # TODO: Abstract out the Thread Pool Memory Monitor
                         with ThreadPoolExecutor() as executor:
@@ -140,7 +172,8 @@ class ConnectionsExperiment():
                             try:
                                 fn_thread = executor.submit(
                                     experiment.single_experiment(
-                                        num_people=_np, num_connections=_nc)
+                                        num_people=_np,
+                                        num_connections=_nc)
                                 )
                             finally:
                                 monitor.keep_measuring = False
@@ -154,15 +187,15 @@ class ConnectionsExperiment():
                         output = {
                             'num_people': num_people,
                             'num_connections': num_connections,
-                            'time': None,
+                            'size': None,
                             'max_memory': None
                         }
                         self.data.append(output)
+        logger.log.info('+ Stopping Engine')
 
-        # Overall runtime tracking
-        end = time.time()
-        self.runtime = end - start
-        return self.data
+    def save_results(self):
+        with open('results_{}.pkl'.format(int(time.time())), 'wb') as file_:
+            pkl.dump(self.data, file_)
 
 
 if __name__ == '__main__':
@@ -172,13 +205,11 @@ if __name__ == '__main__':
     #experiment = ConnectionsExperiment(num_people=num_people, num_connections=num_connections)
     experiment = ConnectionsExperiment(
         num_people=100,
-        num_connections=[5, 6, 7],
+        num_connections=[10, 15, 20],
         connection_engine=ConnectionEngine,
-        num_runs=3
-    )
+        num_runs=3)
 
     experiment.run()
     print(experiment.data)
 
-    with open('connections_experiment_results_{}.pkl'.format(int(time.time())), 'wb') as file_:
-        pkl.dump(experiment, file_)
+    experiment.save_results()
