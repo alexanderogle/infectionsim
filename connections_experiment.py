@@ -199,13 +199,13 @@ class ConnectionsExperiment():
 
 
 if __name__ == '__main__':
-    #num_people = [100, 500, 1000, 5000, 10000]
-    #num_connections = [5, 10, 15, 20, 25, 30]
+    num_people = [100, 500, 1000, 5000, 10000]
+    num_connections = [5, 10, 15, 20, 25, 30]
 
     #experiment = ConnectionsExperiment(num_people=num_people, num_connections=num_connections)
     experiment = ConnectionsExperiment(
-        num_people=100,
-        num_connections=[10, 15, 20],
+        num_people=num_people,
+        num_connections=num_connections,
         connection_engine=ConnectionEngine,
         num_runs=3)
 
