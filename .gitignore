@@ -18,3 +18,7 @@ aws_credentials/
 *.pkl
 
 *.ipynb
+
+log/
+
+*.log
