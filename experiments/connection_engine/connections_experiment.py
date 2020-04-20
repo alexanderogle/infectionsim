@@ -63,7 +63,7 @@ class ConnectionEngine():
         self.num_people = num_people
         self.num_connections = num_connections
 
-    def _build_connection_list(self, agent, population, num_connections):
+    def _build_connection_list(self, agent, population, num_connections, cnt=None):
 
         # Return IDs of people with connections less than num_connections
         available_to_connect = (
@@ -73,8 +73,12 @@ class ConnectionEngine():
         )
 
         # Get other agents available to connect
+        runtime = {}
+        _start = time.time()
         available = available_to_connect(agent, population)
+        runtime_available = time.time() - _start
         # Randomly choose connection
+        _start = time.time()
         if len(available) > 0:
             connection = np.random.choice(available)
             # Make connection
@@ -85,15 +89,17 @@ class ConnectionEngine():
             population.iloc[[agent, connection], 2] += 1
 
             # If more connections are needed, iterate
-            cont = population.num_connections[agent] < num_connections
-            cnt = 0
-            while cont and (cnt < len(population)):
+            if cnt is None:
+                cnt = 0
+            # and (cnt < len(population)):
+            while cnt < len(population) and population.num_connections[agent] < num_connections:
                 cnt += 1
                 self._build_connection_list(agent,
                                             population,
-                                            num_connections)
-
-        return population
+                                            num_connections,
+                                            cnt=cnt)
+        runtime_choose = time.time() - _start
+        return population, runtime_available, runtime_choose
 
     def create_connections(self, verbose=False):
         num_connections = self.num_connections
@@ -107,14 +113,23 @@ class ConnectionEngine():
         )
 
         _update = num_people*0.1
+        runtime = {
+            'available': [],
+            'choose': []
+        }
         for _per in population.index:
             if verbose:
                 if _per % _update == 0:
                     print('{:.0f}% complete'.format(_per/num_people*100))
-            self._build_connection_list(_per, population, num_connections)
+            population, runtime_available, runtime_choose = self._build_connection_list(
+                _per,
+                population,
+                num_connections)
+            runtime['available'].append(runtime_available)
+            runtime['choose'].append(runtime_choose)
 
         self.population = population
-        return population
+        return population, runtime
 
 
 class ConnectionsExperiment():
@@ -128,22 +143,24 @@ class ConnectionsExperiment():
         self.logger.init()
 
     def single_experiment(self, num_connections=None, num_people=None):
-        logger = self.logger
         if num_connections is None:
             num_connections = self.num_connections
         if num_people is None:
             num_people = self.num_people
+        _start = time.time()
         xns = self.connection_engine(
             num_people=num_people,
             num_connections=num_connections
         )
-        xns.create_connections()
+        population, runtime = xns.create_connections()
         output = {
             'num_people': num_people,
             'num_connections': num_connections,
-            'size': sys.getsizeof(xns.population)
+            'size': sys.getsizeof(xns.population),
+            'runtime': runtime
         }
         del xns
+        output['runtime']['total'] = time.time() - _start
         self.data.append(output)
 
     def run(self):
@@ -158,8 +175,6 @@ class ConnectionsExperiment():
             num_people = [num_people]
         if isinstance(num_connections, int):
             num_connections = [num_connections]
-        # if isinstance(num_runs,int):
-        #    num_runs = [num_runs]
 
         # Main
         logger.log.info('+ Starting Engine')
@@ -174,7 +189,7 @@ class ConnectionsExperiment():
                             mem_thread = executor.submit(monitor.measure_usage)
                             try:
                                 fn_thread = executor.submit(
-                                    experiment.single_experiment(
+                                    self.single_experiment(
                                         num_people=_np,
                                         num_connections=_nc)
                                 )
@@ -207,8 +222,8 @@ if __name__ == '__main__':
 
     #experiment = ConnectionsExperiment(num_people=num_people, num_connections=num_connections)
     experiment = ConnectionsExperiment(
-        num_people=num_people,
-        num_connections=num_connections,
+        num_people=100,  # num_people,
+        num_connections=10,  # num_connections,
         connection_engine=ConnectionEngine,
         num_runs=3)
 
