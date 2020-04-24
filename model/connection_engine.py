@@ -67,4 +67,5 @@ class ConnectionEngine():
 
 
 if __name__ == '__main__':
-    print("Hi")
+    print("Hi, I'm the Connection Engine. I'm not meant to be run directly.")
+    print('To use me, please import ConnectionEngine in your script.')
