@@ -3,6 +3,7 @@ import numpy as np
 import time
 import sys
 import resource
+import os
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 import pickle as pkl
@@ -212,8 +213,15 @@ class ConnectionsExperiment():
         logger.log.info('+ Stopping Engine')
 
     def save_results(self):
-        with open('results_{}.pkl'.format(int(time.time())), 'wb') as file_:
+        os.makedirs('results', exist_ok=True)
+        with open('results/results_{}.pkl'.format(int(time.time())), 'wb') as file_:
+            logger.log.info('+ Saving results.')
             pkl.dump(self.data, file_)
+            logger.log.info('+ Pushing results to the cloud.')
+            cmd = (
+                'aws s3 sync results  s3://infectionsim-experiment-data/connections/ --profile is --exact-timestamps'
+            )
+            _ = subprocess.run(cmd.split())
 
 
 if __name__ == '__main__':
