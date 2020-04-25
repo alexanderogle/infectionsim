@@ -283,10 +283,10 @@ if __name__ == '__main__':
     parser.add_argument('-mc', '--mean_connections', nargs='+', type=int,
                         help='single value or list for nmean umber of connections',
                         default='10')
-    parser.add_argument('-sd', '--std', nargs='+', type=int,
+    parser.add_argument('-sd', '--std', type=int,
                         help='standard deviation for connection distribution',
                         default='10')
-    parser.add_argument('-s', '--size', nargs='+', type=int,
+    parser.add_argument('-s', '--size', type=int,
                         help='sample size for connection distribution',
                         default='1000000')
     parser.add_argument('-nr', '--num_runs', type=int,
