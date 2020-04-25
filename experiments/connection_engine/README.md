@@ -8,4 +8,6 @@
 ## Submitting a Job
 
 **NOTE:**
-    - It is best to run the experiment in a TMUX window so that you can close your connection and come back to it later. See TMUX Tutorial for instructions on doing that.
+- It is best to run the experiment in a TMUX window so that you can close your connection and come back to it later. See TMUX Tutorial for instructions on doing that.
+
+## Determine Parameters
