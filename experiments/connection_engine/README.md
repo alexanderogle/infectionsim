@@ -39,12 +39,14 @@ optional arguments:
 ### Parameter Descriptions
 
 | Parameter | Description | Default | Max |
-|:-:|---|:-:|---|
+|:-:|---|:-:|:-:|
 | `num_people` | the number of people in the | 100| 10000 |
 | `mean_connections` | the average number of connections | 10 |  100 |
 |`std` | the standard deviation for the number of connections distribution | 10 | None |
 |`size`| the sample size from which number of connections are chosen | 1000000 | None |
 |`num_runs`| the number of times to iterate experiment | 3 | 5 |
+
+
 **NOTE:**
 - For each of the `num_people` and `mean_connections` parameters, you can pass a list of values. The experiment engine will automatically run all pairs.
 - The max values are suggestions to keep runtimes manageable.
