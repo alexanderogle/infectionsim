@@ -8,6 +8,7 @@ from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 import pickle as pkl
 import logging
+import subprocess
 sys.setrecursionlimit(10**6)
 
 
@@ -38,7 +39,8 @@ class ExperimentLogger:
         logger = logging.getLogger('connection-engine')
         logger.setLevel(logging.DEBUG)
         # Create file handler
-        log_path = 'experiment.log'
+        os.makedirs('log/', exist_ok=True)
+        log_path = 'log/experiment.log'
         fh = logging.FileHandler(log_path)
         fh.setLevel(logging.DEBUG)
         # Create console handler
@@ -211,31 +213,46 @@ class ConnectionsExperiment():
                         }
                         self.data.append(output)
         logger.log.info('+ Stopping Engine')
+        logger.log.info('+ Saving results.')
+        self.save_results()
+        logger.log.info('+ Closing Logger')
 
     def save_results(self):
+        now = int(time.time())
+
+        # Save results
         os.makedirs('results', exist_ok=True)
-        with open('results/results_{}.pkl'.format(int(time.time())), 'wb') as file_:
-            logger.log.info('+ Saving results.')
+        with open('results/results_{}.pkl'.format(now), 'wb') as file_:
             pkl.dump(self.data, file_)
-            logger.log.info('+ Pushing results to the cloud.')
-            cmd = (
-                'aws s3 sync results  s3://infectionsim-experiment-data/connections/ --profile is --exact-timestamps'
-            )
-            _ = subprocess.run(cmd.split())
+
+        # Push results to cloud
+        cmd = (
+            'aws s3 sync results  s3://infectionsim-experiment-data/connections/ --profile is --exact-timestamps'
+        )
+        _ = subprocess.run(cmd.split())
+
+        # Rename log
+        cmd = (
+            'mv log/experiment.log log/experiment_{}.log'.format(now)
+        )
+        _ = subprocess.run(cmd.split())
+
+        # Push log to cloude
+        cmd = (
+            'aws s3 sync log  s3://infectionsim-experiment-log/connections/ --profile is --exact-timestamps'
+        )
+        _ = subprocess.run(cmd.split())
 
 
 if __name__ == '__main__':
-    num_people = [100, 500, 1000, 5000, 10000]
-    num_connections = [5, 10, 15, 20, 25, 30]
+    num_people = [100]  # , 500, 1000, 5000, 10000]
+    num_connections = [5]  # [5, 10, 15, 20, 25, 30]
 
     #experiment = ConnectionsExperiment(num_people=num_people, num_connections=num_connections)
     experiment = ConnectionsExperiment(
-        num_people=100,  # num_people,
-        num_connections=10,  # num_connections,
+        num_people=num_people,
+        num_connections=num_connections,
         connection_engine=ConnectionEngine,
         num_runs=3)
 
     experiment.run()
-    print(experiment.data)
-
-    experiment.save_results()
