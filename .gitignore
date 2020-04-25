@@ -22,3 +22,5 @@ aws_credentials/
 log/
 
 *.log
+
+notebooks/connection_engine.py
