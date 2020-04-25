@@ -14,3 +14,13 @@ aws_credentials/
 .ipynb_checkpoints/
 
 .DS_Store
+
+*.pkl
+
+*.ipynb
+
+log/
+
+*.log
+
+notebooks/connection_engine.py
