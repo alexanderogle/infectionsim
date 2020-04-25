@@ -7,23 +7,42 @@ sys.setrecursionlimit(10**6)
 
 
 class ConnectionEngine():
-    def __init__(self, num_people=None, num_connections=None):
+    def __init__(self, num_people=None, mean_connections=None):
         self.num_people = num_people
-        self.num_connections = num_connections
+        self.mean_connections = mean_connections
 
-    def _build_connection_list(self, agent, population, num_connections):
-        # Break counter
-        # if _cnt == 0:
-        #    _cnt += 1
-        # Return IDs of people with connections less than num_connections
-        available_to_connect = (
-            lambda agent, population: population.drop(agent).query('num_connections < {}'
-                                                                   .format(num_connections)
-                                                                   ).index
+    def _max_connections(self, std=None, size=None):
+        distribution = np.round(
+            np.random.normal(
+                loc=self.mean_connections,  # Mean
+                scale=std,  # Standard Deviation
+                size=size  # sample size
+            )
         )
 
+        choice = int(np.random.choice(distribution))
+        while choice < 0:
+            choice = int(np.random.choice(distribution))
+
+        return choice
+
+    def _available_to_connect(self, agent, population):
+        # Return IDs of people with connections less than num_connections
+        # Only drop agent if it returns from query
+        try:
+            return population[
+                population.num_connections < population.max_connections
+            ].drop(agent).index
+        except:
+            return population[
+                population.num_connections < population.max_connections
+            ].index
+
+    def _build_connection_list(self, agent, population):
+
         # Get other agents available to connect
-        available = available_to_connect(agent, population)
+        available = self._available_to_connect(agent, population)
+
         # Randomly choose connection
         if len(available) > 0:
             connection = np.random.choice(available)
@@ -33,22 +52,27 @@ class ConnectionEngine():
 
             # Update number of connections
             population.iloc[[agent, connection], 2] += 1
-            # if _cnt < 10:
-            while population.num_connections[agent] < num_connections:
-                self._build_connection_list(agent,
-                                            population,
-                                            num_connections)
+
+            # Iterate if necessary
+            cont = (
+                population.num_connections[agent] < population.max_connections[agent]
+            )
+            if cont:
+                self._build_connection_list(agent, population)
 
         return population
 
-    def create_connections(self, verbose=False):
-        num_connections = self.num_connections
+    def create_connections(self, std=10, size=100000, verbose=False):
         num_people = self.num_people
         population = pd.DataFrame(
             {
                 'agent': [i for i in range(num_people)],
                 'connections': [[] for i in range(num_people)],
-                'num_connections': [0 for i in range(num_people)]
+                'num_connections': [0 for i in range(num_people)],
+                'max_connections': [
+                    self._max_connections(std=std, size=size)
+                    for i in range(num_people)
+                ]
             }
         )
 
@@ -57,8 +81,8 @@ class ConnectionEngine():
             if verbose:
                 if _per % _update == 0:
                     print('{:.0f}% complete'.format(_per/num_people*100))
-            self._build_connection_list(_per, population, num_connections)
 
+            self._build_connection_list(_per, population)
         self.connections = population
 
     def make_dummy(self, verbose=False):
