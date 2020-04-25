@@ -9,6 +9,8 @@ from concurrent.futures import ThreadPoolExecutor
 import pickle as pkl
 import logging
 import subprocess
+import argparse
+from connection_engine import ConnectionEngine
 sys.setrecursionlimit(10**6)
 
 
@@ -61,104 +63,126 @@ class ExperimentLogger:
         return logger
 
 
-class ConnectionEngine():
-    def __init__(self, num_people=None, num_connections=None):
-        self.num_people = num_people
-        self.num_connections = num_connections
-
-    def _build_connection_list(self, agent, population, num_connections, cnt=None):
-
-        # Return IDs of people with connections less than num_connections
-        available_to_connect = (
-            lambda agent, population: population.drop(agent).query('num_connections < {}'
-                                                                   .format(num_connections)
-                                                                   ).index
-        )
-
-        # Get other agents available to connect
-        runtime = {}
-        _start = time.time()
-        available = available_to_connect(agent, population)
-        runtime_available = time.time() - _start
-        # Randomly choose connection
-        _start = time.time()
-        if len(available) > 0:
-            connection = np.random.choice(available)
-            # Make connection
-            population.iloc[connection].connections.append(agent)
-            population.iloc[agent].connections.append(connection)
-
-            # Update number of connections
-            population.iloc[[agent, connection], 2] += 1
-
-            # If more connections are needed, iterate
-            if cnt is None:
-                cnt = 0
-            # and (cnt < len(population)):
-            while cnt < len(population) and population.num_connections[agent] < num_connections:
-                cnt += 1
-                self._build_connection_list(agent,
-                                            population,
-                                            num_connections,
-                                            cnt=cnt)
-        runtime_choose = time.time() - _start
-        return population, runtime_available, runtime_choose
-
-    def create_connections(self, verbose=False):
-        num_connections = self.num_connections
-        num_people = self.num_people
-        population = pd.DataFrame(
-            {
-                'index': [i for i in range(num_people)],
-                'connections': [[] for i in range(num_people)],
-                'num_connections': [0 for i in range(num_people)]
-            }
-        )
-
-        _update = num_people*0.1
-        runtime = {
-            'available': [],
-            'choose': []
-        }
-        for _per in population.index:
-            if verbose:
-                if _per % _update == 0:
-                    print('{:.0f}% complete'.format(_per/num_people*100))
-            population, runtime_available, runtime_choose = self._build_connection_list(
-                _per,
-                population,
-                num_connections)
-            runtime['available'].append(runtime_available)
-            runtime['choose'].append(runtime_choose)
-
-        self.population = population
-        return population, runtime
+# class ConnectionEngine():
+    #    def __init__(self, num_people=None, num_connections=None):
+    #        self.num_people = num_people
+    #        self.num_connections = num_connections
+    #
+    #    def _build_connection_list(self, agent, population, num_connections, cnt=None):
+    #
+    #        # Return IDs of people with connections less than num_connections
+    #        available_to_connect = (
+    #            lambda agent, population: population.drop(agent).query('num_connections < {}'
+    #                                                                   .format(num_connections)
+    #                                                                   ).index
+    #        )
+    #
+    #        # Get other agents available to connect
+    #        runtime = {}
+    #        _start = time.time()
+    #        available = available_to_connect(agent, population)
+    #        runtime_available = time.time() - _start
+    #        # Randomly choose connection
+    #        _start = time.time()
+    #        if len(available) > 0:
+    #            connection = np.random.choice(available)
+    #            # Make connection
+    #            population.iloc[connection].connections.append(agent)
+    #            population.iloc[agent].connections.append(connection)
+    #
+    #            # Update number of connections
+    #            population.iloc[[agent, connection], 2] += 1
+    #
+    #            # If more connections are needed, iterate
+    #            if cnt is None:
+    #                cnt = 0
+    #            # and (cnt < len(population)):
+    #            while cnt < len(population) and population.num_connections[agent] < num_connections:
+    #                cnt += 1
+    #                self._build_connection_list(agent,
+    #                                            population,
+    #                                            num_connections,
+    #                                            cnt=cnt)
+    #        runtime_choose = time.time() - _start
+    #        return population, runtime_available, runtime_choose
+    #
+    #    def create_connections(self, verbose=False):
+    #        num_connections = self.num_connections
+    #        num_people = self.num_people
+    #        population = pd.DataFrame(
+    #            {
+    #                'index': [i for i in range(num_people)],
+    #                'connections': [[] for i in range(num_people)],
+    #                'num_connections': [0 for i in range(num_people)]
+    #            }
+    #        )
+    #
+    #        _update = num_people*0.1
+    #        runtime = {
+    #            'available': [],
+    #            'choose': []
+    #        }
+    #        for _per in population.index:
+    #            if verbose:
+    #                if _per % _update == 0:
+    #                    print('{:.0f}% complete'.format(_per/num_people*100))
+    #            population, runtime_available, runtime_choose = self._build_connection_list(
+    #                _per,
+    #                population,
+    #                num_connections)
+    #            runtime['available'].append(runtime_available)
+    #            runtime['choose'].append(runtime_choose)
+    #
+    #        self.population = population
+    #        return population, runtime
 
 
 class ConnectionsExperiment():
-    def __init__(self, num_people=None, num_connections=None, connection_engine=None, num_runs=1):
+    def __init__(self,
+                 num_people=None,
+                 mean_connections=None,
+                 connection_engine=None,
+                 std=10,
+                 size=100000,
+                 num_runs=1):
         self.num_people = num_people
-        self.num_connections = num_connections
+        self.mean_connections = mean_connections
+        self.std = std
+        self.size = size
         self.connection_engine = connection_engine
         self.num_runs = num_runs
         self.data = []
         self.logger = ExperimentLogger()
         self.logger.init()
 
-    def single_experiment(self, num_connections=None, num_people=None):
-        if num_connections is None:
-            num_connections = self.num_connections
+    def single_experiment(self,
+                          mean_connections=None,
+                          num_people=None,
+                          std=None,
+                          size=None):
+
+        if mean_connections is None:
+            mean_connections = self.mean_connections
         if num_people is None:
             num_people = self.num_people
+        if size is None:
+            size = self.size
+        if std is None:
+            std = self.std
+
         _start = time.time()
         xns = self.connection_engine(
             num_people=num_people,
-            num_connections=num_connections
+            mean_connections=mean_connections,
+            experiment=True
         )
-        population, runtime = xns.create_connections()
+        population, runtime = xns.create_connections(
+            std=std,
+            size=size
+        )
         output = {
             'num_people': num_people,
-            'num_connections': num_connections,
+            'mean_connections': mean_connections,
             'size': sys.getsizeof(xns.population),
             'runtime': runtime
         }
@@ -170,21 +194,25 @@ class ConnectionsExperiment():
         logger = self.logger
         # Set variables
         num_people = self.num_people
-        num_connections = self.num_connections
+        mean_connections = self.mean_connections
+        std = self.std
+        size = self.size
         num_runs = self.num_runs
 
         # Allows handling of single values
         if isinstance(num_people, int):
             num_people = [num_people]
-        if isinstance(num_connections, int):
-            num_connections = [num_connections]
+        if isinstance(mean_connections, int):
+            mean_connections = [mean_connections]
 
         # Main
         logger.log.info('+ Starting Engine')
         for run in range(num_runs):
             for _np in num_people:
-                for _nc in num_connections:
-                    logger.log.info('People: {} Connections: {}'.format(_np, _nc))
+                for _nc in mean_connections:
+                    logger.log.info(
+                        'People: {} Mean Connections: {} STD: {} Size {}'
+                        .format(_np, _nc, std, size))
                     try:
                         # TODO: Abstract out the Thread Pool Memory Monitor
                         with ThreadPoolExecutor() as executor:
@@ -194,7 +222,9 @@ class ConnectionsExperiment():
                                 fn_thread = executor.submit(
                                     self.single_experiment(
                                         num_people=_np,
-                                        num_connections=_nc)
+                                        mean_connections=_nc,
+                                        size=size,
+                                        std=std)
                                 )
                             finally:
                                 monitor.keep_measuring = False
@@ -207,7 +237,7 @@ class ConnectionsExperiment():
                         # Bad run
                         output = {
                             'num_people': num_people,
-                            'num_connections': num_connections,
+                            'mean_connections': mean_connections,
                             'size': None,
                             'max_memory': None
                         }
@@ -237,7 +267,7 @@ class ConnectionsExperiment():
         )
         _ = subprocess.run(cmd.split())
 
-        # Push log to cloude
+        # Push log to cloud
         cmd = (
             'aws s3 sync log  s3://infectionsim-experiment-log/connections/ --profile is --exact-timestamps'
         )
@@ -245,14 +275,39 @@ class ConnectionsExperiment():
 
 
 if __name__ == '__main__':
-    num_people = [100]  # , 500, 1000, 5000, 10000]
-    num_connections = [5]  # [5, 10, 15, 20, 25, 30]
+    # Commandline arguments ---
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-np', '--num_people', nargs='+', type=int,
+                        help='single value or list for number of people',
+                        default='100')
+    parser.add_argument('-mc', '--mean_connections', nargs='+', type=int,
+                        help='single value or list for nmean umber of connections',
+                        default='10')
+    parser.add_argument('-sd', '--std', nargs='+', type=int,
+                        help='standard deviation for connection distribution',
+                        default='10')
+    parser.add_argument('-s', '--size', nargs='+', type=int,
+                        help='sample size for connection distribution',
+                        default='1000000')
+    parser.add_argument('-nr', '--num_runs', type=int,
+                        help=(
+                            'number of times to iterate over (num_people,num_connections) pairs'
+                        ),
+                        default=3)
+    args = parser.parse_args()
 
-    #experiment = ConnectionsExperiment(num_people=num_people, num_connections=num_connections)
+    num_people = args.num_people
+    mean_connections = args.mean_connections
+    num_runs = args.num_runs
+    std = args.std
+    size = args.size
+
     experiment = ConnectionsExperiment(
         num_people=num_people,
-        num_connections=num_connections,
+        mean_connections=mean_connections,
         connection_engine=ConnectionEngine,
-        num_runs=3)
+        num_runs=num_runs,
+        std=std,
+        size=size)
 
     experiment.run()

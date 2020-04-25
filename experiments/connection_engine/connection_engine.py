@@ -97,11 +97,13 @@ class ConnectionEngine():
             raise TypeError('Bad population given. Pass nothing for now. DEBUG THIS')
 
         _update = num_people*0.1
+
         if self.experiment:
             runtime = {
                 'available': [],
                 'choose': []
             }
+
         for _per in population.index:
             if verbose:
                 if _per % _update == 0:
@@ -110,8 +112,7 @@ class ConnectionEngine():
             if self.experiment:
                 population, runtime_available, runtime_choose = self._build_connection_list(
                     _per,
-                    population,
-                    num_connections)
+                    population)
                 runtime['available'].append(runtime_available)
                 runtime['choose'].append(runtime_choose)
             else:
