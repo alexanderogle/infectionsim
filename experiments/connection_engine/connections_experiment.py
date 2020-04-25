@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 import pickle as pkl
 import logging
 import subprocess
+import argparse
 sys.setrecursionlimit(10**6)
 
 
@@ -136,7 +137,11 @@ class ConnectionEngine():
 
 
 class ConnectionsExperiment():
-    def __init__(self, num_people=None, num_connections=None, connection_engine=None, num_runs=1):
+    def __init__(self,
+                 num_people=None,
+                 num_connections=None,
+                 connection_engine=None,
+                 num_runs=1):
         self.num_people = num_people
         self.num_connections = num_connections
         self.connection_engine = connection_engine
@@ -237,7 +242,7 @@ class ConnectionsExperiment():
         )
         _ = subprocess.run(cmd.split())
 
-        # Push log to cloude
+        # Push log to cloud
         cmd = (
             'aws s3 sync log  s3://infectionsim-experiment-log/connections/ --profile is --exact-timestamps'
         )
@@ -245,14 +250,30 @@ class ConnectionsExperiment():
 
 
 if __name__ == '__main__':
-    num_people = [100]  # , 500, 1000, 5000, 10000]
-    num_connections = [5]  # [5, 10, 15, 20, 25, 30]
+    # Commandline arguments ---
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-np', '--num_people', nargs='+', type=int,
+                        help='single value or list for number of people',
+                        default='100')
+    parser.add_argument('-nc', '--num_connections', nargs='+', type=int,
+                        help='single value or list for number of connections',
+                        default='10')
+    parser.add_argument('-nr', '--num_runs', type=int,
+                        help=(
+                            'number of times to iterate over (num_people,num_connections) pairs'
+                        ),
+                        default=3)
+    args = parser.parse_args()
+
+    num_people = args.num_people
+    num_connections = args.num_connections
+    num_runs = args.num_runs
 
     #experiment = ConnectionsExperiment(num_people=num_people, num_connections=num_connections)
     experiment = ConnectionsExperiment(
         num_people=num_people,
         num_connections=num_connections,
         connection_engine=ConnectionEngine,
-        num_runs=3)
+        num_runs=num_runs)
 
     experiment.run()
