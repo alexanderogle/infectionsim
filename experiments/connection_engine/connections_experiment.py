@@ -210,7 +210,9 @@ class ConnectionsExperiment():
         for run in range(num_runs):
             for _np in num_people:
                 for _nc in mean_connections:
-                    logger.log.info('People: {} Mean Connections: {}'.format(_np, _nc))
+                    logger.log.info(
+                        'People: {} Mean Connections: {} STD: {} Size {}'
+                        .format(_np, _nc, std, size))
                     try:
                         # TODO: Abstract out the Thread Pool Memory Monitor
                         with ThreadPoolExecutor() as executor:
