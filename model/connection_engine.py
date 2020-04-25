@@ -7,9 +7,10 @@ sys.setrecursionlimit(10**6)
 
 
 class ConnectionEngine():
-    def __init__(self, num_people=None, mean_connections=None):
+    def __init__(self, num_people=None, mean_connections=None, population=None):
         self.num_people = num_people
         self.mean_connections = mean_connections
+        self.population = population
 
     def _max_connections(self, std=None, size=None):
         distribution = np.round(
@@ -64,17 +65,21 @@ class ConnectionEngine():
 
     def create_connections(self, std=10, size=100000, verbose=False):
         num_people = self.num_people
-        population = pd.DataFrame(
-            {
-                'agent': [i for i in range(num_people)],
-                'connections': [[] for i in range(num_people)],
-                'num_connections': [0 for i in range(num_people)],
-                'max_connections': [
-                    self._max_connections(std=std, size=size)
-                    for i in range(num_people)
-                ]
-            }
-        )
+        if self.population is None:
+            population = pd.DataFrame(
+                {
+                    'agent': [i for i in range(num_people)],
+                    'connections': [[] for i in range(num_people)],
+                    'num_connections': [0 for i in range(num_people)],
+                    'max_connections': [
+                        self._max_connections(std=std, size=size)
+                        for i in range(num_people)
+                    ]
+                }
+            )
+            self.population = population
+        else:
+            raise TypeError('Bad population given. Pass nothing for now. DEBUG THIS')
 
         _update = num_people*0.1
         for _per in population.index:
