@@ -7,10 +7,15 @@ sys.setrecursionlimit(10**6)
 
 
 class ConnectionEngine():
-    def __init__(self, num_people=None, mean_connections=None, population=None):
+    def __init__(self,
+                 num_people=None,
+                 mean_connections=None,
+                 population=None,
+                 experiment=False):
         self.num_people = num_people
         self.mean_connections = mean_connections
         self.population = population
+        self.experiment = experiment
 
     def _max_connections(self, std=None, size=None):
         distribution = np.round(
@@ -42,9 +47,16 @@ class ConnectionEngine():
     def _build_connection_list(self, agent, population):
 
         # Get other agents available to connect
+        if self.experiment:
+            runtime = {}
+            _start = time.time()
         available = self._available_to_connect(agent, population)
+        if self.experiment:
+            runtime_available = time.time() - _start
 
         # Randomly choose connection
+        if self.experiment:
+            _start = time.time()
         if len(available) > 0:
             connection = np.random.choice(available)
             # Make connection
@@ -60,8 +72,11 @@ class ConnectionEngine():
             )
             if cont:
                 self._build_connection_list(agent, population)
-
-        return population
+        if self.experiment:
+            runtime_choose = time.time() - _start
+            return population, runtime_available, runtime_choose
+        else:
+            return population
 
     def create_connections(self, std=10, size=100000, verbose=False):
         num_people = self.num_people
@@ -82,13 +97,29 @@ class ConnectionEngine():
             raise TypeError('Bad population given. Pass nothing for now. DEBUG THIS')
 
         _update = num_people*0.1
+        if self.experiment:
+            runtime = {
+                'available': [],
+                'choose': []
+            }
         for _per in population.index:
             if verbose:
                 if _per % _update == 0:
                     print('{:.0f}% complete'.format(_per/num_people*100))
 
-            self._build_connection_list(_per, population)
+            if self.experiment:
+                population, runtime_available, runtime_choose = self._build_connection_list(
+                    _per,
+                    population,
+                    num_connections)
+                runtime['available'].append(runtime_available)
+                runtime['choose'].append(runtime_choose)
+            else:
+                self._build_connection_list(_per, population)
         self.connections = population
+
+        if self.experiment:
+            return population, runtime
 
     def make_dummy(self, verbose=False):
 
