@@ -22,8 +22,6 @@ class ConnectionEngine():
                                                                    ).index
         )
 
-        # Update number of connections
-        #population['num_connections'] = population.connections.apply(len)
         # Get other agents available to connect
         available = available_to_connect(agent, population)
         # Randomly choose connection
@@ -48,7 +46,7 @@ class ConnectionEngine():
         num_people = self.num_people
         population = pd.DataFrame(
             {
-                'index': [i for i in range(num_people)],
+                'agent': [i for i in range(num_people)],
                 'connections': [[] for i in range(num_people)],
                 'num_connections': [0 for i in range(num_people)]
             }
@@ -61,7 +59,31 @@ class ConnectionEngine():
                     print('{:.0f}% complete'.format(_per/num_people*100))
             self._build_connection_list(_per, population, num_connections)
 
-        self.population = population
+        self.connections = population
+
+    def make_dummy(self, verbose=False):
+
+        states = ['sus', 'inf', 'rec', 'imm', 'dead']
+
+        try:
+            population = pd.DataFrame(
+                self.connections
+                .agent
+                .copy()
+            )
+        except:
+            self.create_connections()
+            population = pd.DataFrame(
+                self.connections
+                .agent
+                .copy()
+            )
+        population['state'] = [np.random.choice(states) for i in range(len(population))]
+        population['infected_by'] = None
+        population['days_infected'] = [np.random.randint(14) for i in range(len(population))]
+
+        if verbose:
+            print(population.state.value_counts())
 
         return population
 
