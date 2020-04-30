@@ -183,7 +183,7 @@ class ConnectionsExperiment():
         output = {
             'num_people': num_people,
             'mean_connections': mean_connections,
-            'size': sys.getsizeof(xns.population),
+            'max_size': sys.getsizeof(xns.population),
             'runtime': runtime
         }
         del xns
