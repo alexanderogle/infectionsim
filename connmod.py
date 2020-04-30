@@ -21,6 +21,12 @@ Created on Wed Apr 15 18:47:41 2020
 #   https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population_density
 #   based on 2010 census
 # later: demographics, social distancing and policy modifications
-def connmod(popdens,intarea):
+# UPDATE 4.30 - changed input to average number of steps (avdist) & 
+#               interaction distance (intdist)
+#               where the interaction distance is the maximum distance between
+#               a susceptible individual and an infected one with a 
+#               chance of transmission - currently this assumption is 6ft = 
+def connmod(popdens,avdist,intdist):
+    intarea = avdist*intdist
     numconn = intarea*popdens
     return round(numconn)
