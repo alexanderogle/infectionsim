@@ -186,8 +186,8 @@ class ConnectionsExperiment():
             'max_size': sys.getsizeof(xns.population),
             'runtime': runtime
         }
-        del xns
         output['runtime']['total'] = time.time() - _start
+        del xns
         self.data.append(output)
 
     def run(self):
