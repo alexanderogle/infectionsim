@@ -22,11 +22,13 @@ alias tkill='tmux kill-ses -t'
 
 - Create a new window with the `tnew` command
 ![](https://cdn.cacher.io/attachments/u/3cfsxkosk01w7/FvjgzqHIwCDZHon4MqpxqRDi1S977vbS/new_tmux_window.png)
+
 You'll know that you are in a `tmux` window by the green bar at the bottom.
 
 - By default, `tmux` names the windows with sequential integers. I prefer to 
   rename my windows. You can do this by hitting `ctrl+b;$` (`x;y` denoting press `x`, release, and then press `y`). 
 ![](https://cdn.cacher.io/attachments/u/3cfsxkosk01w7/bYSEVYwkaW3PDRlXf4loX8sl0iUpbhYM/rename_tmux_window.png)
+
 You'll know you are in "Rename Mode", because the bar at the bottom changes to a mustard color.
 
  - Delete the existing name, typing a new name (I use "example"), and . `Enter`. The bar should turn green again.
