@@ -24,7 +24,8 @@ class InteractionEngine():
         # Explode on connections
         # Drop num_connections column
         # Rename columns
-        connections = (connections.explode(column='connections')
+        connections = (connections.query('num_connections > 0')
+                       .explode(column='connections')
                        .drop(columns=['num_connections'])
                        .rename(columns={
                            'agent': 'agent_a',
@@ -108,7 +109,7 @@ class InteractionEngine():
         infect = draw < pathogen['infection_rate']
         if interact and infect:
             self.population.loc[susceptible['agent'], 'state'] = 'inf'
-            self.population.loc[susceptible['agent'], 'infected_by'] = (
+            self.population.loc[susceptible['agent'], 'infected_by'].append(
                 int(infected['agent'])
             )
 
