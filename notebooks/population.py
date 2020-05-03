@@ -34,7 +34,7 @@ class Population:
         # Give infected people random infected_by and days_infected
         infected = population.query('state == "inf"').index
         population.loc[infected, 'days_infected'] = [
-            np.random.randint(0, high=10)
+            np.random.randint(1, high=10)
             for i in range(len(infected))
         ]
         population.loc[infected, 'infected_by'].apply(
