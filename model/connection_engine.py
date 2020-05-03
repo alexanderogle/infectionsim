@@ -29,9 +29,15 @@ class ConnectionEngine():
         choice = int(np.random.choice(distribution))
         while choice < 0:
             choice = int(np.random.choice(distribution))
+<<<<<<< HEAD
 
         return choice
 
+=======
+
+        return choice
+
+>>>>>>> interaction_engine
     def _available_to_connect(self, agent, population):
         # Return IDs of people with connections less than num_connections
         # Only drop agent if it returns from query
@@ -80,6 +86,7 @@ class ConnectionEngine():
 
     def create_connections(self, std=10, size=100000, verbose=False):
         num_people = self.num_people
+<<<<<<< HEAD
         if self.population is None:
             population = pd.DataFrame(
                 {
@@ -95,6 +102,19 @@ class ConnectionEngine():
             self.population = population
         else:
             raise TypeError('Bad population given. Pass nothing for now. DEBUG THIS')
+=======
+        population = pd.DataFrame(
+            {
+                'agent': [i for i in range(num_people)],
+                'connections': [[] for i in range(num_people)],
+                'num_connections': [0 for i in range(num_people)],
+                'max_connections': [
+                    self._max_connections(std=std, size=size)
+                    for i in range(num_people)
+                ]
+            }
+        )
+>>>>>>> interaction_engine
 
         _update = num_people*0.1
         if self.experiment:
