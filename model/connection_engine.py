@@ -10,11 +10,10 @@ class ConnectionEngine():
     def __init__(self,
                  num_people=None,
                  mean_connections=None,
-                 population=None,
+                 connections=None,
                  experiment=False):
         self.num_people = num_people
         self.mean_connections = mean_connections
-        self.population = population
         self.experiment = experiment
 
     def _max_connections(self, std=None, size=None):
@@ -32,25 +31,25 @@ class ConnectionEngine():
 
         return choice
 
-    def _available_to_connect(self, agent, population):
+    def _available_to_connect(self, agent, connections):
         # Return IDs of people with connections less than num_connections
         # Only drop agent if it returns from query
         try:
-            return population[
-                population.num_connections < population.max_connections
+            return connections[
+                connections.num_connections < connections.max_connections
             ].drop(agent).index
         except:
-            return population[
-                population.num_connections < population.max_connections
+            return connections[
+                connections.num_connections < connections.max_connections
             ].index
 
-    def _build_connection_list(self, agent, population):
+    def _build_connection_list(self, agent, connections):
 
         # Get other agents available to connect
         if self.experiment:
             runtime = {}
             _start = time.time()
-        available = self._available_to_connect(agent, population)
+        available = self._available_to_connect(agent, connections)
         if self.experiment:
             runtime_available = time.time() - _start
 
@@ -60,23 +59,23 @@ class ConnectionEngine():
         if len(available) > 0:
             connection = np.random.choice(available)
             # Make connection
-            population.iloc[connection].connections.append(agent)
-            population.iloc[agent].connections.append(connection)
+            connections.iloc[connection].connections.append(agent)
+            connections.iloc[agent].connections.append(connection)
 
             # Update number of connections
-            population.iloc[[agent, connection], 2] += 1
+            connections.iloc[[agent, connection], 2] += 1
 
             # Iterate if necessary
             cont = (
-                population.num_connections[agent] < population.max_connections[agent]
+                connections.num_connections[agent] < connections.max_connections[agent]
             )
             if cont:
-                self._build_connection_list(agent, population)
+                self._build_connection_list(agent, connections)
         if self.experiment:
             runtime_choose = time.time() - _start
-            return population, runtime_available, runtime_choose
+            return connections, runtime_available, runtime_choose
         else:
-            return population
+            return connections
 
     def create_connections(self, std=10, size=100000, verbose=False):
         num_people = self.num_people
@@ -116,39 +115,6 @@ class ConnectionEngine():
 
         if self.experiment:
             return connections, runtime
-
-    def make_dummy(self, verbose=False):
-
-        states = ['sus', 'inf', 'dead']
-
-        try:
-            population = pd.DataFrame(
-                self.connections
-                .agent
-                .copy()
-            )
-        except:
-            self.create_connections()
-            population = pd.DataFrame(
-                self.connections
-                .agent
-                .copy()
-            )
-        population['state'] = [np.random.choice(states) for i in range(len(population))]
-        population['infected_by'] = [[] for i in range(len(population))]
-        population['days_infected'] = [np.random.randint(14) for i in range(len(population))]
-        population['immunity'] = 0
-
-        susceptible = population.query('state == "sus"').index
-        population.loc[susceptible, 'immunity'] = [
-            np.random.randint(0, high=10)
-            for i in range(len(susceptible))
-        ]
-
-        if verbose:
-            print(population.state.value_counts())
-
-        return population
 
 
 if __name__ == '__main__':
