@@ -89,8 +89,17 @@ class InteractionEngine():
         )
         infected_is_contagious = days_infected < pathogen['contagious_period']
 
+        # Susecptible is immune
+        immunity = (
+            self.population
+            .query('agent == {}'.format(susceptible['agent']))
+            .immunity
+            .values[0]
+        )
+        susecptible_is_immune = immunity > 0
+
         # Qualify
-        if different_states and someone_infected and someone_susceptible and infected_is_contagious:
+        if different_states and someone_infected and someone_susceptible and infected_is_contagious and not susecptible_is_immune:
             return True, infected, susceptible
         else:
             return False, None, None

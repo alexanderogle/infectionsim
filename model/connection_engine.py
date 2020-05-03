@@ -8,11 +8,10 @@ sys.setrecursionlimit(10**6)
 
 class ConnectionEngine():
     def __init__(self,
-                 num_people=None,
+                 population=None,
                  mean_connections=None,
-                 connections=None,
                  experiment=False):
-        self.num_people = num_people
+        self.population = population
         self.mean_connections = mean_connections
         self.experiment = experiment
 
@@ -78,20 +77,20 @@ class ConnectionEngine():
             return connections
 
     def create_connections(self, std=10, size=100000, verbose=False):
-        num_people = self.num_people
+        not_dead = self.population.query('state != "dead"').index
         connections = pd.DataFrame(
             {
-                'agent': [i for i in range(num_people)],
-                'connections': [[] for i in range(num_people)],
-                'num_connections': [0 for i in range(num_people)],
+                'agent': [i for i in not_dead],
+                'connections': [[] for i in not_dead],
+                'num_connections': [0 for i in not_dead],
                 'max_connections': [
                     self._max_connections(std=std, size=size)
-                    for i in range(num_people)
+                    for i in not_dead
                 ]
             }
         )
 
-        _update = num_people*0.1
+        _update = len(not_dead)*0.1
         if self.experiment:
             runtime = {
                 'available': [],
@@ -100,7 +99,7 @@ class ConnectionEngine():
         for _per in connections.index:
             if verbose:
                 if _per % _update == 0:
-                    print('{:.0f}% complete'.format(_per/num_people*100))
+                    print('{:.0f}% complete'.format(_per/len(not_dead)*100))
 
             if self.experiment:
                 connections, runtime_available, runtime_choose = self._build_connection_list(
