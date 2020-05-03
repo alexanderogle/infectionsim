@@ -80,7 +80,7 @@ class ConnectionEngine():
 
     def create_connections(self, std=10, size=100000, verbose=False):
         num_people = self.num_people
-        population = pd.DataFrame(
+        connections = pd.DataFrame(
             {
                 'agent': [i for i in range(num_people)],
                 'connections': [[] for i in range(num_people)],
@@ -98,24 +98,24 @@ class ConnectionEngine():
                 'available': [],
                 'choose': []
             }
-        for _per in population.index:
+        for _per in connections.index:
             if verbose:
                 if _per % _update == 0:
                     print('{:.0f}% complete'.format(_per/num_people*100))
 
             if self.experiment:
-                population, runtime_available, runtime_choose = self._build_connection_list(
+                connections, runtime_available, runtime_choose = self._build_connection_list(
                     _per,
-                    population,
+                    connections,
                     num_connections)
                 runtime['available'].append(runtime_available)
                 runtime['choose'].append(runtime_choose)
             else:
-                self._build_connection_list(_per, population)
-        self.connections = population
+                self._build_connection_list(_per, connections)
+        self.connections = connections
 
         if self.experiment:
-            return population, runtime
+            return connections, runtime
 
     def make_dummy(self, verbose=False):
 
