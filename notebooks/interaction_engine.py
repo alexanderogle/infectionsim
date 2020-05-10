@@ -63,45 +63,62 @@ class InteractionEngine():
         return agent_a, agent_b
 
     def _qualify_interaction(self, agent_a, agent_b):
-        # Agents are different states
+
+        # Determine if agents have different states
         different_states = agent_a['state'] != agent_b['state']
 
-        # Someone is infected
-        someone_infected = agent_a['state'] == 'inf' or agent_b['state'] == 'inf'
+        if different_states:
 
-        # Someone is susceptible
-        someone_susceptible = agent_a['state'] == 'sus' or agent_b['state'] == 'sus'
+            # Determine if someone is infected
+            someone_infected = agent_a['state'] == 'inf' or agent_b['state'] == 'inf'
 
-        # Determine who is infected and who is susceptible
-        if agent_a['state'] == 'inf':
-            infected = agent_a
-            susceptible = agent_b
+            # Determine if someone is susceptible
+            someone_susceptible = agent_a['state'] == 'sus' or agent_b['state'] == 'sus'
+
+            if someone_infected and someone_susceptible:
+
+                # Determine who is infected and who is susceptible
+                if agent_a['state'] == 'inf':
+                    infected = agent_a
+                    susceptible = agent_b
+                else:
+                    infected = agent_b
+                    susceptible = agent_a
+
+                # Determine if infected is contagious
+                days_infected = (
+                    self.population
+                    .query('agent == {}'.format(infected['agent']))
+                    .days_infected
+                    .values[0]
+                )
+                infected_is_contagious = days_infected < pathogen['contagious_period']
+
+                if infected_is_contagious:
+
+                    # Determine if susecptible is immune
+                    immunity = (
+                        self.population
+                        .query('agent == {}'.format(susceptible['agent']))
+                        .immunity
+                        .values[0]
+                    )
+                    susecptible_is_immune = immunity > 0
+
+                    if not susecptible_is_immune:
+                        # Interaction qualified
+                        return True, infected, susceptible
+                    else:
+                        # Interaction disqualified
+                        return False, None, None
+                else:
+                    # Interaction disqualified
+                    return False, None, None
+            else:
+                # Interaction disqualified
+                return False, None, None
         else:
-            infected = agent_b
-            susceptible = agent_a
-
-        # Infected is contagious
-        days_infected = (
-            self.population
-            .query('agent == {}'.format(infected['agent']))
-            .days_infected
-            .values[0]
-        )
-        infected_is_contagious = days_infected < pathogen['contagious_period']
-
-        # Susecptible is immune
-        immunity = (
-            self.population
-            .query('agent == {}'.format(susceptible['agent']))
-            .immunity
-            .values[0]
-        )
-        susecptible_is_immune = immunity > 0
-
-        # Qualify
-        if different_states and someone_infected and someone_susceptible and infected_is_contagious and not susecptible_is_immune:
-            return True, infected, susceptible
-        else:
+            # Interaction disqualified
             return False, None, None
 
     def _interact(self, a, b):
@@ -118,7 +135,7 @@ class InteractionEngine():
         infect = draw < pathogen['infection_rate']
         if interact and infect:
             self.population.loc[susceptible['agent'], 'state'] = 'inf'
-            self.population.loc[susceptible['agent'], 'infected_by'].append(
+            self.population.loc[susceptible['agent'], 'infected_by'] = (
                 int(infected['agent'])
             )
 
