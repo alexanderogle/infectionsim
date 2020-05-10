@@ -10,10 +10,17 @@ class ConnectionEngine():
     def __init__(self,
                  population=None,
                  mean_connections=None,
-                 experiment=False):
+                 experiment=False,
+                 verbose=False,
+                 std=10,
+                 size=10**5):
+
         self.population = population
         self.mean_connections = mean_connections
         self.experiment = experiment
+        self.verbose = verbose
+        self.std = std
+        self.size = size
 
     def _max_connections(self, std=None, size=None):
         distribution = np.round(
@@ -76,7 +83,11 @@ class ConnectionEngine():
         else:
             return connections
 
-    def create_connections(self, std=10, size=100000, verbose=False):
+    def create_connections(self):
+        std = self.std
+        size = self.size
+        verbose = self.verbose
+
         not_dead = self.population.query('state != "dead"').index
         connections = pd.DataFrame(
             {

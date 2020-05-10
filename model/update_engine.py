@@ -1,6 +1,6 @@
 from connection_engine import ConnectionEngine
 from interaction_engine import InteractionEngine, pathogen
-from population import Population
+from population_engine import PopulationEngine
 
 import pandas as pd
 import numpy as np
@@ -44,6 +44,7 @@ class UpdateEngine():
         # Reset their state, days_infected, and immunity
         self.population.loc[recovered, 'state'] = 'sus'
         self.population.loc[recovered, 'days_infected'] = 0
+        self.population.loc[recovered, 'infected_by'] = None
         self.population.loc[recovered, 'immunity'] = self.pathogen['immunity_period']
 
     def _update_infected(self):
