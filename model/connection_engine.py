@@ -89,7 +89,8 @@ class ConnectionEngine():
 
         return choice
 
-    def _available_to_connect(self, agent, connections):
+    @staticmethod
+    def _available_to_connect(agent, connections):
         # Return IDs of people with connections less than num_connections
         # Only drop agent if it returns from query
         try:
