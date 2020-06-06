@@ -1,18 +1,17 @@
 import pandas as pd
 import numpy as np
+from simfection_settings import SimFectionSettings
 
 
 class PopulationEngine:
-    def __init__(self, num_people=None, initial_states=None, _df=None, verbose=False):
+    def __init__(self, settings: SimFectionSettings, _df: pd.DataFrame = None) -> None:
         if _df is not None:
             self._df = _df
         else:
-            assert num_people is not None, ('Must pass number of people.')
-            assert initial_states is not None, ('Must pass initial states.')
-            self.num_people = num_people
-            self.initial_states = initial_states
+            self.num_people = settings.get_setting('num_people')
+            self.initial_states = settings.get_setting('initial_states')
             self._df = pd.DataFrame()
-            self.verbose = verbose
+            self.verbose = settings.get_setting('verbose')
 
     def _synthesize_states(self):
         initial_states = self.initial_states
