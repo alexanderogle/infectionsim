@@ -205,8 +205,8 @@ class ConnectionEngine():
             if self.experiment:
                 connections, runtime_available, runtime_choose = self._build_connection_list(
                     _per,
-                    connections,
-                    num_connections)
+                    connections
+                )
                 runtime['available'].append(runtime_available)
                 runtime['choose'].append(runtime_choose)
             else:
