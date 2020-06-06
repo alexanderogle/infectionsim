@@ -62,12 +62,12 @@ class ConnectionEngine():
     """
 
     def __init__(self,
-                 population=None,
-                 mean_connections=None,
-                 experiment=False,
-                 verbose=False,
-                 std=10,
-                 size=10**5):
+                 population: PopulationEngine = None,
+                 mean_connections: int = None,
+                 experiment: bool = False,
+                 verbose: bool = False,
+                 std: int = 10,
+                 size: int = 10**5) -> None:
 
         self.population = population
         self.mean_connections = mean_connections
