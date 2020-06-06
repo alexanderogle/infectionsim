@@ -1,3 +1,33 @@
+"""Creates a network of hand-shake connections as part of model run.
+
+The ConnectionEngine takes a Population object and an average number of connections
+and randomly creates a hand-shake network of interactions within the population.
+
+  Typical usage example:
+
+  from population_engine import PopulationEngine
+  from connection_engine import ConnectionEngine
+
+  # Set params
+  initial_states = {'inf':0.2}
+  num_people = 100
+  mean_connections = 10
+
+  # Synthesize population
+  population = PopulationEngine(
+    num_people=num_people,
+    initial_states=initial_states
+  )
+  population.synthesize_population()
+
+  # Create connections
+  connection_engine = ConnectionEngine(
+    population=population._df,
+    mean_connections=mean_connections
+  )
+  connection_engine.create_connections()
+"""
+
 import pandas as pd
 import numpy as np
 import typing
