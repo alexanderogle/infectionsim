@@ -1,13 +1,19 @@
 import pandas as pd
 from connection_engine import ConnectionEngine
+from simfection_settings import SimFectionSettings
 import numpy as np
 
 
 class InteractionEngine():
-    def __init__(self, connections=None, population=None, pathogen=None):
+    def __init__(self,
+                 connections: pd.DataFrame = None,
+                 population: pd.DataFrame = None,
+                 settings: SimFectionSettings = None) -> None:
         self.connections = connections
         self.population = population
-        self.pathogen = pathogen
+        self.pathogen = {
+            key: settings.get_setting(key) for key in settings.get_setting('pathogen_keys')
+        }
 
     def _make_interaction_pair(self, row):
         agent_a = row['agent_a']

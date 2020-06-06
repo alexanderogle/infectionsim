@@ -5,27 +5,23 @@ and randomly creates a hand-shake network of interactions within the population.
 
   Typical usage example:
 
-  from population_engine import PopulationEngine
-  from connection_engine import ConnectionEngine
+    from simfection_settings import SimFectionSettings
+    from population_engine import PopulationEngine
+    from connection_engine import ConnectionEngine
 
-  # Set params
-  initial_states = {'inf':0.2}
-  num_people = 100
-  mean_connections = 10
+    # Settings
+    settings = SimFectionSettings()
 
-  # Synthesize population
-  population = PopulationEngine(
-    num_people=num_people,
-    initial_states=initial_states
-  )
-  population.synthesize_population()
+    # Synthesize population
+    population = PopulationEngine(settings)
+    population.synthesize_population()
 
-  # Create connections
-  connection_engine = ConnectionEngine(
-    population=population._df,
-    mean_connections=mean_connections
-  )
-  connection_engine.create_connections()
+    # Create connections
+    connection_engine = ConnectionEngine(
+      population=population._df,
+      settings=settings
+    )
+    connection_engine.create_connections()
 """
 # import typing #TODO: (Grant) I'm not sure if this is
 # needed for typing.
@@ -33,6 +29,7 @@ import time
 import sys
 import pandas as pd
 import numpy as np
+from simfection_settings import SimFectionSettings
 from population_engine import PopulationEngine
 
 sys.setrecursionlimit(10**6)
@@ -46,7 +43,8 @@ class ConnectionEngine():
     Longer class information....
 
     Attributes:
-        population: A PopulationEngine instance.
+        population: A pandas DataFrame representing a population attribute from
+            a PopulationEngine instance.
         mean_connections: An integer average number of connections for each
             agent.
         experiment: A boolean indicating whether or not this instance is being
@@ -63,20 +61,15 @@ class ConnectionEngine():
             create_connections method.
     """
 
-    def __init__(self,
-                 population: PopulationEngine = None,
-                 mean_connections: int = None,
-                 experiment: bool = False,
-                 verbose: bool = False,
-                 std: int = 10,
-                 size: int = 10**5) -> None:
+    def __init__(self, population: pd.DataFrame = None,
+                 settings: SimFectionSettings = None) -> None:
 
         self.population = population
-        self.mean_connections = mean_connections
-        self.experiment = experiment
-        self.verbose = verbose
-        self.std = std
-        self.size = size
+        self.mean_connections = settings.get_setting('mean_connections')
+        self.experiment = settings.get_setting('experiment')
+        self.verbose = settings.get_setting('verbose')
+        self.std = settings.get_setting('std')
+        self.size = settings.get_setting('size')
         self.connections = None
 
     def _max_connections(self,

@@ -1,15 +1,20 @@
 from connection_engine import ConnectionEngine
 from interaction_engine import InteractionEngine, pathogen
 from population_engine import PopulationEngine
+from simfection_settings import SimFectionSettings
 
 import pandas as pd
 import numpy as np
 
 
 class UpdateEngine():
-    def __init__(self, population=None, pathogen=None):
+    def __init__(self,
+                 population: pd.DataFrame = None,
+                 settings: SimFectionSettings = None) -> None:
         self.population = population
-        self.pathogen = pathogen
+        self.pathogen = {
+            key: settings.get_setting(key) for key in settings.get_setting('pathogen_keys')
+        }
 
     def _update_state(self, agent):
 
