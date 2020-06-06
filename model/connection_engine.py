@@ -132,8 +132,7 @@ class ConnectionEngine():
         if self.experiment:
             runtime_choose = time.time() - _start
             return connections, runtime_available, runtime_choose
-        else:
-            return connections
+        return connections
 
     def create_connections(self):
         """Creates connection list for each agent.
