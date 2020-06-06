@@ -27,11 +27,13 @@ and randomly creates a hand-shake network of interactions within the population.
   )
   connection_engine.create_connections()
 """
-import typing
+# import typing #TODO: (Grant) I'm not sure if this is
+# needed for typing.
 import time
 import sys
 import pandas as pd
 import numpy as np
+from population_engine import PopulationEngine
 
 sys.setrecursionlimit(10**6)
 
