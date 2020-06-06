@@ -47,7 +47,7 @@ class SimFectionSettings:
             return None
         return self.settings[setting]
 
-    def set_setting(self, setting: str, value: str):
+    def set_setting(self, setting: str, value: Any):
         if setting not in self.settings.keys():
             print('Setting "{}" not found.'.format(setting))
             return None
