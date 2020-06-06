@@ -6,6 +6,7 @@ import resource
 import matplotlib.pyplot as plt
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from tests import anchor
 sys.setrecursionlimit(10**6)
 
 def mean(x):
@@ -16,10 +17,8 @@ class ConnectionEngine():
         self.num_people = num_people
         self.num_connections = num_connections
 
-    def _build_connection_list(self,agent,population,num_connections):
-        # Break ounter
-        #if _cnt == 0:
-        #    _cnt += 1
+    def _build_connection_list(self,agent,population,num_connections, recursion_num):
+        recursion_num = recursion_num + 1
         # Return IDs of people with connections less than num_connections
         available_to_connect = (
             lambda agent,population: population.drop(agent).query('num_connections < {}'
@@ -28,34 +27,37 @@ class ConnectionEngine():
         )
 
         ## Update number of connections
-        #population['num_connections'] = population.connections.apply(len)
         # Get other agents available to connect
-        available_to_connect_times = []
-        start_time = time.time()
         available = available_to_connect(agent,population)
-        end_time = time.time()
-        available_to_connect_runtime = end_time - start_time
+
 
         # Randomly choose connection
-        start_time = time.time()
+        anchor = 'connection_' + str(recursion_num)
+        anchor_tracker.create_anchor(anchor)
         if len(available) > 0:
+
             connection = np.random.choice(available)
+
             # Make connection
             population.iloc[connection].connections.append(agent)
             population.iloc[agent].connections.append(connection)
 
+
             # Update number of connections
             population.iloc[[agent,connection],2] += 1
-            #if _cnt < 10:
+            anchor_tracker.create_anchor('recursion')
             while population.num_connections[agent] < num_connections:
-                self._build_connection_list(agent,
+                self.return_data = self._build_connection_list(agent,
                                        population,
-                                       num_connections)
-        end_time = time.time()
-        randomly_chosen_runtime = end_time - start_time
+                                       num_connections,
+                                       recursion_num)
+            anchor_tracker.end_anchor('recursion')
+        anchor_tracker.end_anchor(anchor)
 
-
-        return population, available_to_connect_runtime, randomly_chosen_runtime
+        if recursion_num == 1:
+            return population
+        else:
+            return population, recursion_num
 
     def create_connections(self,verbose=False):
         num_connections = self.num_connections
@@ -69,33 +71,40 @@ class ConnectionEngine():
         )
 
         _update = num_people*0.1
-        available_to_connect_runtimes = []
-        randomly_chosen_runtimes = []
-        for _per in population.index:
+        times = []
+        for count, _per in enumerate(population.index):
             if verbose:
                 if _per % _update == 0:
                     print('{:.0f}% complete'.format(_per/num_people*100))
-            population, available_to_connect_runtime, randomly_chosen_runtime = self._build_connection_list(_per,population,num_connections)
-            available_to_connect_runtimes.append(available_to_connect_runtime)
-            randomly_chosen_runtimes.append(randomly_chosen_runtime)
+            anchor = 'build_connection_list_' + str(count)
+            anchor_tracker.create_anchor(anchor)
+            population = self._build_connection_list(_per,population,num_connections,0)
+            anchor_tracker.end_anchor(anchor)
+            t = anchor_tracker.timing(anchor)
+            times.append(t)
 
         self.population = population
-        if verbose:
-            mean_available_to_connect = mean(available_to_connect_runtimes)
-            mean_randomly_chosen = mean(randomly_chosen_runtimes)
-            iterations = population.index.size
-            time = range(0, iterations)
-            overall_runtime_available_to_connect = iterations * mean_available_to_connect
-            overall_runtime_randomly_chosen = iterations * mean_randomly_chosen
-            plt.scatter(time, available_to_connect_runtimes)
-            plt.scatter(time, randomly_chosen_runtimes)
-            plt.xlabel("iterations")
-            plt.ylabel("execution time (s)")
-            plt.legend(["available_to_connect", "randomly_chosen_connection"])
-            plt.title(f'available_to_connect overall runtime: {overall_runtime_available_to_connect}\nrandomly_chosen overall runtime: {overall_runtime_randomly_chosen}')
-            plt.show()
 
-        return population
+        return population, times
 
-engine = ConnectionEngine(10000, 10)
-engine.create_connections(verbose=True)
+def run_experiment(connections):
+    engine = ConnectionEngine(1000, connections)
+    population, times = engine.create_connections(verbose=True)
+
+    df = pd.DataFrame(times)
+    filename = './test_output_' + str(connections) + '.csv'
+    df.to_csv(filename)
+    # Explicitly delete the DataFrame
+    del df
+
+
+# Run a series of experiments
+experiments = [300]
+
+for experiment in experiments:
+    anchor_tracker = anchor.AnchorTracker()
+    print("Running experiment: " + str(experiment))
+    run_experiment(experiment)
+    print("Experiment " + str(experiment) + " concluded.")
+    # Delete the AnchorTracker to get different results
+    del anchor_tracker
