@@ -36,7 +36,7 @@ class SimFectionSettings:
 
     def __init__(self, settings=None):
         self.settings = self.default_settings
-        # Set custom default
+        # Set custom settings
         if settings is not None:
             for key, value in settings.items():
                 self.set_setting(key, value)
