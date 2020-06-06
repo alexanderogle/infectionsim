@@ -57,6 +57,8 @@ class ConnectionEngine():
         size: An interger number of samples to take from the normal distribution
             from which each agent draws to determine the maximum number of
             connections.
+        connections: Initialized as a Nonetype. This will be set in the
+            create_connections method.
     """
 
     def __init__(self,
@@ -73,6 +75,7 @@ class ConnectionEngine():
         self.verbose = verbose
         self.std = std
         self.size = size
+        self.connections = None
 
     def _max_connections(self, std=None, size=None):
         distribution = np.round(
