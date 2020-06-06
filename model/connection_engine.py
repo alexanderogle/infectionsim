@@ -27,12 +27,12 @@ and randomly creates a hand-shake network of interactions within the population.
   )
   connection_engine.create_connections()
 """
-
-import pandas as pd
-import numpy as np
 import typing
 import time
 import sys
+import pandas as pd
+import numpy as np
+
 sys.setrecursionlimit(10**6)
 
 
@@ -171,7 +171,7 @@ class ConnectionEngine():
 
 
         Raises:
-            #TODO 
+            #TODO
         """
         std = self.std
         size = self.size
