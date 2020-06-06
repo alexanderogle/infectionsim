@@ -216,6 +216,7 @@ class ConnectionEngine():
 
         if self.experiment:
             return connections, runtime
+        return None
 
 
 if __name__ == '__main__':
