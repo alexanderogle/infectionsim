@@ -1,16 +1,16 @@
 #include "person.h"
 
-Person::Person(std::string name, State state){
-    setName(name);
+Person::Person(int id, State state){
+    setID(id);
     setState(state);
 }
 
-void Person::setName(std::string newName){
-    name = newName;
+void Person::setID(int newID){
+    id = newID;
 }
 
-std::string Person::getName(){
-    return name;
+int Person::getID(){
+    return id;
 }
 
 void Person::setState(State newState){

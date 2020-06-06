@@ -4,8 +4,7 @@
 // User defined libraries
 #include "population.h"
 
-Population::Population(int ID){
-    setID(ID);
+Population::Population(){
 }
 
 void Population::setID(int newID){
@@ -24,8 +23,11 @@ void Population::genPopulation(int size){
     // Reset the people vector
     people = {};
     for (int i = 0; i < size; i++){
-        std::string name = std::to_string(i);
-        Person newPerson(name);
+        Person newPerson(i);
         people.push_back(newPerson);
     }
+}
+
+int Population::size(){
+    return people.size();
 }

@@ -8,10 +8,11 @@ class Population {
         int id;
         std::vector<Person> people;
     public:
-        Population(int ID);
+        Population();
         void setID(int newId);
         std::vector<Person> getPeople();
         void addPerson(Person newPerson);
         void genPopulation(int size);
+        int size();
 };
 #endif

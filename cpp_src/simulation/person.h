@@ -14,13 +14,13 @@ enum class State {
 
 class Person {
     private: 
-        std::string name;
+        int id;
         State state;
 
     public:
-        Person(std::string name, State state=State::susceptible);
-        std::string getName();
-        void setName(std::string name);
+        Person(int id, State state=State::susceptible);
+        int getID();
+        void setID(int newID);
         State getState();
         void setState(State newState);
 };

@@ -3,10 +3,12 @@ cc_library(
     srcs = [
             "person.cpp",
             "population.cpp",
+            "network.cpp",
             ],
     hdrs = [
             "person.h",
             "population.h",
+            "network.h",
         ],
 )
 
