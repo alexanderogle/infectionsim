@@ -106,7 +106,6 @@ class ConnectionEngine():
 
         # Get other agents available to connect
         if self.experiment:
-            runtime = {}
             _start = time.time()
         available = self._available_to_connect(agent, connections)
         if self.experiment:
