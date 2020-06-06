@@ -179,7 +179,7 @@ class ConnectionEngine():
         not_dead = self.population.query('state != "dead"').index
         connections = pd.DataFrame(
             {
-                'agent': [i for i in not_dead],
+                'agent': list(range(len(not_dead))),
                 'connections': [[] for i in not_dead],
                 'num_connections': [0 for i in not_dead],
                 'max_connections': [
