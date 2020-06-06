@@ -79,7 +79,9 @@ class ConnectionEngine():
         self.size = size
         self.connections = None
 
-    def _max_connections(self, std=None, size=None):
+    def _max_connections(self,
+                         std: int = None,
+                         size: int = None):
         distribution = np.round(
             np.random.normal(
                 loc=self.mean_connections,  # Mean
@@ -95,7 +97,7 @@ class ConnectionEngine():
         return choice
 
     @staticmethod
-    def _available_to_connect(agent, connections):
+    def _available_to_connect(agent: str, connections: pd.DataFrame):
         # Return IDs of people with connections less than num_connections
         # Only drop agent if it returns from query
         try:
