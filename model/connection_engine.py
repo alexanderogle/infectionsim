@@ -1,6 +1,6 @@
 """Creates a network of hand-shake connections as part of model run.
 
-The ConnectionEngine takes a Population object and an average number of connections
+The ConnectionEngine takes a PopulationEngine object and an average number of connections
 and randomly creates a hand-shake network of interactions within the population.
 
   Typical usage example:
