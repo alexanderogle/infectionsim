@@ -97,7 +97,7 @@ class ConnectionEngine():
             return connections[
                 connections.num_connections < connections.max_connections
             ].drop(agent).index
-        except:
+        except KeyError:
             return connections[
                 connections.num_connections < connections.max_connections
             ].index
