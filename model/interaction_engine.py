@@ -16,6 +16,7 @@ class InteractionEngine():
         logger.debug('+ Initializing interaction engine.')
         self.connections = connections
         self.population = population
+        self.verbose = settings.get_setting('verbose')
         self.pathogen = {
             key: settings.get_setting(key) for key in settings.get_setting('pathogen_keys')
         }
@@ -150,7 +151,8 @@ class InteractionEngine():
                 int(infected['agent'])
             )
 
-    def interact_all(self, verbose=False):
+    def interact_all(self):
+        verbose = self.verbose
         logger.debug('- Getting unique connections.')
         self._get_unique_connections()
         connections = self.connections
