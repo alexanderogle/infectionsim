@@ -3,6 +3,7 @@ from simulation_day import SimulationDay
 from settings import SimfectionSettings
 from logger import SimfectionLogger
 from path import SimfectionPath
+from arguments import _get_parser, simfection_args
 import time
 
 simfection_logger = SimfectionLogger()
@@ -68,5 +69,15 @@ class SimulationRun():
 
 
 if __name__ == '__main__':
-    sim = SimulationRun()
+    parser = _get_parser(simfection_args)
+    args = parser.parse_args()
+    settings = {
+        arg: getattr(args, arg)
+        for arg in vars(args)
+        if getattr(args, arg) is not None
+    }
+    if settings != {}:
+        sim = SimulationRun(settings)
+    else:
+        sim = SimulationRun()
     sim.run()

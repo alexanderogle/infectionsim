@@ -14,7 +14,7 @@ def _get_parser(arguments):
 simfection_args = {
     ('-nd', '--num-days'): {
         'help': (
-            'number of days to simulate (default: {})'
+            'number of days to simulate \n(default: {})'
             .format(settings.get_setting('num_days'))
         ),
         'type': int,
@@ -22,7 +22,7 @@ simfection_args = {
     },
     ('-bp', '--base-path'): {
         'help': (
-            'base path for simfection run (default: {})'
+            'base path for simfection run \n(default: {})'
             .format(settings.get_setting('base_path'))
         ),
         'type': str,
@@ -31,15 +31,15 @@ simfection_args = {
     # TODO Make previous run setting a path and load restart instance
     ('-v', '--verbose'): {
         'help': (
-            'whether or not to print extra info to stream (default: {})'
+            'whether or not to print extra info to stream \n(default: {})'
             .format(settings.get_setting('verbose'))
         ),
-        'type': ,
+        'type': bool,
         'required': False
     },
     ('-np', '--num-people'): {
         'help': (
-            'how many people tp simulation in population (default: {})'
+            'how many people tp simulation in population \n(default: {})'
             .format(settings.get_setting('num_people'))
         ),
         'type': int,
@@ -47,7 +47,7 @@ simfection_args = {
     },
     ('-if', '--initial_infected'): {
         'help': (
-            'ratio of population that is initiall infected (default: {})'
+            'ratio of population that is initiall infected \n(default: {})'
             .format(settings.get_setting('initial_states')['inf'])
         ),
         'type': float,
@@ -55,7 +55,7 @@ simfection_args = {
     },
     ('-ir', '--infection-rate'): {
         'help': (
-            '(default: {})'
+            '\n(default: {})'
             .format(settings.get_setting('infection_rate'))
         ),
         'type': float,
@@ -63,7 +63,7 @@ simfection_args = {
     },
     ('-rr', '--recovery-rate'): {
         'help': (
-            '(default: {})'
+            '\n(default: {})'
             .format(settings.get_setting('recovery_rate'))
         ),
         'type': float,
@@ -71,7 +71,7 @@ simfection_args = {
     },
     ('-dr', '--death-rate'): {
         'help': (
-            '(default: {})'
+            '\n(default: {})'
             .format(settings.get_setting('death_rate'))
         ),
         'type': float,
@@ -79,7 +79,7 @@ simfection_args = {
     },
     ('-sr', '--spontaneous-rate'): {
         'help': (
-            '(default: {})'
+            '\n(default: {})'
             .format(settings.get_setting('spontaneous_rate'))
         ),
         'type': float,
@@ -87,7 +87,7 @@ simfection_args = {
     },
     ('-ip', '--immunity-period'): {
         'help': (
-            '(default: {})'
+            '\n(default: {})'
             .format(settings.get_setting('immunity_period'))
         ),
         'type': int,
@@ -95,15 +95,15 @@ simfection_args = {
     },
     ('-cr', '--contagious-period'): {
         'help': (
-            '(default: {})'
+            '\n(default: {})'
             .format(settings.get_setting('contagious_period'))
         ),
         'type': int,
         'required': False
     },
-    ('-ir', '--incubation-period'): {
+    ('-icp', '--incubation-period'): {
         'help': (
-            '(default: {})'
+            '\n(default: {})'
             .format(settings.get_setting('incubation_period'))
         ),
         'type': int,
