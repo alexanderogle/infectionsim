@@ -44,8 +44,8 @@ class SimulationDay():
             population=self.population._df,
             settings=self.settings
         )
-        use_cpp = self.settings.get_setting('use_cpp')
-        self.connection_engine.create_connections(use_cpp)
+        cpp = self.settings.get_setting('cpp')
+        self.connection_engine.create_connections(cpp)
 
         self.interaction_engine = InteractionEngine(
             connections=self.connection_engine.connections,

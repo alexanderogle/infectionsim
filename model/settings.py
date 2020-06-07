@@ -41,7 +41,7 @@ class SimfectionSettings:
         'verbose': False,
         'previous_run': None,
         # Optimization settings
-        'use_cpp': False
+        'cpp': False
     }
 
     def __init__(self, settings=None):

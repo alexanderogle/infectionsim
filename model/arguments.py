@@ -116,5 +116,12 @@ simfection_args = {
         'type': int,
         'required': False
     },
-
+    ('-cpp', '--cpp'): {
+        'help': (
+            'use the cpp optimization \n(default: {})'
+            .format(settings.get_setting('incubation_period'))
+        ),
+        'dest': 'cpp',
+        'action': 'store_true'
+    },
 }
