@@ -1,4 +1,5 @@
 from libcpp.vector cimport vector
+from libcpp cimport bool
 
 # Declare the class with cdef
 cdef extern from "connections.h":
@@ -10,5 +11,6 @@ cdef extern from "connections.h":
         Connections(int) except +
         int getSize()
         void setSize(int)
+        bool existsInVector(int, vector[int])
         vector[int] getAvailable(int, int, vector[vector[int]])
         vector[vector[int]] genRandomNetwork(int, bool)

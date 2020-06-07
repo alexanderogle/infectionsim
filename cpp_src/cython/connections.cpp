@@ -21,12 +21,21 @@ void Connections::setSize(int newSize){
     size = newSize;
 }
 
+bool Connections::existsInVector(int num, std::vector<int> v){
+    for(int i : v){
+        if(num == i){
+            return true;
+        }
+    }
+    return false;
+}
+
 std::vector<int> Connections::getAvailable(int personID, int connectionMax, std::vector<std::vector<int> > connections){
     // Finds all the connections avialable for a given perosn, excluding themselves. 
     std::vector<int> available;
 
     for (int i = 0; i < connections.size(); i++){
-        if (i != personID && connections[i].size() < connectionMax){
+        if (i != personID && !existsInVector(personID, connections[i]) && connections[i].size() < connectionMax){
             available.push_back(i);
         }
     }

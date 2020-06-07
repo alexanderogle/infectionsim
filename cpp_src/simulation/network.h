@@ -26,6 +26,7 @@ class Network{
         void genRandomNetwork(int connection_max, bool verbose);
         void genTrivialNetwork();
         void printNetwork();
+        bool existsInVector(int num, std::vector<int> v);
         bool availableToConnect(int personID, int connectionMax);
 
         std::vector<int> getAvailable(int personID, int connectionMax);
