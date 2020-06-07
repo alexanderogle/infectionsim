@@ -12,5 +12,6 @@ cdef extern from "connections.h":
         int getSize()
         void setSize(int)
         bool existsInVector(int, vector[int])
-        vector[int] getAvailable(int, int, vector[vector[int]])
-        vector[vector[int]] genRandomNetwork(int, bool)
+        vector[int] genConnectionsMaxVector(int, int, int)
+        vector[int] getAvailable(int, vector[int], vector[vector[int]])
+        vector[vector[int]] genRandomNetwork(vector[int], bool, bool)

@@ -1,7 +1,7 @@
 # Running a Connections Engine Experiment
 
 ## Set Up Local Environment
-1. Change into the `infection_simulation` directory.
+1. Change into the `infection_simulation` directory where you have cloned the Simfection repository.
 2. Check out the develop branch with `git checkout develop`.
 3. Change into the `experiments/connection_engine` directory.
 

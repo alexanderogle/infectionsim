@@ -22,10 +22,13 @@ cdef class PyConnections:
     def set_size(self, int size):
         self.c_connections.setSize(size)
 
-    def get_available(self, int personID, int connectionMax, vector[vector[int]] connections):
-        return self.c_connections.getAvailable(personID, connectionMax, connections)
+    def gen_connections_max_vector(self, int minConnections, int maxConnections, int size):
+        return self.c_connections.genConnectionsMaxVector(minConnections, maxConnections, size)
 
-    def gen_random_network(self, int connectionMax, bool verbose=False):
-        return self.c_connections.genRandomNetwork(connectionMax, verbose)
+    def get_available(self, int personID, vector[int] connectionsMax, vector[vector[int]] connections):
+        return self.c_connections.getAvailable(personID, connectionsMax, connections)
+
+    def gen_random_network(self, vector[int] connectionsMax, bool verbose=False, bool testing=False):
+        return self.c_connections.genRandomNetwork(connectionsMax, verbose, testing)
 
     
