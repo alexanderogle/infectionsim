@@ -2,6 +2,10 @@ import pandas as pd
 from connection_engine import ConnectionEngine
 from settings import SimfectionSettings
 import numpy as np
+from logger import SimfectionLogger
+
+simfection_logger = SimfectionLogger()
+logger = simfection_logger.get_logger()
 
 
 class InteractionEngine():
@@ -9,6 +13,7 @@ class InteractionEngine():
                  connections: pd.DataFrame = None,
                  population: pd.DataFrame = None,
                  settings: SimfectionSettings = None) -> None:
+        logger.debug('+ Initializing interaction engine.')
         self.connections = connections
         self.population = population
         self.pathogen = {
@@ -146,8 +151,10 @@ class InteractionEngine():
             )
 
     def interact_all(self, verbose=False):
+        logger.debug('- Getting unique connections.')
         self._get_unique_connections()
         connections = self.connections
+        logger.debug('- Running all interactions.')
         for a, b in connections.interaction.values:
             self._interact(a, b)
 
