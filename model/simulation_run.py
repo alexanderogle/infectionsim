@@ -3,6 +3,7 @@ from simulation_day import SimulationDay
 from settings import SimfectionSettings
 from logger import SimfectionLogger
 from path import SimfectionPath
+import time
 
 simfection_logger = SimfectionLogger()
 logger = simfection_logger.get_logger()
@@ -22,9 +23,11 @@ class SimulationRun():
             self.population = PopulationEngine(self.settings)
             self.population.synthesize_population()
             self.days = None
-        else:
+            self.run_id = 'simfection_{}'.format(int(time.time()))
+        else:  # Restarting
             logger.info('+ Restarting from previous run.')
             self.days = self.settings.get_setting('previous_run').days
+            self.run_id = self.settings.get_setting('previous_run').run_id
             logger.info('- Loading population.')
             self.population = self.days[-1].population
 
@@ -42,6 +45,7 @@ class SimulationRun():
                 day_number = self.days[-1].day_number + 1
             if today == 0:
                 day = SimulationDay(
+                    self.run_id,
                     population=population,
                     day_number=day_number,
                     settings=self.settings
@@ -49,6 +53,7 @@ class SimulationRun():
             else:
                 yesterday = self.days[-1]
                 day = SimulationDay(
+                    self.run_id,
                     population=yesterday.population,
                     day_number=day_number,
                     settings=self.settings
@@ -58,3 +63,5 @@ class SimulationRun():
             self.days.append(day)
             self.path.save_day(day)
         logger.info('- All days ran successfully.')
+        logger.info('+ Saving run.')
+        self.path.save_run(self)

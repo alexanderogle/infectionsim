@@ -1,6 +1,7 @@
 import os
 import shutil
 import pickle
+import time
 from simulation_day import SimulationDay
 from logger import SimfectionLogger
 
@@ -44,9 +45,12 @@ class SimfectionPath:
         except FileNotFoundError:
             logger.exception('+ No log file found at {}.'.format(source))
 
+    # Output directory
     def day(self, day):
+        day_number = day.day_number
+        run_id = day.run_id
         try:
-            return os.path.join(self.output(), 'day_{}.pickle'.format(day.day_number))
+            return os.path.join(self.output(), '{}_day_{}.pickle'.format(run_id, day_number, ))
         except AttributeError:  # For loading when passing in an int
             return os.path.join(self.output(), 'day_{}.pickle'.format(day))
 
@@ -65,3 +69,9 @@ class SimfectionPath:
                 return pickle.load(_file)
         except FileNotFoundError:
             logger.exception('+ Unable to load day {} from {}.'.format(day_number, source))
+
+    def save_run(self, run):
+        run_id = run.run_id
+        destination = os.path.join(self.output(), '{}.pickle'.format(run_id))
+        with open(destination, 'wb') as file_:
+            pickle.dump(run, file_)

@@ -15,6 +15,7 @@ logger = simfection_logger.get_logger()
 class SimulationDay():
     def __init__(
             self,
+            run_id,
             day_number: int = None,
             population: PopulationEngine = None,
             settings: SimfectionSettings = None) -> None:
@@ -24,6 +25,7 @@ class SimulationDay():
         logger.info('+ Initializing day {}.'.format(day_number))
         self.day_number = day_number
         self.settings = settings
+        self.run_id = run_id
         if population is None:
             logger.info('+ Dummy population generated.')
             self.population = PopulationEngine(settings)
