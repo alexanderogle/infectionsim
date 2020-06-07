@@ -5,7 +5,7 @@ import time
 from simulation_day import SimulationDay
 from logger import SimfectionLogger
 
-simfection_logger = SimfectionLogger()
+simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
 
 
@@ -37,7 +37,7 @@ class SimfectionPath:
         source = self.log_file(source=True)
         destination = self.log_file()
         try:
-            logger.info('Moving log from {} to {}.'.format(source, destination))
+            logger.info('+ Moving log from {} to {}.'.format(source, destination))
             shutil.move(
                 source,
                 destination

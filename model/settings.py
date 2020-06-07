@@ -1,7 +1,7 @@
 from typing import Any
 from logger import SimfectionLogger
 
-simfection_logger = SimfectionLogger()
+simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
 
 
@@ -44,9 +44,7 @@ class SimfectionSettings:
         'cpp': False
     }
 
-    def __init__(self, settings=None):
-        logger.info('+ Initializing Simfection settings.')
-        logger.debug('- Reading defaults.')
+    def __init__(self, settings: dict = None):
         self.settings = self.default_settings
         # Set custom settings
         if settings is not None:

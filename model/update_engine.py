@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from logger import SimfectionLogger
 
-simfection_logger = SimfectionLogger()
+simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
 
 

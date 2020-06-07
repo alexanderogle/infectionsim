@@ -35,7 +35,7 @@ from logger import SimfectionLogger
 # network.cpython-37m-darwin.so file being in the same directory
 import network
 
-simfection_logger = SimfectionLogger()
+simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
 
 sys.setrecursionlimit(10**6)

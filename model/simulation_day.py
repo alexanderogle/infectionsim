@@ -6,9 +6,10 @@ from settings import SimfectionSettings
 
 import pandas as pd
 import numpy as np
+import logging
 from logger import SimfectionLogger
 
-simfection_logger = SimfectionLogger()
+simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
 
 
@@ -32,7 +33,7 @@ class SimulationDay():
             self.population.make_dummy()
 
         else:
-            logger.info('+ Population loaded.')
+            logger.debug('+ Population loaded.')
             self.population = population
 
         logger.debug('+ Saving starting population.')

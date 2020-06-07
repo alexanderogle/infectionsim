@@ -7,14 +7,14 @@ from arguments import _get_parser, simfection_args
 import pickle
 import time
 
-simfection_logger = SimfectionLogger()
+simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
 
 
 class SimulationRun():
     def __init__(self, settings: dict = None) -> None:
         logger.info('+ Initializing Simfection Run.')
-        # Set settings)
+        # Set settings
         self.settings = SimfectionSettings(settings)
         self.path = SimfectionPath(base_path=self.settings.get_setting('base_path'))
 
@@ -70,7 +70,6 @@ class SimulationRun():
         logger.info('- All days ran successfully.')
         logger.info('+ Saving run.')
         self.path.save_run(self)
-        logger.info('+ Moving log.')
         self.path.move_log()
 
 
