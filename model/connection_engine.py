@@ -30,6 +30,10 @@ import sys
 import pandas as pd
 import numpy as np
 from settings import SimfectionSettings
+from logger import SimfectionLogger
+
+simfection_logger = SimfectionLogger()
+logger = simfection_logger.get_logger()
 
 sys.setrecursionlimit(10**6)
 
@@ -62,7 +66,7 @@ class ConnectionEngine():
 
     def __init__(self, population: pd.DataFrame = None,
                  settings: SimfectionSettings = None) -> None:
-
+        logger.info('+ Initializing connection engine.')
         self.population = population
         self.mean_connections = settings.get_setting('mean_connections')
         self.experiment = settings.get_setting('experiment')
@@ -174,7 +178,10 @@ class ConnectionEngine():
         std = self.std
         size = self.size
         verbose = self.verbose
+        if self.experiment:
+            logger.debug('- Entering experiment mode.')
 
+        logger.info('- Creating connections.')
         not_dead = self.population.query('state != "dead"').index
         connections = pd.DataFrame(
             {
@@ -197,7 +204,7 @@ class ConnectionEngine():
         for _per in connections.index:
             if verbose:
                 if _per % _update == 0:
-                    print('{:.0f}% complete'.format(_per/len(not_dead)*100))
+                    logger.debug('{:.0f}% complete'.format(_per/len(not_dead)*100))
 
             if self.experiment:
                 connections, runtime_available, runtime_choose = self._build_connection_list(
@@ -209,7 +216,7 @@ class ConnectionEngine():
             else:
                 self._build_connection_list(_per, connections)
         self.connections = connections
-
+        logger.debug('100& complete.')
         if self.experiment:
             return connections, runtime
         return None

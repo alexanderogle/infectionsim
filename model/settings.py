@@ -1,4 +1,8 @@
 from typing import Any
+from logger import SimfectionLogger
+
+simfection_logger = SimfectionLogger()
+logger = simfection_logger.get_logger()
 
 
 class SimfectionSettings:
@@ -38,21 +42,25 @@ class SimfectionSettings:
     }
 
     def __init__(self, settings=None):
+        logger.info('+ Initializing Simfection settings.')
+        logger.debug('- Reading defaults.')
         self.settings = self.default_settings
         # Set custom settings
         if settings is not None:
+            logger.info('+ Setting custom settings.')
             for key, value in settings.items():
+                logger.debug('- Setting {} to {}.'.format(key, value))
                 self.set_setting(key, value)
 
     def get_setting(self, setting: str):
         if setting not in self.settings.keys():
-            print('Setting "{}" not found.'.format(setting))
+            logger.error('+ Setting "{}" not found.'.format(setting))
             return None
         return self.settings[setting]
 
     def set_setting(self, setting: str, value: Any):
         if setting not in self.settings.keys():
-            print('Setting "{}" not found.'.format(setting))
+            logger.error('+ Setting "{}" not found.'.format(setting))
             return None
         self.settings[setting] = value
         return value
