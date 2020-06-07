@@ -1,10 +1,23 @@
 import pandas as pd
 import numpy as np
 from settings import SimfectionSettings
+import logging
+import logging.config
+import yaml
+
+# Config and init logger
+with open('logger.yaml', 'rt') as f:
+    config = yaml.safe_load(f.read())
+logging.config.dictConfig(config)
+logger = logging.getLogger('simfection')
+logger.setLevel(logging.DEBUG)
 
 
 class PopulationEngine:
-    def __init__(self, settings: SimfectionSettings, _df: pd.DataFrame = None) -> None:
+    def __init__(self,
+                 settings: SimfectionSettings,
+                 _df: pd.DataFrame = None) -> None:
+        logger.info('+ Initializing population engine.')
         if _df is not None:
             self._df = _df
         else:
