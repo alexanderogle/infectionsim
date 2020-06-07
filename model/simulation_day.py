@@ -23,7 +23,7 @@ class SimulationDay():
         assert population is not None or settings is not None, (
             'Both population and settings are NoneType. At least one must be passed.'
         )
-        logger.info('+ Initializing day {}.'.format(day_number))
+        logger.info('+ Simulating day {}.'.format(day_number))
         self.day_number = day_number
         self.settings = settings
         self.run_id = run_id

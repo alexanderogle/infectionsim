@@ -57,7 +57,7 @@ class SimfectionPath:
     def save_day(self, day: SimulationDay):
         day_number = day.day_number
         destination = self.day(day)
-        logger.info('+ Saving day {} to {}.'.format(day_number, destination))
+        logger.debug('+ Saving day {} to {}.'.format(day_number, destination))
         with open(destination, 'wb') as file_:
             pickle.dump(day, file_)
 
