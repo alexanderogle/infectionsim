@@ -202,9 +202,8 @@ class ConnectionEngine():
                 'choose': []
             }
         for _per in connections.index:
-            if verbose:
-                if _per % _update == 0:
-                    logger.debug('{:.0f}% complete'.format(_per/len(not_dead)*100))
+            if _per % _update == 0:
+                logger.debug('{:.0f}% complete'.format(_per/len(not_dead)*100))
 
             if self.experiment:
                 connections, runtime_available, runtime_choose = self._build_connection_list(

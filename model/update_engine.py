@@ -17,6 +17,7 @@ class UpdateEngine():
                  settings: SimfectionSettings = None) -> None:
         logger.debug('+ Initializing update engine.')
         self.population = population
+        self.verbose = settings.get_setting('verbose')
         logger.debug('- Reading pathogen.')
         self.pathogen = {
             key: settings.get_setting(key) for key in settings.get_setting('pathogen_keys')
