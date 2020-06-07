@@ -11,12 +11,12 @@ class PopulationEngine:
     def __init__(self,
                  settings: SimfectionSettings,
                  _df: pd.DataFrame = None) -> None:
-        logger.info('+ Initializing population engine.')
+        logger.debug('+ Initializing population engine.')
         if _df is not None:
-            logger.info('- Loading population.')
+            logger.debug('- Loading population.')
             self._df = _df
         else:
-            logger.info('- Unloading settings.')
+            logger.debug('- Unloading settings.')
             self.num_people = settings.get_setting('num_people')
             self.initial_states = settings.get_setting('initial_states')
             self._df = pd.DataFrame()

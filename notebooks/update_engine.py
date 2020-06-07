@@ -5,13 +5,20 @@ from settings import SimfectionSettings
 
 import pandas as pd
 import numpy as np
+from logger import SimfectionLogger
+
+simfection_logger = SimfectionLogger()
+logger = simfection_logger.get_logger()
 
 
 class UpdateEngine():
     def __init__(self,
                  population: pd.DataFrame = None,
                  settings: SimfectionSettings = None) -> None:
+        logger.debug('+ Initializing update engine.')
         self.population = population
+        self.verbose = settings.get_setting('verbose')
+        logger.debug('- Reading pathogen.')
         self.pathogen = {
             key: settings.get_setting(key) for key in settings.get_setting('pathogen_keys')
         }
@@ -69,11 +76,19 @@ class UpdateEngine():
         # Remove one day immunity
         self.population.loc[immune, 'immunity'] -= 1
 
-    def update_all(self, verbose=False):
+    def update_all(self):
+        verbose = self.verbose
+
+        logger.debug('+ Running update engine.')
+        logger.debug('- Updating states.')
         self._update_states()
+        logger.debug('- Updating recovered.')
         self._update_recovered()
+        logger.debug('- Updating infected.')
         self._update_infected()
+        logger.debug('- Updating immnue.')
         self._update_immune()
+        logger.debug('- Updates complete.')
 
         if verbose:
             print(self.population.state.value_counts())
