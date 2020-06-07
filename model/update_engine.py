@@ -76,6 +76,8 @@ class UpdateEngine():
         self.population.loc[immune, 'immunity'] -= 1
 
     def update_all(self):
+        verbose = self.verbose
+
         logger.debug('+ Running update engine.')
         logger.debug('- Updating states.')
         self._update_states()
