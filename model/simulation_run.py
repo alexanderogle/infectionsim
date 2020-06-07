@@ -70,6 +70,8 @@ class SimulationRun():
         logger.info('- All days ran successfully.')
         logger.info('+ Saving run.')
         self.path.save_run(self)
+        logger.info('+ Moving log.')
+        self.path.move_log()
 
 
 if __name__ == '__main__':
