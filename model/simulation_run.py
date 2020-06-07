@@ -2,6 +2,7 @@ from population_engine import PopulationEngine
 from simulation_day import SimulationDay
 from settings import SimfectionSettings
 from logger import SimfectionLogger
+from path import SimfectionPath
 
 simfection_logger = SimfectionLogger()
 logger = simfection_logger.get_logger()
@@ -12,6 +13,10 @@ class SimulationRun():
         logger.info('+ Initializing Simfection Run.')
         # Set settings)
         self.settings = SimfectionSettings(settings)
+        self.path = SimfectionPath(base_path=self.settings.get_setting('base_path'))
+
+        logger.info('+ Building directory structure at {}.'.format(self.path.base()))
+        self.path.build_directory_structure()
 
         if self.settings.get_setting('previous_run') is None:
             self.population = PopulationEngine(self.settings)
@@ -51,4 +56,5 @@ class SimulationRun():
 
             day.run()
             self.days.append(day)
+            self.path.save_day(day)
         logger.info('- All days ran successfully.')
