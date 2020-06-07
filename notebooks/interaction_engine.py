@@ -1,6 +1,6 @@
 import pandas as pd
 from connection_engine import ConnectionEngine
-from simfection_settings import SimFectionSettings
+from settings import SimfectionSettings
 import numpy as np
 
 
@@ -8,7 +8,7 @@ class InteractionEngine():
     def __init__(self,
                  connections: pd.DataFrame = None,
                  population: pd.DataFrame = None,
-                 settings: SimFectionSettings = None) -> None:
+                 settings: SimfectionSettings = None) -> None:
         self.connections = connections
         self.population = population
         self.pathogen = {

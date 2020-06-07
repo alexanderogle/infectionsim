@@ -1,4 +1,7 @@
-class SimFectionSettings:
+from typing import Any
+
+
+class SimfectionSettings:
 
     default_settings = {
         # Pathogen settings

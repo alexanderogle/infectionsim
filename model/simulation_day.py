@@ -2,7 +2,7 @@ from connection_engine import ConnectionEngine
 from interaction_engine import InteractionEngine, pathogen
 from population_engine import PopulationEngine
 from update_engine import UpdateEngine
-from simfection_settings import SimFectionSettings
+from settings import SimfectionSettings
 
 import pandas as pd
 import numpy as np
@@ -14,7 +14,7 @@ class SimulationDay():
             self,
             day_number: int = None,
             population: PopulationEngine = None,
-            settings: SimFectionSettings = None) -> None:
+            settings: SimfectionSettings = None) -> None:
         assert population is not None or settings is not None, (
             'Both population and settings are NoneType. At least one must be passed.'
         )
