@@ -75,7 +75,7 @@ class UpdateEngine():
         # Remove one day immunity
         self.population.loc[immune, 'immunity'] -= 1
 
-    def update_all(self, verbose=False):
+    def update_all(self):
         logger.debug('+ Running update engine.')
         logger.debug('- Updating states.')
         self._update_states()
