@@ -22,7 +22,7 @@ class SimfectionPath:
     def output(self):
         return os.path.join(self.base(), 'output')
 
-    def build_base_directory(self):
+    def build_directory_structure(self):
         for _dir in [self.base, self.log, self.output]:
             os.makedirs(_dir(), exist_ok=True)
 
