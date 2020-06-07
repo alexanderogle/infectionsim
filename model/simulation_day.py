@@ -59,4 +59,5 @@ class SimulationDay():
 
         self.population._df = self.update_engine.population
 
-        logger.debug('- Day ran successfully.')
+        logger.debug('- Day ran successfully. Saving final population.')
+        self.final_population = self.population._df
