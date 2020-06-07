@@ -17,10 +17,8 @@ aws_credentials/
 
 *.pkl
 
-*.ipynb
 
 log/
 
 *.log
 
-notebooks/connection_engine.py
