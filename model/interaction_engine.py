@@ -153,10 +153,10 @@ class InteractionEngine():
 
     def interact_all(self):
         verbose = self.verbose
-        logger.debug('- Getting unique connections.')
+        logger.debug('- Getting unique interactions.')
         self._get_unique_connections()
         connections = self.connections
-        logger.debug('- Running all interactions.')
+        logger.debug('- Running all unique interactions.')
         for a, b in connections.interaction.values:
             self._interact(a, b)
 
