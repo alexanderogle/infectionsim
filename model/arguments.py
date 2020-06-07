@@ -28,7 +28,14 @@ simfection_args = {
         'type': str,
         'required': False
     },
-    # TODO Make previous run setting a path and load restart instance
+    ('-pr', '--previous_run'): {
+        'help': (
+            'path to previous run to use for restart\n(default: {})'
+            .format(settings.get_setting('previous_run'))
+        ),
+        'type': str,
+        'required': False
+    },
     ('-v', '--verbose'): {
         'help': (
             'whether or not to print extra info to stream \n(default: {})'

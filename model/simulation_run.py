@@ -4,6 +4,7 @@ from settings import SimfectionSettings
 from logger import SimfectionLogger
 from path import SimfectionPath
 from arguments import _get_parser, simfection_args
+import pickle
 import time
 
 simfection_logger = SimfectionLogger()
@@ -27,8 +28,11 @@ class SimulationRun():
             self.run_id = 'simfection_{}'.format(int(time.time()))
         else:  # Restarting
             logger.info('+ Restarting from previous run.')
-            self.days = self.settings.get_setting('previous_run').days
-            self.run_id = self.settings.get_setting('previous_run').run_id
+            with open(self.settings.get_setting('previous_run'), 'rb') as _file:
+                previous_run = pickle.load(_file)
+            self.days = previous_run.days
+            self.run_id = previous_run.run_id
+            del previous_run
             logger.info('- Loading population.')
             self.population = self.days[-1].population
 
