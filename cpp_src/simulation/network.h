@@ -15,12 +15,13 @@ class Network{
         // { Person { other person ids Person is connected to } }
         std::vector<std::vector<int>> connections;
         bool available_to_connect(int id);
-        void resetConnections();
 
     public: 
         Network(int id, int popID, int newSize);
         int getID();
         void setID(int newID);
+        int getSize();
+        void setSize(int newSize);
         void setupConnections(int size);
         void genRandomNetwork(int connection_max, bool verbose);
         void genTrivialNetwork();

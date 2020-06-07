@@ -10,37 +10,18 @@
 #include "network.h"
 
 
-int main(){
+int main(int argc, const char* argv[]){
 
     // Get start time
     time_t start, end;
     time(&start);
-    // Instantiate a population
-    Population population;
-    population.setID(0);
-    population.genPopulation(100);
-
-    // std::vector<Person> people = population.getPeople();
-    // for (Person person : people){
-    //     if (person.getState() == State::susceptible){
-    //         std::cout << "Person object at " << &person << " is susceptible." << std::endl;
-    //     }
-    //     else if (person.getState() == State::infected){
-    //         std::cout << "Person object at " << &person << " is infected." << std::endl;
-    //     }
-    //     else if (person.getState() == State::removed){
-    //         std::cout << "Person object at " << &person << " is removed." << std::endl;
-    //     }
-    // }
-    
     // Create a new Network object
-    Network network(0, 0, 50000);
-    network.genRandomNetwork(10, true);
+    Network network(0, 0, 1000);
+    std::cout << network.getSize() << std::endl;
+    // network.genRandomNetwork(10, true);
     time(&end);
-    network.printNetwork();
-    // network.genTrivialNetwork();
-    // network.printNetwork();
+    int runtime = end - start;
     
-    std::cout << "Finished in " << end - start << " seconds.\n";
+    std::cout << "Finished in " << runtime << " seconds.\n";
     return 0;
 }

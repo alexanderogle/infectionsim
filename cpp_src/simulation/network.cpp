@@ -8,7 +8,7 @@
 Network::Network(int id, int newPopID, int newSize){
     setID(id);
     popID = newPopID;
-    size = newSize;
+    setSize(newSize);
     // Reserve the space needed for the connections vector
     setupConnections(newSize);
     population.setID(newPopID);
@@ -21,6 +21,14 @@ void Network::setID(int newID){
 
 int Network::getID(){
     return id;
+}
+
+void Network::setSize(int newSize){
+    size = newSize;
+}
+
+int Network::getSize(){
+    return size;
 }
 
 void Network::setupConnections(int size){
@@ -76,6 +84,14 @@ void Network::genRandomNetwork(int connectionMax, bool verbose=false){
             }
             // Pick someone from among those we can connect with
             int randomConnection = std::rand() % available.size();
+
+            // // Make sure they aren't already in the person's conenction list
+            // for (int j = 0; j < connections[i].size(); j++){
+            //     if(randomConnection == connections[i][j]){
+            //         // This person is already in the connections list, so continue
+            //         continue;
+            //     }
+            // }
 
             connections[i].push_back(available[randomConnection]);
             connections[available[randomConnection]].push_back(i);
