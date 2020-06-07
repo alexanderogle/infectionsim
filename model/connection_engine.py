@@ -119,7 +119,7 @@ class ConnectionEngine():
             size = connections['agent'].size
             net = network.PyConnections(size)
             # Get the connection limits as a list to pass into function later
-            connections_max_list = connections['connections_max'].values.tolist()
+            connections_max_list = connections['max_connections'].values.tolist()
             # Generate the random network 2D list to convert to DataFrame form later
             random_network = net.gen_random_network(connections_max_list)
             # Update the connections DataFrame using the 2D list
@@ -229,23 +229,40 @@ class ConnectionEngine():
                 'available': [],
                 'choose': []
             }
-        for _per in connections.index:
-
+        if(use_cpp):
+            # Use the cpp optimization instead
             if self.experiment:
                 connections, runtime_available, runtime_choose = self._build_connection_list(
-                    _per,
+                    0, # this parameter doesn't matter for cpp  
                     connections,
                     use_cpp
                 )
                 runtime['available'].append(runtime_available)
                 runtime['choose'].append(runtime_choose)
-            else:
-                self._build_connection_list(_per, connections, use_cpp)
-        self.connections = connections
-        logger.debug('- All connections made successfully.')
-        if self.experiment:
-            return connections, runtime
-        return None
+            else: 
+                self._build_connection_list(0, connections, use_cpp)
+            self.connections = connections
+            logger.debug('- All connections made successfully with C++ optimization')
+            if self.experiment:
+                return connections, runtime
+            return None
+        else:
+            for _per in connections.index:
+
+                if self.experiment:
+                    connections, runtime_available, runtime_choose = self._build_connection_list(
+                        _per,
+                        connections,
+                    )
+                    runtime['available'].append(runtime_available)
+                    runtime['choose'].append(runtime_choose)
+                else:
+                    self._build_connection_list(_per, connections)
+            self.connections = connections
+            logger.debug('- All connections made successfully.')
+            if self.experiment:
+                return connections, runtime
+            return None
 
 
 if __name__ == '__main__':
