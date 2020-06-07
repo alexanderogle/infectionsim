@@ -39,6 +39,8 @@ class SimfectionSettings:
         'num_days': 15,
         'verbose': False,
         'previous_run': None,
+        # Optimization settings
+        'use_cpp': False
     }
 
     def __init__(self, settings=None):

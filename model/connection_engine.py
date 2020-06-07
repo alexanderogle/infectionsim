@@ -165,7 +165,7 @@ class ConnectionEngine():
                 return connections, runtime_available, runtime_choose
             return connections
 
-    def create_connections(self):
+    def create_connections(self, use_cpp=False):
         """Creates connection list for each agent.
 
         A connections DataFrame is created and returned using the agents in the
@@ -234,12 +234,13 @@ class ConnectionEngine():
             if self.experiment:
                 connections, runtime_available, runtime_choose = self._build_connection_list(
                     _per,
-                    connections
+                    connections,
+                    use_cpp
                 )
                 runtime['available'].append(runtime_available)
                 runtime['choose'].append(runtime_choose)
             else:
-                self._build_connection_list(_per, connections)
+                self._build_connection_list(_per, connections, use_cpp)
         self.connections = connections
         logger.debug('- All connections made successfully.')
         if self.experiment:
