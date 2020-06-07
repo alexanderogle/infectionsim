@@ -31,6 +31,9 @@ import pandas as pd
 import numpy as np
 from settings import SimfectionSettings
 from logger import SimfectionLogger
+# the network library depends on the 
+# network.cpython-37m-darwin.so file being in the same directory
+import network
 
 simfection_logger = SimfectionLogger()
 logger = simfection_logger.get_logger()
@@ -105,37 +108,62 @@ class ConnectionEngine():
                 connections.num_connections < connections.max_connections
             ].index
 
-    def _build_connection_list(self, agent, connections):
+    def _build_connection_list(self, agent, connections, use_cpp=False):
 
-        # Get other agents available to connect
-        if self.experiment:
-            _start = time.time()
-        available = self._available_to_connect(agent, connections)
-        if self.experiment:
-            runtime_available = time.time() - _start
+        if(use_cpp):
+            # Use the wrapped C++ PyConnections object to generate a random network instead
+            if self.experiment:
+                _start = time.time()
+            ### Run functions here
+            # Instantiate a PyConnections object
+            size = connections['agent'].size
+            net = network.PyConnections(size)
+            # Get the connection limits as a list to pass into function later
+            connections_max_list = connections['connections_max'].values.tolist()
+            # Generate the random network 2D list to convert to DataFrame form later
+            random_network = net.gen_random_network(connections_max_list)
+            # Update the connections DataFrame using the 2D list
+            new_connections = pd.DataFrame({'connections': random_network})
+            connections.update(new_connections)
+            # Update the num_connections part of the connections DataFrame
+            # TODO(aogle): update the implementation so it doesn't require magic numbers
+            for i in range(0, connections['connections'].size):
+                connections.iloc[i, 2] = len(connections.iloc[i,1])
+            if self.experiment:
+                runtime_available = time.time() - _start 
+                runtime_choose = runtime_available
+                return connections, runtime_available, runtime_choose
+            return connections
+        else:
+            # Get other agents available to connect
+            if self.experiment:
+                _start = time.time()
+            available = self._available_to_connect(agent, connections)
+            if self.experiment:
+                runtime_available = time.time() - _start
 
-        # Randomly choose connection
-        if self.experiment:
-            _start = time.time()
-        if len(available) > 0:
-            connection = np.random.choice(available)
-            # Make connection
-            connections.iloc[connection].connections.append(agent)
-            connections.iloc[agent].connections.append(connection)
+            # Randomly choose connection
+            if self.experiment:
+                _start = time.time()
+            if len(available) > 0:
+                connection = np.random.choice(available)
+                # Make connection
+                connections.iloc[connection].connections.append(agent)
+                connections.iloc[agent].connections.append(connection)
 
-            # Update number of connections
-            connections.iloc[[agent, connection], 2] += 1
+                # Update number of connections
+                connections.iloc[[agent, connection], 2] += 1
 
-            # Iterate if necessary
-            cont = (
-                connections.num_connections[agent] < connections.max_connections[agent]
-            )
-            if cont:
-                self._build_connection_list(agent, connections)
-        if self.experiment:
-            runtime_choose = time.time() - _start
-            return connections, runtime_available, runtime_choose
-        return connections
+                # Iterate if necessary
+                cont = (
+                    connections.num_connections[agent] < connections.max_connections[agent]
+                )
+                if cont:
+                    self._build_connection_list(agent, connections)
+            if self.experiment:
+                runtime_choose = time.time() - _start
+                return connections, runtime_available, runtime_choose
+            return connections
 
     def create_connections(self):
         """Creates connection list for each agent.

@@ -1196,6 +1196,7 @@ static const char __pyx_k_size[] = "size";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_reduce[] = "__reduce__";
+static const char __pyx_k_testing[] = "testing";
 static const char __pyx_k_verbose[] = "verbose";
 static const char __pyx_k_getstate[] = "__getstate__";
 static const char __pyx_k_personID[] = "personID";
@@ -1204,18 +1205,22 @@ static const char __pyx_k_TypeError[] = "TypeError";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
 static const char __pyx_k_connections[] = "connections";
 static const char __pyx_k_PyConnections[] = "PyConnections";
-static const char __pyx_k_connectionMax[] = "connectionMax";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
+static const char __pyx_k_connectionsMax[] = "connectionsMax";
+static const char __pyx_k_maxConnections[] = "maxConnections";
+static const char __pyx_k_minConnections[] = "minConnections";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static PyObject *__pyx_n_s_PyConnections;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_n_s_cline_in_traceback;
-static PyObject *__pyx_n_s_connectionMax;
 static PyObject *__pyx_n_s_connections;
+static PyObject *__pyx_n_s_connectionsMax;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_main;
+static PyObject *__pyx_n_s_maxConnections;
+static PyObject *__pyx_n_s_minConnections;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_kp_s_no_default___reduce___due_to_non;
 static PyObject *__pyx_n_s_personID;
@@ -1227,14 +1232,16 @@ static PyObject *__pyx_n_s_setstate;
 static PyObject *__pyx_n_s_setstate_cython;
 static PyObject *__pyx_n_s_size;
 static PyObject *__pyx_n_s_test;
+static PyObject *__pyx_n_s_testing;
 static PyObject *__pyx_n_s_verbose;
 static int __pyx_pf_7network_13PyConnections___cinit__(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_size); /* proto */
 static PyObject *__pyx_pf_7network_13PyConnections_2get_size(struct __pyx_obj_7network_PyConnections *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7network_13PyConnections_4set_size(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_size); /* proto */
-static PyObject *__pyx_pf_7network_13PyConnections_6get_available(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_personID, int __pyx_v_connectionMax, std::vector<std::vector<int> >  __pyx_v_connections); /* proto */
-static PyObject *__pyx_pf_7network_13PyConnections_8gen_random_network(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_connectionMax, bool __pyx_v_verbose); /* proto */
-static PyObject *__pyx_pf_7network_13PyConnections_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7network_PyConnections *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7network_13PyConnections_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7network_PyConnections *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_7network_13PyConnections_6gen_connections_max_vector(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_minConnections, int __pyx_v_maxConnections, int __pyx_v_size); /* proto */
+static PyObject *__pyx_pf_7network_13PyConnections_8get_available(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_personID, std::vector<int>  __pyx_v_connectionsMax, std::vector<std::vector<int> >  __pyx_v_connections); /* proto */
+static PyObject *__pyx_pf_7network_13PyConnections_10gen_random_network(struct __pyx_obj_7network_PyConnections *__pyx_v_self, std::vector<int>  __pyx_v_connectionsMax, bool __pyx_v_verbose, bool __pyx_v_testing); /* proto */
+static PyObject *__pyx_pf_7network_13PyConnections_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7network_PyConnections *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7network_13PyConnections_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7network_PyConnections *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_tp_new_7network_PyConnections(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
@@ -1451,7 +1458,7 @@ static PyObject *__pyx_pf_7network_13PyConnections_4set_size(struct __pyx_obj_7n
  *     def set_size(self, int size):
  *         self.c_connections.setSize(size)             # <<<<<<<<<<<<<<
  * 
- *     def get_available(self, int personID, int connectionMax, vector[vector[int]] connections):
+ *     def gen_connections_max_vector(self, int minConnections, int maxConnections, int size):
  */
   __pyx_v_self->c_connections.setSize(__pyx_v_size);
 
@@ -1473,16 +1480,141 @@ static PyObject *__pyx_pf_7network_13PyConnections_4set_size(struct __pyx_obj_7n
 /* "network.pyx":25
  *         self.c_connections.setSize(size)
  * 
- *     def get_available(self, int personID, int connectionMax, vector[vector[int]] connections):             # <<<<<<<<<<<<<<
- *         return self.c_connections.getAvailable(personID, connectionMax, connections)
+ *     def gen_connections_max_vector(self, int minConnections, int maxConnections, int size):             # <<<<<<<<<<<<<<
+ *         return self.c_connections.genConnectionsMaxVector(minConnections, maxConnections, size)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7network_13PyConnections_7get_available(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7network_13PyConnections_7get_available(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7network_13PyConnections_7gen_connections_max_vector(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_7network_13PyConnections_7gen_connections_max_vector(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  int __pyx_v_minConnections;
+  int __pyx_v_maxConnections;
+  int __pyx_v_size;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("gen_connections_max_vector (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_minConnections,&__pyx_n_s_maxConnections,&__pyx_n_s_size,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_minConnections)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_maxConnections)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("gen_connections_max_vector", 1, 3, 3, 1); __PYX_ERR(1, 25, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_size)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("gen_connections_max_vector", 1, 3, 3, 2); __PYX_ERR(1, 25, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "gen_connections_max_vector") < 0)) __PYX_ERR(1, 25, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+    }
+    __pyx_v_minConnections = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_minConnections == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 25, __pyx_L3_error)
+    __pyx_v_maxConnections = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_maxConnections == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 25, __pyx_L3_error)
+    __pyx_v_size = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_size == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 25, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("gen_connections_max_vector", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 25, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("network.PyConnections.gen_connections_max_vector", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_7network_13PyConnections_6gen_connections_max_vector(((struct __pyx_obj_7network_PyConnections *)__pyx_v_self), __pyx_v_minConnections, __pyx_v_maxConnections, __pyx_v_size);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7network_13PyConnections_6gen_connections_max_vector(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_minConnections, int __pyx_v_maxConnections, int __pyx_v_size) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("gen_connections_max_vector", 0);
+
+  /* "network.pyx":26
+ * 
+ *     def gen_connections_max_vector(self, int minConnections, int maxConnections, int size):
+ *         return self.c_connections.genConnectionsMaxVector(minConnections, maxConnections, size)             # <<<<<<<<<<<<<<
+ * 
+ *     def get_available(self, int personID, vector[int] connectionsMax, vector[vector[int]] connections):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __pyx_convert_vector_to_py_int(__pyx_v_self->c_connections.genConnectionsMaxVector(__pyx_v_minConnections, __pyx_v_maxConnections, __pyx_v_size)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 26, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "network.pyx":25
+ *         self.c_connections.setSize(size)
+ * 
+ *     def gen_connections_max_vector(self, int minConnections, int maxConnections, int size):             # <<<<<<<<<<<<<<
+ *         return self.c_connections.genConnectionsMaxVector(minConnections, maxConnections, size)
+ * 
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("network.PyConnections.gen_connections_max_vector", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "network.pyx":28
+ *         return self.c_connections.genConnectionsMaxVector(minConnections, maxConnections, size)
+ * 
+ *     def get_available(self, int personID, vector[int] connectionsMax, vector[vector[int]] connections):             # <<<<<<<<<<<<<<
+ *         return self.c_connections.getAvailable(personID, connectionsMax, connections)
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7network_13PyConnections_9get_available(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_7network_13PyConnections_9get_available(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_personID;
-  int __pyx_v_connectionMax;
+  std::vector<int>  __pyx_v_connectionsMax;
   std::vector<std::vector<int> >  __pyx_v_connections;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -1491,7 +1623,7 @@ static PyObject *__pyx_pw_7network_13PyConnections_7get_available(PyObject *__py
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_available (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_personID,&__pyx_n_s_connectionMax,&__pyx_n_s_connections,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_personID,&__pyx_n_s_connectionsMax,&__pyx_n_s_connections,0};
     PyObject* values[3] = {0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -1513,19 +1645,19 @@ static PyObject *__pyx_pw_7network_13PyConnections_7get_available(PyObject *__py
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_connectionMax)) != 0)) kw_args--;
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_connectionsMax)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("get_available", 1, 3, 3, 1); __PYX_ERR(1, 25, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("get_available", 1, 3, 3, 1); __PYX_ERR(1, 28, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_connections)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("get_available", 1, 3, 3, 2); __PYX_ERR(1, 25, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("get_available", 1, 3, 3, 2); __PYX_ERR(1, 28, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "get_available") < 0)) __PYX_ERR(1, 25, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "get_available") < 0)) __PYX_ERR(1, 28, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -1534,26 +1666,26 @@ static PyObject *__pyx_pw_7network_13PyConnections_7get_available(PyObject *__py
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_personID = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_personID == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 25, __pyx_L3_error)
-    __pyx_v_connectionMax = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_connectionMax == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 25, __pyx_L3_error)
-    __pyx_v_connections = __pyx_convert_vector_from_py_std_3a__3a_vector_3c_int_3e___(values[2]); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 25, __pyx_L3_error)
+    __pyx_v_personID = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_personID == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+    __pyx_v_connectionsMax = __pyx_convert_vector_from_py_int(values[1]); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+    __pyx_v_connections = __pyx_convert_vector_from_py_std_3a__3a_vector_3c_int_3e___(values[2]); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_available", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 25, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_available", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 28, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("network.PyConnections.get_available", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7network_13PyConnections_6get_available(((struct __pyx_obj_7network_PyConnections *)__pyx_v_self), __pyx_v_personID, __pyx_v_connectionMax, __pyx_v_connections);
+  __pyx_r = __pyx_pf_7network_13PyConnections_8get_available(((struct __pyx_obj_7network_PyConnections *)__pyx_v_self), __pyx_v_personID, __pyx_v_connectionsMax, __pyx_v_connections);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7network_13PyConnections_6get_available(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_personID, int __pyx_v_connectionMax, std::vector<std::vector<int> >  __pyx_v_connections) {
+static PyObject *__pyx_pf_7network_13PyConnections_8get_available(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_personID, std::vector<int>  __pyx_v_connectionsMax, std::vector<std::vector<int> >  __pyx_v_connections) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1562,25 +1694,25 @@ static PyObject *__pyx_pf_7network_13PyConnections_6get_available(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_available", 0);
 
-  /* "network.pyx":26
+  /* "network.pyx":29
  * 
- *     def get_available(self, int personID, int connectionMax, vector[vector[int]] connections):
- *         return self.c_connections.getAvailable(personID, connectionMax, connections)             # <<<<<<<<<<<<<<
+ *     def get_available(self, int personID, vector[int] connectionsMax, vector[vector[int]] connections):
+ *         return self.c_connections.getAvailable(personID, connectionsMax, connections)             # <<<<<<<<<<<<<<
  * 
- *     def gen_random_network(self, int connectionMax, bool verbose=False):
+ *     def gen_random_network(self, vector[int] connectionsMax, bool verbose=False, bool testing=False):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_vector_to_py_int(__pyx_v_self->c_connections.getAvailable(__pyx_v_personID, __pyx_v_connectionMax, __pyx_v_connections)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 26, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_vector_to_py_int(__pyx_v_self->c_connections.getAvailable(__pyx_v_personID, __pyx_v_connectionsMax, __pyx_v_connections)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "network.pyx":25
- *         self.c_connections.setSize(size)
+  /* "network.pyx":28
+ *         return self.c_connections.genConnectionsMaxVector(minConnections, maxConnections, size)
  * 
- *     def get_available(self, int personID, int connectionMax, vector[vector[int]] connections):             # <<<<<<<<<<<<<<
- *         return self.c_connections.getAvailable(personID, connectionMax, connections)
+ *     def get_available(self, int personID, vector[int] connectionsMax, vector[vector[int]] connections):             # <<<<<<<<<<<<<<
+ *         return self.c_connections.getAvailable(personID, connectionsMax, connections)
  * 
  */
 
@@ -1595,19 +1727,20 @@ static PyObject *__pyx_pf_7network_13PyConnections_6get_available(struct __pyx_o
   return __pyx_r;
 }
 
-/* "network.pyx":28
- *         return self.c_connections.getAvailable(personID, connectionMax, connections)
+/* "network.pyx":31
+ *         return self.c_connections.getAvailable(personID, connectionsMax, connections)
  * 
- *     def gen_random_network(self, int connectionMax, bool verbose=False):             # <<<<<<<<<<<<<<
- *         return self.c_connections.genRandomNetwork(connectionMax, verbose)
+ *     def gen_random_network(self, vector[int] connectionsMax, bool verbose=False, bool testing=False):             # <<<<<<<<<<<<<<
+ *         return self.c_connections.genRandomNetwork(connectionsMax, verbose, testing)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7network_13PyConnections_9gen_random_network(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7network_13PyConnections_9gen_random_network(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  int __pyx_v_connectionMax;
+static PyObject *__pyx_pw_7network_13PyConnections_11gen_random_network(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_7network_13PyConnections_11gen_random_network(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  std::vector<int>  __pyx_v_connectionsMax;
   bool __pyx_v_verbose;
+  bool __pyx_v_testing;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1615,12 +1748,14 @@ static PyObject *__pyx_pw_7network_13PyConnections_9gen_random_network(PyObject 
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("gen_random_network (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_connectionMax,&__pyx_n_s_verbose,0};
-    PyObject* values[2] = {0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_connectionsMax,&__pyx_n_s_verbose,&__pyx_n_s_testing,0};
+    PyObject* values[3] = {0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         CYTHON_FALLTHROUGH;
         case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
@@ -1631,7 +1766,7 @@ static PyObject *__pyx_pw_7network_13PyConnections_9gen_random_network(PyObject 
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_connectionMax)) != 0)) kw_args--;
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_connectionsMax)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -1639,12 +1774,20 @@ static PyObject *__pyx_pw_7network_13PyConnections_9gen_random_network(PyObject 
           PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_verbose);
           if (value) { values[1] = value; kw_args--; }
         }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_testing);
+          if (value) { values[2] = value; kw_args--; }
+        }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "gen_random_network") < 0)) __PYX_ERR(1, 28, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "gen_random_network") < 0)) __PYX_ERR(1, 31, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         CYTHON_FALLTHROUGH;
         case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
@@ -1652,29 +1795,34 @@ static PyObject *__pyx_pw_7network_13PyConnections_9gen_random_network(PyObject 
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_connectionMax = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_connectionMax == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+    __pyx_v_connectionsMax = __pyx_convert_vector_from_py_int(values[0]); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 31, __pyx_L3_error)
     if (values[1]) {
-      __pyx_v_verbose = __Pyx_PyObject_IsTrue(values[1]); if (unlikely((__pyx_v_verbose == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(1, 28, __pyx_L3_error)
+      __pyx_v_verbose = __Pyx_PyObject_IsTrue(values[1]); if (unlikely((__pyx_v_verbose == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(1, 31, __pyx_L3_error)
     } else {
       __pyx_v_verbose = ((bool)0);
+    }
+    if (values[2]) {
+      __pyx_v_testing = __Pyx_PyObject_IsTrue(values[2]); if (unlikely((__pyx_v_testing == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(1, 31, __pyx_L3_error)
+    } else {
+      __pyx_v_testing = ((bool)0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("gen_random_network", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 28, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("gen_random_network", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 31, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("network.PyConnections.gen_random_network", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7network_13PyConnections_8gen_random_network(((struct __pyx_obj_7network_PyConnections *)__pyx_v_self), __pyx_v_connectionMax, __pyx_v_verbose);
+  __pyx_r = __pyx_pf_7network_13PyConnections_10gen_random_network(((struct __pyx_obj_7network_PyConnections *)__pyx_v_self), __pyx_v_connectionsMax, __pyx_v_verbose, __pyx_v_testing);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7network_13PyConnections_8gen_random_network(struct __pyx_obj_7network_PyConnections *__pyx_v_self, int __pyx_v_connectionMax, bool __pyx_v_verbose) {
+static PyObject *__pyx_pf_7network_13PyConnections_10gen_random_network(struct __pyx_obj_7network_PyConnections *__pyx_v_self, std::vector<int>  __pyx_v_connectionsMax, bool __pyx_v_verbose, bool __pyx_v_testing) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1683,25 +1831,25 @@ static PyObject *__pyx_pf_7network_13PyConnections_8gen_random_network(struct __
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("gen_random_network", 0);
 
-  /* "network.pyx":29
+  /* "network.pyx":32
  * 
- *     def gen_random_network(self, int connectionMax, bool verbose=False):
- *         return self.c_connections.genRandomNetwork(connectionMax, verbose)             # <<<<<<<<<<<<<<
+ *     def gen_random_network(self, vector[int] connectionsMax, bool verbose=False, bool testing=False):
+ *         return self.c_connections.genRandomNetwork(connectionsMax, verbose, testing)             # <<<<<<<<<<<<<<
  * 
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_vector_to_py_std_3a__3a_vector_3c_int_3e___(__pyx_v_self->c_connections.genRandomNetwork(__pyx_v_connectionMax, __pyx_v_verbose)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 29, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_vector_to_py_std_3a__3a_vector_3c_int_3e___(__pyx_v_self->c_connections.genRandomNetwork(__pyx_v_connectionsMax, __pyx_v_verbose, __pyx_v_testing)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "network.pyx":28
- *         return self.c_connections.getAvailable(personID, connectionMax, connections)
+  /* "network.pyx":31
+ *         return self.c_connections.getAvailable(personID, connectionsMax, connections)
  * 
- *     def gen_random_network(self, int connectionMax, bool verbose=False):             # <<<<<<<<<<<<<<
- *         return self.c_connections.genRandomNetwork(connectionMax, verbose)
+ *     def gen_random_network(self, vector[int] connectionsMax, bool verbose=False, bool testing=False):             # <<<<<<<<<<<<<<
+ *         return self.c_connections.genRandomNetwork(connectionsMax, verbose, testing)
  * 
  */
 
@@ -1723,19 +1871,19 @@ static PyObject *__pyx_pf_7network_13PyConnections_8gen_random_network(struct __
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7network_13PyConnections_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_7network_13PyConnections_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_7network_13PyConnections_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_7network_13PyConnections_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7network_13PyConnections_10__reduce_cython__(((struct __pyx_obj_7network_PyConnections *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7network_13PyConnections_12__reduce_cython__(((struct __pyx_obj_7network_PyConnections *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7network_13PyConnections_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7network_PyConnections *__pyx_v_self) {
+static PyObject *__pyx_pf_7network_13PyConnections_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7network_PyConnections *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1780,19 +1928,19 @@ static PyObject *__pyx_pf_7network_13PyConnections_10__reduce_cython__(CYTHON_UN
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7network_13PyConnections_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_7network_13PyConnections_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_7network_13PyConnections_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_7network_13PyConnections_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7network_13PyConnections_12__setstate_cython__(((struct __pyx_obj_7network_PyConnections *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_7network_13PyConnections_14__setstate_cython__(((struct __pyx_obj_7network_PyConnections *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7network_13PyConnections_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7network_PyConnections *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_7network_13PyConnections_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7network_PyConnections *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -2219,10 +2367,11 @@ static void __pyx_tp_dealloc_7network_PyConnections(PyObject *o) {
 static PyMethodDef __pyx_methods_7network_PyConnections[] = {
   {"get_size", (PyCFunction)__pyx_pw_7network_13PyConnections_3get_size, METH_NOARGS, 0},
   {"set_size", (PyCFunction)__pyx_pw_7network_13PyConnections_5set_size, METH_O, 0},
-  {"get_available", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_7network_13PyConnections_7get_available, METH_VARARGS|METH_KEYWORDS, 0},
-  {"gen_random_network", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_7network_13PyConnections_9gen_random_network, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_7network_13PyConnections_11__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_7network_13PyConnections_13__setstate_cython__, METH_O, 0},
+  {"gen_connections_max_vector", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_7network_13PyConnections_7gen_connections_max_vector, METH_VARARGS|METH_KEYWORDS, 0},
+  {"get_available", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_7network_13PyConnections_9get_available, METH_VARARGS|METH_KEYWORDS, 0},
+  {"gen_random_network", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_7network_13PyConnections_11gen_random_network, METH_VARARGS|METH_KEYWORDS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_7network_13PyConnections_13__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_7network_13PyConnections_15__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -2344,10 +2493,12 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_PyConnections, __pyx_k_PyConnections, sizeof(__pyx_k_PyConnections), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
-  {&__pyx_n_s_connectionMax, __pyx_k_connectionMax, sizeof(__pyx_k_connectionMax), 0, 0, 1, 1},
   {&__pyx_n_s_connections, __pyx_k_connections, sizeof(__pyx_k_connections), 0, 0, 1, 1},
+  {&__pyx_n_s_connectionsMax, __pyx_k_connectionsMax, sizeof(__pyx_k_connectionsMax), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
+  {&__pyx_n_s_maxConnections, __pyx_k_maxConnections, sizeof(__pyx_k_maxConnections), 0, 0, 1, 1},
+  {&__pyx_n_s_minConnections, __pyx_k_minConnections, sizeof(__pyx_k_minConnections), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_kp_s_no_default___reduce___due_to_non, __pyx_k_no_default___reduce___due_to_non, sizeof(__pyx_k_no_default___reduce___due_to_non), 0, 0, 1, 0},
   {&__pyx_n_s_personID, __pyx_k_personID, sizeof(__pyx_k_personID), 0, 0, 1, 1},
@@ -2359,6 +2510,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
   {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
+  {&__pyx_n_s_testing, __pyx_k_testing, sizeof(__pyx_k_testing), 0, 0, 1, 1},
   {&__pyx_n_s_verbose, __pyx_k_verbose, sizeof(__pyx_k_verbose), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
