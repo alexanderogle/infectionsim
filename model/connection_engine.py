@@ -66,7 +66,7 @@ class ConnectionEngine():
 
     def __init__(self, population: pd.DataFrame = None,
                  settings: SimfectionSettings = None) -> None:
-        logger.info('+ Initializing connection engine.')
+        logger.debug('+ Initializing connection engine.')
         self.population = population
         self.mean_connections = settings.get_setting('mean_connections')
         self.experiment = settings.get_setting('experiment')
@@ -181,7 +181,7 @@ class ConnectionEngine():
         if self.experiment:
             logger.debug('- Entering experiment mode.')
 
-        logger.info('- Creating connections.')
+        logger.debug('- Creating connections.')
         not_dead = self.population.query('state != "dead"').index
         connections = pd.DataFrame(
             {
