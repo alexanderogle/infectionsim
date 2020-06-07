@@ -5,12 +5,12 @@ and randomly creates a hand-shake network of interactions within the population.
 
   Typical usage example:
 
-    from simfection_settings import SimFectionSettings
+    from settings import SimfectionSettings
     from population_engine import PopulationEngine
     from connection_engine import ConnectionEngine
 
     # Settings
-    settings = SimFectionSettings()
+    settings = SimfectionSettings()
 
     # Synthesize population
     population = PopulationEngine(settings)
@@ -29,8 +29,7 @@ import time
 import sys
 import pandas as pd
 import numpy as np
-from simfection_settings import SimFectionSettings
-from population_engine import PopulationEngine
+from settings import SimfectionSettings
 
 sys.setrecursionlimit(10**6)
 
@@ -62,7 +61,7 @@ class ConnectionEngine():
     """
 
     def __init__(self, population: pd.DataFrame = None,
-                 settings: SimFectionSettings = None) -> None:
+                 settings: SimfectionSettings = None) -> None:
 
         self.population = population
         self.mean_connections = settings.get_setting('mean_connections')

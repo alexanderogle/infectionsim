@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
-from simfection_settings import SimFectionSettings
+from settings import SimfectionSettings
 
 
 class PopulationEngine:
-    def __init__(self, settings: SimFectionSettings, _df: pd.DataFrame = None) -> None:
+    def __init__(self, settings: SimfectionSettings, _df: pd.DataFrame = None) -> None:
         if _df is not None:
             self._df = _df
         else:

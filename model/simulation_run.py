@@ -1,13 +1,13 @@
 from population_engine import PopulationEngine
 from simulation_day import SimulationDay
-from simfection_settings import SimFectionSettings
+from settings import SimfectionSettings
 
 
 class SimulationRun():
     def __init__(self, settings: dict = None) -> None:
 
         # Set settings
-        self.settings = SimFectionSettings(settings)
+        self.settings = SimfectionSettings(settings)
 
         if self.settings.get_setting('previous_run') is None:
             self.population = PopulationEngine(self.settings)
