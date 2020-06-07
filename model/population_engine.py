@@ -1,13 +1,22 @@
 import pandas as pd
 import numpy as np
 from settings import SimfectionSettings
+from logger import SimfectionLogger
+
+simfection_logger = SimfectionLogger()
+logger = simfection_logger.get_logger()
 
 
 class PopulationEngine:
-    def __init__(self, settings: SimfectionSettings, _df: pd.DataFrame = None) -> None:
+    def __init__(self,
+                 settings: SimfectionSettings,
+                 _df: pd.DataFrame = None) -> None:
+        logger.debug('+ Initializing population engine.')
         if _df is not None:
+            logger.debug('- Loading population.')
             self._df = _df
         else:
+            logger.debug('- Unloading settings.')
             self.num_people = settings.get_setting('num_people')
             self.initial_states = settings.get_setting('initial_states')
             self._df = pd.DataFrame()
@@ -40,7 +49,7 @@ class PopulationEngine:
         return states
 
     def synthesize_population(self):
-        print('+ Synthesizing population.')
+        logger.info('+ Synthesizing population.')
         num_people = self.num_people
         initial_states = self.initial_states
 
@@ -62,6 +71,7 @@ class PopulationEngine:
         self._df = population
 
     def make_dummy(self):
+        logger.info('+ Synthesizing a dummy population.')
         verbose = self.verbose
 
         states = ['sus', 'inf', 'dead']

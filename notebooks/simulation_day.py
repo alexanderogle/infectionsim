@@ -6,7 +6,10 @@ from settings import SimfectionSettings
 
 import pandas as pd
 import numpy as np
-import sys
+from logger import SimfectionLogger
+
+simfection_logger = SimfectionLogger()
+logger = simfection_logger.get_logger()
 
 
 class SimulationDay():
@@ -18,51 +21,42 @@ class SimulationDay():
         assert population is not None or settings is not None, (
             'Both population and settings are NoneType. At least one must be passed.'
         )
+        logger.info('+ Initializing day {}.'.format(day_number))
         self.day_number = day_number
         self.settings = settings
         if population is None:
-            print('+ Dummy population generated.')
+            logger.info('+ Dummy population generated.')
             self.population = PopulationEngine(settings)
             self.population.make_dummy()
 
         else:
-            print('+ Population loaded.')
+            logger.info('+ Population loaded.')
             self.population = population
 
+        logger.debug('+ Saving starting population.')
         self.starting_population = self.population._df.copy()
 
     def run(self):
         verbose = self.settings.get_setting('verbose')
-        if verbose:
-            print('\n+ Starting PopulationEngine:')
-            print(self.population._df.state.value_counts())
-        if verbose:
-            print('\n+ Running Connection Engine.')
         self.connection_engine = ConnectionEngine(
             population=self.population._df,
             settings=self.settings
         )
         self.connection_engine.create_connections()
 
-        if verbose:
-            print('\n+ Running Interaction Engine.')
         self.interaction_engine = InteractionEngine(
             connections=self.connection_engine.connections,
             settings=self.settings,
             population=self.connection_engine.population
         )
-        self.interaction_engine.interact_all(verbose=verbose)
+        self.interaction_engine.interact_all()
 
-        if verbose:
-            print('\n+ Running Update Engine.')
         self.update_engine = UpdateEngine(
             population=self.interaction_engine.population,
             settings=self.settings
         )
-        self.update_engine.update_all(
-            verbose=verbose
-        )
+        self.update_engine.update_all()
 
-        if verbose:
-            print('\n+ Updating PopulationEngine.')
         self.population._df = self.update_engine.population
+
+        logger.debug('- Day ran successfully.')
