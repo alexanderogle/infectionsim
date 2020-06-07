@@ -202,8 +202,6 @@ class ConnectionEngine():
                 'choose': []
             }
         for _per in connections.index:
-            if _per % _update == 0:
-                logger.debug('{:.0f}% complete'.format(_per/len(not_dead)*100))
 
             if self.experiment:
                 connections, runtime_available, runtime_choose = self._build_connection_list(
@@ -215,7 +213,7 @@ class ConnectionEngine():
             else:
                 self._build_connection_list(_per, connections)
         self.connections = connections
-        logger.debug('100& complete.')
+        logger.debug('- All connections made successfully.')
         if self.experiment:
             return connections, runtime
         return None
