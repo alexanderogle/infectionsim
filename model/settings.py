@@ -36,11 +36,12 @@ class SimfectionSettings:
         'size': 10**5,
         'experiment': False,
         # SimulationRun settings
+        'base_path': 'simfection',
         'num_days': 15,
         'verbose': False,
         'previous_run': None,
         # Optimization settings
-        'use_cpp': False
+        'cpp': False
     }
 
     def __init__(self, settings=None):

@@ -2,6 +2,10 @@ from population_engine import PopulationEngine
 from simulation_day import SimulationDay
 from settings import SimfectionSettings
 from logger import SimfectionLogger
+from path import SimfectionPath
+from arguments import _get_parser, simfection_args
+import pickle
+import time
 
 simfection_logger = SimfectionLogger()
 logger = simfection_logger.get_logger()
@@ -12,14 +16,23 @@ class SimulationRun():
         logger.info('+ Initializing Simfection Run.')
         # Set settings)
         self.settings = SimfectionSettings(settings)
+        self.path = SimfectionPath(base_path=self.settings.get_setting('base_path'))
+
+        logger.info('+ Building directory structure at {}.'.format(self.path.base()))
+        self.path.build_directory_structure()
 
         if self.settings.get_setting('previous_run') is None:
             self.population = PopulationEngine(self.settings)
             self.population.synthesize_population()
             self.days = None
-        else:
+            self.run_id = 'simfection_{}'.format(int(time.time()))
+        else:  # Restarting
             logger.info('+ Restarting from previous run.')
-            self.days = self.settings.get_setting('previous_run').days
+            with open(self.settings.get_setting('previous_run'), 'rb') as _file:
+                previous_run = pickle.load(_file)
+            self.days = previous_run.days
+            self.run_id = previous_run.run_id
+            del previous_run
             logger.info('- Loading population.')
             self.population = self.days[-1].population
 
@@ -37,6 +50,7 @@ class SimulationRun():
                 day_number = self.days[-1].day_number + 1
             if today == 0:
                 day = SimulationDay(
+                    self.run_id,
                     population=population,
                     day_number=day_number,
                     settings=self.settings
@@ -44,6 +58,7 @@ class SimulationRun():
             else:
                 yesterday = self.days[-1]
                 day = SimulationDay(
+                    self.run_id,
                     population=yesterday.population,
                     day_number=day_number,
                     settings=self.settings
@@ -51,4 +66,24 @@ class SimulationRun():
 
             day.run()
             self.days.append(day)
+            self.path.save_day(day)
         logger.info('- All days ran successfully.')
+        logger.info('+ Saving run.')
+        self.path.save_run(self)
+        logger.info('+ Moving log.')
+        self.path.move_log()
+
+
+if __name__ == '__main__':
+    parser = _get_parser(simfection_args)
+    args = parser.parse_args()
+    settings = {
+        arg: getattr(args, arg)
+        for arg in vars(args)
+        if getattr(args, arg) is not None
+    }
+    if settings != {}:
+        sim = SimulationRun(settings)
+    else:
+        sim = SimulationRun()
+    sim.run()
