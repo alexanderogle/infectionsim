@@ -1678,7 +1678,6 @@ static PyObject *__pyx_pf_7network_13PyConnections_8gen_random_network(struct __
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1692,13 +1691,10 @@ static PyObject *__pyx_pf_7network_13PyConnections_8gen_random_network(struct __
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_verbose); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 29, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_vector_to_py_std_3a__3a_vector_3c_int_3e___(__pyx_v_self->c_connections.genRandomNetwork(__pyx_v_connectionMax, __pyx_v_verbose)); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_vector_to_py_std_3a__3a_vector_3c_int_3e___(__pyx_v_self->c_connections.genRandomNetwork(__pyx_v_connectionMax, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 29, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_r = __pyx_t_2;
-  __pyx_t_2 = 0;
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
   goto __pyx_L0;
 
   /* "network.pyx":28
@@ -1712,7 +1708,6 @@ static PyObject *__pyx_pf_7network_13PyConnections_8gen_random_network(struct __
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_AddTraceback("network.PyConnections.gen_random_network", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;

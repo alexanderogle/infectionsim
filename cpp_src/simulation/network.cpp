@@ -39,6 +39,15 @@ void Network::setupConnections(int size){
     }
 }
 
+bool Network::existsInVector(int num, std::vector<int> v){
+    for(int i : v){
+        if(num == i){
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Network::availableToConnect(int personID, int connectionMax){
     // Is there space for the Person of personID to connect? 
     for (int i = 0; i < connections.size(); i++){
@@ -53,7 +62,7 @@ std::vector<int> Network::getAvailable(int personID, int connectionMax){
     // Finds all the connections avialable for a given perosn, excluding themselves. 
     std::vector<int> available = {};
     for (int i = 0; i < connections.size(); i++){
-        if (i != personID && connections[i].size() < connectionMax){
+        if (i != personID && !existsInVector(personID, connections[i]) && connections[i].size() < connectionMax){
             available.push_back(i);
         }
     }
@@ -84,14 +93,6 @@ void Network::genRandomNetwork(int connectionMax, bool verbose=false){
             }
             // Pick someone from among those we can connect with
             int randomConnection = std::rand() % available.size();
-
-            // // Make sure they aren't already in the person's conenction list
-            // for (int j = 0; j < connections[i].size(); j++){
-            //     if(randomConnection == connections[i][j]){
-            //         // This person is already in the connections list, so continue
-            //         continue;
-            //     }
-            // }
 
             connections[i].push_back(available[randomConnection]);
             connections[available[randomConnection]].push_back(i);
