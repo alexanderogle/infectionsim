@@ -8,8 +8,6 @@ import pickle
 import time
 import os
 
-# Needed to avoid numexpr.utils from writing to log
-os.environ["NUMEXPR_NUM_THREADS"] = "4"
 
 simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
@@ -24,6 +22,11 @@ class SimulationRun():
 
         logger.info('+ Building directory structure at {}.'.format(self.path.base()))
         self.path.build_directory_structure()
+
+        # Needed to avoid numexpr.utils from writing to log
+        if 'NUMEXPR_NUM_THREADS' not in os.environ.keys():
+            logginer.debug('+ Setting NUMEXP_NUM_THREADS to 4.')
+            os.environ["NUMEXPR_NUM_THREADS"] = "4"
 
         if self.settings.get_setting('previous_run') is None:
             self.population = PopulationEngine(self.settings)
