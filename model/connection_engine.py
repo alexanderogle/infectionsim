@@ -31,11 +31,11 @@ import pandas as pd
 import numpy as np
 from settings import SimfectionSettings
 from logger import SimfectionLogger
-# the network library depends on the 
+# the network library depends on the
 # network.cpython-37m-darwin.so file being in the same directory
 import network
 
-simfection_logger = SimfectionLogger()
+simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
 
 sys.setrecursionlimit(10**6)
@@ -114,7 +114,7 @@ class ConnectionEngine():
             # Use the wrapped C++ PyConnections object to generate a random network instead
             if self.experiment:
                 _start = time.time()
-            ### Run functions here
+            # Run functions here
             # Instantiate a PyConnections object
             size = connections['agent'].size
             net = network.PyConnections(size)
@@ -128,9 +128,9 @@ class ConnectionEngine():
             # Update the num_connections part of the connections DataFrame
             # TODO(aogle): update the implementation so it doesn't require magic numbers
             for i in range(0, connections['connections'].size):
-                connections.iloc[i, 2] = len(connections.iloc[i,1])
+                connections.iloc[i, 2] = len(connections.iloc[i, 1])
             if self.experiment:
-                runtime_available = time.time() - _start 
+                runtime_available = time.time() - _start
                 runtime_choose = runtime_available
                 return connections, runtime_available, runtime_choose
             return connections
@@ -233,16 +233,16 @@ class ConnectionEngine():
             # Use the cpp optimization instead
             if self.experiment:
                 connections, runtime_available, runtime_choose = self._build_connection_list(
-                    0, # this parameter doesn't matter for cpp  
+                    0,  # this parameter doesn't matter for cpp
                     connections,
                     use_cpp
                 )
                 runtime['available'].append(runtime_available)
                 runtime['choose'].append(runtime_choose)
-            else: 
+            else:
                 self._build_connection_list(0, connections, use_cpp)
             self.connections = connections
-            logger.debug('- All connections made successfully with C++ optimization')
+            logger.debug('- All connections made successfully with C++ optimization.')
             if self.experiment:
                 return connections, runtime
             return None

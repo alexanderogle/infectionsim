@@ -5,7 +5,7 @@ import time
 from simulation_day import SimulationDay
 from logger import SimfectionLogger
 
-simfection_logger = SimfectionLogger()
+simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
 
 
@@ -37,7 +37,7 @@ class SimfectionPath:
         source = self.log_file(source=True)
         destination = self.log_file()
         try:
-            logger.info('Moving log from {} to {}.'.format(source, destination))
+            logger.info('+ Moving log from {} to {}.'.format(source, destination))
             shutil.move(
                 source,
                 destination
@@ -57,7 +57,7 @@ class SimfectionPath:
     def save_day(self, day: SimulationDay):
         day_number = day.day_number
         destination = self.day(day)
-        logger.info('+ Saving day {} to {}.'.format(day_number, destination))
+        logger.debug('+ Saving day {} to {}.'.format(day_number, destination))
         with open(destination, 'wb') as file_:
             pickle.dump(day, file_)
 
