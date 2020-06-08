@@ -25,7 +25,7 @@ class SimulationRun():
 
         # Needed to avoid numexpr.utils from writing to log
         if 'NUMEXPR_NUM_THREADS' not in os.environ.keys():
-            logginer.debug('+ Setting NUMEXP_NUM_THREADS to 4.')
+            logger.debug('+ Setting NUMEXP_NUM_THREADS to 4.')
             os.environ["NUMEXPR_NUM_THREADS"] = "4"
 
         if self.settings.get_setting('previous_run') is None:
