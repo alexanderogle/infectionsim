@@ -6,6 +6,10 @@ from path import SimfectionPath
 from arguments import _get_parser, simfection_args
 import pickle
 import time
+import os
+
+# Needed to avoid numexpr.utils from writing to log
+os.environ["NUMEXPR_NUM_THREADS"] = "4"
 
 simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
