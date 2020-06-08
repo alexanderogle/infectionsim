@@ -72,6 +72,10 @@
         "type_traits": "cpp",
         "typeinfo": "cpp",
         "*.tcc": "cpp",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "forward_list": "cpp",
+        "iomanip": "cpp",
+        "typeindex": "cpp",
+        "unordered_set": "cpp"
     }
 }

@@ -22,7 +22,7 @@ void Connections::setSize(int newSize){
     size = newSize;
 }
 
-bool Connections::existsInVector(int num, std::vector<int> v){
+bool Connections::existsInVector(int num, std::vector<int> &v){
     for(int i : v){
         if(num == i){
             return true;
@@ -41,7 +41,7 @@ std::vector<int> Connections::genConnectionsMaxVector(int minConnections, int ma
     return connectionsMax;
 }
 
-std::vector<int> Connections::getAvailable(int personID, std::vector<int> connectionsMax, std::vector<std::vector<int> > connections){
+std::vector<int> Connections::getAvailable(int personID, std::vector<int> &connectionsMax, std::vector<std::vector<int> > &connections){
     // Finds all the connections avialable for a given perosn, excluding themselves. 
     std::vector<int> available;
 
@@ -53,7 +53,7 @@ std::vector<int> Connections::getAvailable(int personID, std::vector<int> connec
     return available;
 }
 
-std::vector<std::vector<int> > Connections::genRandomNetwork(std::vector<int> connectionsMax, bool verbose, bool testing){
+std::vector<std::vector<int> > Connections::genRandomNetwork(std::vector<int> &connectionsMax, bool verbose, bool testing){
     // Instantiate a 2d vector container for the connections list
     std::vector<std::vector<int> > connections;
     for(int i = 0; i < size; i++){

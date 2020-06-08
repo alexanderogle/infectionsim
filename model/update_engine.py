@@ -5,6 +5,7 @@ from settings import SimfectionSettings
 
 import pandas as pd
 import numpy as np
+import time
 from logger import SimfectionLogger
 
 simfection_logger = SimfectionLogger(name=__name__)
@@ -78,7 +79,6 @@ class UpdateEngine():
 
     def update_all(self):
         verbose = self.verbose
-
         logger.debug('+ Running update engine.')
         logger.debug('- Updating states.')
         self._update_states()
@@ -89,7 +89,6 @@ class UpdateEngine():
         logger.debug('- Updating immnue.')
         self._update_immune()
         logger.debug('- Updates complete.')
-
         if verbose:
             print(self.population.state.value_counts())
 

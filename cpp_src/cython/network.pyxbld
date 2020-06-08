@@ -1,0 +1,5 @@
+def make_ext(network, 'network.pyx'):
+    from distutils.extension import Extension
+    return Extension(name=network,
+                     sources=['network.pyx'],
+                     extra_compile_args=['-O3', '-march=native'])

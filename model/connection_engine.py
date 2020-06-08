@@ -121,7 +121,11 @@ class ConnectionEngine():
             # Get the connection limits as a list to pass into function later
             connections_max_list = connections['max_connections'].values.tolist()
             # Generate the random network 2D list to convert to DataFrame form later
+            start_gen_random_network = time.time()
             random_network = net.gen_random_network(connections_max_list)
+            end_gen_random_network = time.time()
+            runtime_gen_random_network = end_gen_random_network - start_gen_random_network
+            logger.debug(f'- Random network generated in {runtime_gen_random_network} seconds.')
             # Update the connections DataFrame using the 2D list
             new_connections = pd.DataFrame({'connections': random_network})
             connections.update(new_connections)

@@ -7,11 +7,10 @@ from arguments import _get_parser, simfection_args
 import pickle
 import time
 import os
-
+import anchor
 
 simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
-
 
 class SimulationRun():
     def __init__(self, settings: dict = None) -> None:
