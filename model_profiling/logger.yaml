@@ -1,0 +1,32 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+    console:
+        format: '%(asctime)s  %(name)-20s  %(levelname)s  %(message)s'
+    file:
+        format: "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
+
+handlers:
+    console:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: console
+        stream: ext://sys.stdout
+    file:
+        class: logging.FileHandler #.handlers.RotatingFileHandler
+        level: DEBUG
+        formatter: file
+        filename: simfection.log
+        #maxBytes: 10485760 # 10MB
+        #backupCount: 20
+        encoding: utf8
+
+root:
+    level: NOTSET
+    handlers: [console, file]
+    propagate: true
+
+loggers:
+    file:
+        handlers: [file]
