@@ -2,7 +2,7 @@ import sys
 sys.path.append('../')
 sys.path.append('../model')
 
-from model.connection_engine_timing_test import ConnectionEngine
+from model.connection_engine import ConnectionEngine
 from model.population_engine import PopulationEngine
 from model.settings import SimfectionSettings
 import pandas as pd
@@ -33,9 +33,7 @@ class TimingTest:
             popengine.make_dummy()
             population = popengine._df
             connectengine = ConnectionEngine(population, self.settings)
-            runtime = connectengine.create_connections(self.settings.get_setting('cpp'))
-            runtimes.append(runtime)
-        return runtimes
+            connectengine.create_connections(self.settings.get_setting('cpp'))
 
     def run_test(self):
         self._experiment()
