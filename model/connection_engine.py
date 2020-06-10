@@ -33,7 +33,10 @@ from settings import SimfectionSettings
 from logger import SimfectionLogger
 # the network library depends on the
 # network.cpython-37m-darwin.so file being in the same directory
-import network
+try:
+    import network
+except ModuleNotFoundError:
+    pass
 
 simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
