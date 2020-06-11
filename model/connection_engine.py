@@ -38,7 +38,7 @@ try:
     # If network.cpython-37m-darwin.so does not exist, this will fail
     import network
 except ModuleNotFoundError:
-    # Compile the Network library from /cpp_src/cython/
+    # Compile the Network library from /cpp_src/
     cmd = "python3 setup.py build_ext --inplace"
     result = run(cmd, hide=True, warn=True)
     if result.ok:
