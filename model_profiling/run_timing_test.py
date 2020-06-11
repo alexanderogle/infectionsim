@@ -1,5 +1,7 @@
 # TODO(aogle): Implement the following for execution time, CPU utilization, and memory profiling:
 # https://stackoverflow.com/questions/13507205/finding-memory-usage-cpu-utilization-execution-time-for-running-a-python-scrip
+# Helpful for visualizing: 
+# https://stackoverflow.com/questions/582336/how-can-you-profile-a-python-script
 
 import cProfile
 import pstats, math

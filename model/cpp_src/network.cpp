@@ -3,21 +3,16 @@
 /* BEGIN: Cython Metadata
 {
     "distutils": {
-        "depends": [
-            "cpp_src/cython/connections.h"
-        ],
+        "depends": [],
         "extra_compile_args": [
             "-std=c++11",
             "-O3"
         ],
-        "include_dirs": [
-            "cpp_src/cython"
-        ],
         "language": "c++",
         "name": "network",
         "sources": [
-            "cpp_src/cython/network.pyx",
-            "/cpp_src/cython/connections.cpp"
+            "./cpp_src/network.pyx",
+            "./cpp_src/connections.cpp"
         ]
     },
     "module_name": "network"
@@ -847,7 +842,7 @@ static const char *__pyx_filename;
 
 static const char *__pyx_f[] = {
   "stringsource",
-  "cpp_src/cython/network.pyx",
+  "cpp_src/network.pyx",
 };
 
 /*--- Type declarations ---*/
@@ -2846,7 +2841,7 @@ if (!__Pyx_RefNanny) {
 
   /* "network.pyx":1
  * # Wrapping the connections list code             # <<<<<<<<<<<<<<
- * # distutils: sources = /cpp_src/cython/connections.cpp
+ * # distutils: sources = ./cpp_src/connections.cpp
  * # distutils: language = c++
  */
   __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)

@@ -8,7 +8,7 @@ from Cython.Build import cythonize
 ext_modules=[
     Extension(
         "network",
-        sources=["network.pyx"],
+        sources=["./cpp_src/network.pyx"],
         language="c++",
         extra_compile_args=['-std=c++11', '-O3'],
     )

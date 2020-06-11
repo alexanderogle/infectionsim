@@ -29,14 +29,28 @@ import time
 import sys
 import pandas as pd
 import numpy as np
+from invoke import run
 from settings import SimfectionSettings
 from logger import SimfectionLogger
 # the network library depends on the
 # network.cpython-37m-darwin.so file being in the same directory
 try:
+    # If network.cpython-37m-darwin.so does not exist, this will fail
     import network
 except ModuleNotFoundError:
-    pass
+    # Compile the Network library from /cpp_src/cython/
+    cmd = "python3 setup.py build_ext --inplace"
+    result = run(cmd, hide=True, warn=True)
+    if result.ok:
+        print("Network C++ library succesfully compiled.")
+        try:
+            import network
+        except ModuleNotFoundError:
+            print("Even after Network library was compiled, unable to import.")
+            pass
+    else:
+        print("Unable to compile Network C++ library.")
+    
 
 simfection_logger = SimfectionLogger(name=__name__)
 logger = simfection_logger.get_logger()
